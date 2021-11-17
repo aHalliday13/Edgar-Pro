@@ -55,20 +55,19 @@ void InertialRight(float targetTurn)
 
   heading = targetTurn + prevTurn;
 
-  while (inertialSensor.rotation(degrees) < heading) 
-  {
-
+  while (inertialSensor.rotation(degrees) < heading){
+    printf("%lf\n",inertialSensor.rotation());
     calcVelocity = std::abs(heading - inertialSensor.rotation(degrees));
 
     if (calcVelocity > maxVelocity) {
-      RightDriveSmart.spin(directionType::rev, maxVelocity, velocityUnits::pct);
-      LeftDriveSmart.spin(directionType::fwd, maxVelocity, velocityUnits::pct);
+      RightDriveSmart.spin(directionType::fwd, maxVelocity, velocityUnits::pct);
+      LeftDriveSmart.spin(directionType::rev, maxVelocity, velocityUnits::pct);
     } else if (calcVelocity < minVelocity) {
-      RightDriveSmart.spin(directionType::rev, minVelocity, velocityUnits::pct);
-      LeftDriveSmart.spin(directionType::fwd, minVelocity, velocityUnits::pct);
+      RightDriveSmart.spin(directionType::fwd, minVelocity, velocityUnits::pct);
+      LeftDriveSmart.spin(directionType::rev, minVelocity, velocityUnits::pct);
     } else {
-      RightDriveSmart.spin(directionType::rev, calcVelocity, velocityUnits::pct);
-      LeftDriveSmart.spin(directionType::fwd, calcVelocity, velocityUnits::pct);
+      RightDriveSmart.spin(directionType::fwd, calcVelocity, velocityUnits::pct);
+      LeftDriveSmart.spin(directionType::rev, calcVelocity, velocityUnits::pct);
     }
   }
   RightDriveSmart.stop(brakeType::brake);
@@ -84,19 +83,18 @@ void InertialLeft(float targetTurn)
 
   heading = targetTurn * -1 + prevTurn;
 
-  while (inertialSensor.rotation(degrees) > heading) 
-  {
-
+  while (inertialSensor.rotation(degrees) > heading){
+    printf("%lf\n",inertialSensor.rotation());
     calcVelocity = std::abs(heading - inertialSensor.rotation(degrees));
     if (calcVelocity > maxVelocity) {
-      RightDriveSmart.spin(directionType::fwd, maxVelocity, velocityUnits::pct);
-      LeftDriveSmart.spin(directionType::rev, maxVelocity, velocityUnits::pct);
+      RightDriveSmart.spin(directionType::rev, maxVelocity, velocityUnits::pct);
+      LeftDriveSmart.spin(directionType::fwd, maxVelocity, velocityUnits::pct);
     } else if (calcVelocity < minVelocity) {
-      RightDriveSmart.spin(directionType::fwd, minVelocity, velocityUnits::pct);
-      LeftDriveSmart.spin(directionType::rev, minVelocity, velocityUnits::pct);
+      RightDriveSmart.spin(directionType::rev, minVelocity, velocityUnits::pct);
+      LeftDriveSmart.spin(directionType::fwd, minVelocity, velocityUnits::pct);
     } else {
-      RightDriveSmart.spin(directionType::fwd, calcVelocity, velocityUnits::pct);
-      LeftDriveSmart.spin(directionType::rev, calcVelocity, velocityUnits::pct);
+      RightDriveSmart.spin(directionType::rev, calcVelocity, velocityUnits::pct);
+      LeftDriveSmart.spin(directionType::fwd, calcVelocity, velocityUnits::pct);
     }
   }
   RightDriveSmart.stop(brakeType::brake);
@@ -114,17 +112,13 @@ void pre_auton(void) {
   frontMogo.resetPosition();
   rearMogo.resetPosition();
   // Calibrate Inertial and report status
-  Controller1.Screen.clearScreen();
-  Controller1.Screen.print("Calibrating Inertial Sensor");
-  inertialSensor.calibrate();
-  task::sleep(5000);
-  Controller1.Screen.clearScreen();
-  Controller1.Screen.print("Calibrating Complete!");
+  inertialSensor.startCalibration();
+  waitUntil(!inertialSensor.isCalibrating());
 }
 
 // define auton routine here
 void auton(void) {
-  
+  InertialRight(90);
 }
 
 // define user control code here
