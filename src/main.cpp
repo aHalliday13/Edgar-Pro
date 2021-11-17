@@ -21,6 +21,8 @@
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 #include "vex.h"
+#include "cmath"
+
 using namespace vex;
 competition Competition;
 
@@ -28,12 +30,11 @@ competition Competition;
 int leftDrive;
 int rightDrive;
 int calcVelocity;
-directionType lDir;
-directionType rDir;
+int prevTurn = 0;
 #define DEADBAND 15
-#define TURNTHRESH 15
-#define maxVelocity = 40;
-#define minVelocity = 10;
+#define maxVelocity 40
+#define minVelocity 10
+float heading;
 
 // define functions here
 void pneumaticSwitchFront(void){
@@ -45,17 +46,64 @@ void pneumaticSwitchFront(void){
     frontHook.set(true);
   }
 }
-void inertialTurn(int targetAngle){
-  inertialSensor.resetHeading();
-  lDir = targetAngle>0 ? directionType::rev : directionType::fwd;
-  rDir = targetAngle>0 ? directionType::fwd : directionType::rev;
-  targetAngle=abs(targetAngle);
-  while(inertialSensor.heading()>targetAngle-TURNTHRESH && inertialSensor.heading()<targetAngle+TURNTHRESH){
-    calcVelocity=(targetAngle- inertialSensor.heading());
-    LeftDriveSmart.spin(lDir, calcVelocity,velocityUnits::rpm);
-    RightDriveSmart.spin(rDir, calcVelocity,velocityUnits::rpm);
+
+void InertialRight(float targetTurn) 
+{
+  prevTurn = inertialSensor.rotation(degrees);
+
+  task::sleep(100);
+
+  heading = targetTurn + prevTurn;
+
+  while (inertialSensor.rotation(degrees) < heading) 
+  {
+
+    calcVelocity = std::abs(heading - inertialSensor.rotation(degrees));
+
+    if (calcVelocity > maxVelocity) {
+      RightDriveSmart.spin(directionType::rev, maxVelocity, velocityUnits::pct);
+      LeftDriveSmart.spin(directionType::fwd, maxVelocity, velocityUnits::pct);
+    } else if (calcVelocity < minVelocity) {
+      RightDriveSmart.spin(directionType::rev, minVelocity, velocityUnits::pct);
+      LeftDriveSmart.spin(directionType::fwd, minVelocity, velocityUnits::pct);
+    } else {
+      RightDriveSmart.spin(directionType::rev, calcVelocity, velocityUnits::pct);
+      LeftDriveSmart.spin(directionType::fwd, calcVelocity, velocityUnits::pct);
+    }
   }
+  RightDriveSmart.stop(brakeType::brake);
+  LeftDriveSmart.stop(brakeType::brake);
+  task::sleep(100);
 }
+
+void InertialLeft(float targetTurn) 
+{
+  prevTurn = inertialSensor.rotation(degrees);
+
+  task::sleep(100);
+
+  heading = targetTurn * -1 + prevTurn;
+
+  while (inertialSensor.rotation(degrees) > heading) 
+  {
+
+    calcVelocity = std::abs(heading - inertialSensor.rotation(degrees));
+    if (calcVelocity > maxVelocity) {
+      RightDriveSmart.spin(directionType::fwd, maxVelocity, velocityUnits::pct);
+      LeftDriveSmart.spin(directionType::rev, maxVelocity, velocityUnits::pct);
+    } else if (calcVelocity < minVelocity) {
+      RightDriveSmart.spin(directionType::fwd, minVelocity, velocityUnits::pct);
+      LeftDriveSmart.spin(directionType::rev, minVelocity, velocityUnits::pct);
+    } else {
+      RightDriveSmart.spin(directionType::fwd, calcVelocity, velocityUnits::pct);
+      LeftDriveSmart.spin(directionType::rev, calcVelocity, velocityUnits::pct);
+    }
+  }
+  RightDriveSmart.stop(brakeType::brake);
+  LeftDriveSmart.stop(brakeType::brake);
+  task::sleep(100);
+}
+
 
 // define pre-auton routine here
 void pre_auton(void) {

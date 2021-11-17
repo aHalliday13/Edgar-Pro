@@ -62,24 +62,22 @@ __vex_critical_section
 Discarded input sections
 
  .text          0x0000000000000000        0x0 build/src/main.o
- .text._Z12inertialTurni
-                0x0000000000000000        0xc build/src/main.o
- .ARM.exidx.text._Z12inertialTurni
+ .text._Z13InertialRightf
+                0x0000000000000000      0x230 build/src/main.o
+ .ARM.exidx.text._Z13InertialRightf
                 0x0000000000000000        0x8 build/src/main.o
- .bss.targetHeading
-                0x0000000000000000        0x4 build/src/main.o
- .bss.calcVelocity
-                0x0000000000000000        0x4 build/src/main.o
- .data.maxVelocity
-                0x0000000000000000        0x4 build/src/main.o
- .data.minVelocity
-                0x0000000000000000        0x4 build/src/main.o
- .bss.lDir      0x0000000000000000        0x4 build/src/main.o
- .bss.rDir      0x0000000000000000        0x4 build/src/main.o
+ .text._Z12InertialLeftf
+                0x0000000000000000      0x230 build/src/main.o
+ .ARM.exidx.text._Z12InertialLeftf
+                0x0000000000000000        0x8 build/src/main.o
  .bss.leftDrive
                 0x0000000000000000        0x4 build/src/main.o
  .bss.rightDrive
                 0x0000000000000000        0x4 build/src/main.o
+ .bss.calcVelocity
+                0x0000000000000000        0x4 build/src/main.o
+ .bss.prevTurn  0x0000000000000000        0x4 build/src/main.o
+ .bss.heading   0x0000000000000000        0x4 build/src/main.o
  .llvm_addrsig  0x0000000000000000        0xe build/src/main.o
  .text          0x0000000000000000        0x0 build/src/robot-config.o
  .data.RemoteControlCodeEnabled
