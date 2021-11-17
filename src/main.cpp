@@ -118,7 +118,7 @@ void pre_auton(void) {
 
 // define auton routine here
 void auton(void) {
-  InertialRight(90);
+  
 }
 
 // define user control code here
