@@ -21,7 +21,6 @@
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 #include "vex.h"
-#include "inertialMovement.h"
 using namespace vex;
 competition Competition;
 
