@@ -45,17 +45,6 @@ void pneumaticSwitchFront(void){
     frontHook.set(true);
   }
 }
-void inertialTurn(int targetAngle){
-  inertialSensor.resetHeading();
-  lDir = targetAngle>0 ? directionType::rev : directionType::fwd;
-  rDir = targetAngle>0 ? directionType::fwd : directionType::rev;
-  targetAngle=abs(targetAngle);
-  while(inertialSensor.heading()>targetAngle-TURNTHRESH && inertialSensor.heading()<targetAngle+TURNTHRESH){
-    calcVelocity=(targetAngle- inertialSensor.heading());
-    LeftDriveSmart.spin(lDir, calcVelocity,velocityUnits::rpm);
-    RightDriveSmart.spin(rDir, calcVelocity,velocityUnits::rpm);
-  }
-}
 
 // define pre-auton routine here
 void pre_auton(void) {
