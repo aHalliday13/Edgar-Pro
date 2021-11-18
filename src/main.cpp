@@ -102,6 +102,26 @@ void InertialLeft(float targetTurn)
   task::sleep(100);
 }
 
+void driveIN(int dist, directionType dir){
+  dist=dist/(5.625);
+  if(dir==directionType::rev){
+    dist=0-dist;
+  }
+  LeftDriveSmart.resetPosition();
+  RightDriveSmart.resetPosition();
+  LeftDriveSmart.spin(dir,55,percentUnits::pct);
+  RightDriveSmart.spin(dir,55,percentUnits::pct);
+  if(dir==directionType::rev){
+    waitUntil(LeftDriveSmart.position(rotationUnits::rev)<dist && RightDriveSmart.position(rotationUnits::rev)<dist);
+  }
+  else{
+    waitUntil(LeftDriveSmart.position(rotationUnits::rev)>dist && RightDriveSmart.position(rotationUnits::rev)>dist);
+  }
+  
+  LeftDriveSmart.stop();
+  RightDriveSmart.stop();
+}
+
 
 // define pre-auton routine here
 void pre_auton(void) {
@@ -118,7 +138,14 @@ void pre_auton(void) {
 
 // define auton routine here
 void auton(void) {
-  
+  frontHook.set(false);
+  driveIN(50,directionType::fwd);
+  frontHook.set(true);
+  task::sleep(3000);
+  frontMogo.spinFor(500,rotationUnits::deg);
+  driveIN(12,directionType::rev);
+  InertialLeft(45);
+
 }
 
 // define user control code here
@@ -163,6 +190,6 @@ int main() {
   Competition.drivercontrol(usercontrol);
   // Prevent main from exiting with an infinite loop.
   while (true) {
-    task::sleep(1);
+    printf("%lf\n",LeftDriveSmart.position(rotationUnits::rev));
   }
 }
