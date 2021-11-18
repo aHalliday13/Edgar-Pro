@@ -30,42 +30,43 @@ competition Competition;
 int leftDrive;
 int rightDrive;
 int calcVelocity;
-int prevTurn = 0;
-#define DEADBAND 15
-#define maxVelocity 40
-#define minVelocity 10
+int prevTurn;
 float heading;
+#define DEADBAND 15
+#define MAXVELOCITY 40
+#define MINVELOCITY 10
 
 // define functions here
-void pneumaticSwitchFront(void){
+void pneumaticSwitchFront(void) {
   // on button press, if front hook is pressurized, depresurize, otherwise, pressurize
-  if(frontHook.value()){
+  if(frontHook.value()) {
     frontHook.set(false);
   }
-  else{
+  else {
     frontHook.set(true);
   }
 }
 
-void InertialRight(float targetTurn) 
-{
+void InertialRight(float targetTurn) {
   prevTurn = inertialSensor.rotation(degrees);
 
   task::sleep(100);
 
   heading = targetTurn + prevTurn;
 
-  while (inertialSensor.rotation(degrees) < heading){
+  while(inertialSensor.rotation(degrees) < heading) {
     printf("%lf\n",inertialSensor.rotation());
     calcVelocity = std::abs(heading - inertialSensor.rotation(degrees));
 
-    if (calcVelocity > maxVelocity) {
-      RightDriveSmart.spin(directionType::fwd, maxVelocity, velocityUnits::pct);
-      LeftDriveSmart.spin(directionType::rev, maxVelocity, velocityUnits::pct);
-    } else if (calcVelocity < minVelocity) {
-      RightDriveSmart.spin(directionType::fwd, minVelocity, velocityUnits::pct);
-      LeftDriveSmart.spin(directionType::rev, minVelocity, velocityUnits::pct);
-    } else {
+    if(calcVelocity > MAXVELOCITY) {
+      RightDriveSmart.spin(directionType::fwd, MAXVELOCITY, velocityUnits::pct);
+      LeftDriveSmart.spin(directionType::rev, MAXVELOCITY, velocityUnits::pct);
+    } 
+    else if(calcVelocity < MINVELOCITY) {
+      RightDriveSmart.spin(directionType::fwd, MINVELOCITY, velocityUnits::pct);
+      LeftDriveSmart.spin(directionType::rev, MINVELOCITY, velocityUnits::pct);
+    } 
+    else {
       RightDriveSmart.spin(directionType::fwd, calcVelocity, velocityUnits::pct);
       LeftDriveSmart.spin(directionType::rev, calcVelocity, velocityUnits::pct);
     }
@@ -75,24 +76,25 @@ void InertialRight(float targetTurn)
   task::sleep(100);
 }
 
-void InertialLeft(float targetTurn) 
-{
+void InertialLeft(float targetTurn) {
   prevTurn = inertialSensor.rotation(degrees);
 
   task::sleep(100);
 
   heading = targetTurn * -1 + prevTurn;
 
-  while (inertialSensor.rotation(degrees) > heading){
+  while(inertialSensor.rotation(degrees) > heading) {
     printf("%lf\n",inertialSensor.rotation());
     calcVelocity = std::abs(heading - inertialSensor.rotation(degrees));
-    if (calcVelocity > maxVelocity) {
-      RightDriveSmart.spin(directionType::rev, maxVelocity, velocityUnits::pct);
-      LeftDriveSmart.spin(directionType::fwd, maxVelocity, velocityUnits::pct);
-    } else if (calcVelocity < minVelocity) {
-      RightDriveSmart.spin(directionType::rev, minVelocity, velocityUnits::pct);
-      LeftDriveSmart.spin(directionType::fwd, minVelocity, velocityUnits::pct);
-    } else {
+    if(calcVelocity > MAXVELOCITY) {
+      RightDriveSmart.spin(directionType::rev, MAXVELOCITY, velocityUnits::pct);
+      LeftDriveSmart.spin(directionType::fwd, MAXVELOCITY, velocityUnits::pct);
+    } 
+    else if(calcVelocity < MINVELOCITY) {
+      RightDriveSmart.spin(directionType::rev, MINVELOCITY, velocityUnits::pct);
+      LeftDriveSmart.spin(directionType::fwd, MINVELOCITY, velocityUnits::pct);
+    } 
+    else {
       RightDriveSmart.spin(directionType::rev, calcVelocity, velocityUnits::pct);
       LeftDriveSmart.spin(directionType::fwd, calcVelocity, velocityUnits::pct);
     }
@@ -102,32 +104,30 @@ void InertialLeft(float targetTurn)
   task::sleep(100);
 }
 
-void driveIN(int dist, directionType dir){
+void driveIN(int dist, directionType dir) {
   dist=dist/(5.625);
-  if(dir==directionType::rev){
+  if(dir==directionType::rev) {
     dist=0-dist;
   }
   LeftDriveSmart.resetPosition();
   RightDriveSmart.resetPosition();
   LeftDriveSmart.spin(dir,55,percentUnits::pct);
   RightDriveSmart.spin(dir,55,percentUnits::pct);
-  if(dir==directionType::rev){
+  if(dir==directionType::rev) {
     waitUntil(LeftDriveSmart.position(rotationUnits::rev)<dist && RightDriveSmart.position(rotationUnits::rev)<dist);
   }
-  else{
+  else {
     waitUntil(LeftDriveSmart.position(rotationUnits::rev)>dist && RightDriveSmart.position(rotationUnits::rev)>dist);
-  }
-  
-  LeftDriveSmart.stop();
-  RightDriveSmart.stop();
+  } 
+  LeftDriveSmart.stop(brakeType::brake);
+  RightDriveSmart.stop(brakeType::brake);
 }
-
 
 // define pre-auton routine here
 void pre_auton(void) {
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
-  // Pre-auton goes here
+  // Reset important encoders and close the front claw
   frontHook.set(true);
   frontMogo.resetPosition();
   rearMogo.resetPosition();
@@ -145,35 +145,34 @@ void auton(void) {
   frontMogo.spinFor(500,rotationUnits::deg);
   driveIN(12,directionType::rev);
   InertialLeft(45);
-
 }
 
 // define user control code here
 void usercontrol(void) {
   // Bind button x to front hook
   Controller1.ButtonX.pressed(pneumaticSwitchFront);
-  while (true) {
+  while(true) {
       // Spin drivetrain motors
       LeftDriveSmart.spin(vex::directionType::undefined, (abs(Controller1.Axis3.position()-Controller1.Axis4.position()) >= DEADBAND) ? 0-(Controller1.Axis3.position()-Controller1.Axis4.position()) : 0, velocityUnits::pct);
       RightDriveSmart.spin(vex::directionType::undefined, (abs(Controller1.Axis3.position()+Controller1.Axis4.position()) >= DEADBAND) ? 0-(Controller1.Axis3.position()+Controller1.Axis4.position()) : 0, velocityUnits::pct);
       // Rear Lift up/down
-      if(Controller1.ButtonL1.pressing()){
+      if(Controller1.ButtonL1.pressing()) {
         rearMogo.spin(directionType::rev, 50, percentUnits::pct);
       }
-      else if(Controller1.ButtonL2.pressing()){
+      else if(Controller1.ButtonL2.pressing()) {
         rearMogo.spin(directionType::fwd, 50, percentUnits::pct);
       }
-      else{
+      else {
         rearMogo.stop(brakeType::hold);
       }
       // Front Lift up/down
-      if(Controller1.ButtonR1.pressing()&&frontMogo.position(rotationUnits::deg)<=910){
+      if(Controller1.ButtonR1.pressing()&&frontMogo.position(rotationUnits::deg)<=910) {
         frontMogo.spin(directionType::fwd, 100, percentUnits::pct);
       }
-      else if(Controller1.ButtonR2.pressing()&&frontMogo.position(rotationUnits::deg)>=0){
+      else if(Controller1.ButtonR2.pressing()&&frontMogo.position(rotationUnits::deg)>=0) {
         frontMogo.spin(directionType::rev, 100, percentUnits::pct);
       }
-      else{
+      else {
         frontMogo.stop(brakeType::brake);
       }
       // Ringle lift controls
@@ -189,7 +188,7 @@ int main() {
   Competition.autonomous(auton);
   Competition.drivercontrol(usercontrol);
   // Prevent main from exiting with an infinite loop.
-  while (true) {
-    printf("%lf\n",LeftDriveSmart.position(rotationUnits::rev));
+  while(true) {
+    task::sleep(100);
   }
 }
