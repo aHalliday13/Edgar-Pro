@@ -139,11 +139,11 @@ void pre_auton(void) {
 // define auton routine here
 void auton(void) {
   frontHook.set(false);
-  driveIN(50,directionType::fwd);
+  driveIN(55,directionType::fwd);
   frontHook.set(true);
   task::sleep(3000);
   frontMogo.spinFor(500,rotationUnits::deg);
-  driveIN(12,directionType::rev);
+  driveIN(17,directionType::rev);
   InertialLeft(45);
 }
 
