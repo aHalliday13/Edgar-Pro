@@ -1,6 +1,10 @@
 # Vex64040Edgar
 VexCode project for 64040's E.D.G.A.R. Robot
 
+# IMPORTANT BRANCH INFO
+The `main` branch should not contain any auton code. For a specific auton routine, see `LeftAuton` or `RightAuton`.
+
+
 # Code Style Guide
 1. Code should always be arranged from top to bottom:
 ```
