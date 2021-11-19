@@ -138,13 +138,7 @@ void pre_auton(void) {
 
 // define auton routine here
 void auton(void) {
-  frontHook.set(false);
-  driveIN(55,directionType::fwd);
-  frontHook.set(true);
-  task::sleep(3000);
-  frontMogo.spinFor(500,rotationUnits::deg);
-  driveIN(17,directionType::rev);
-  InertialLeft(45);
+  // nothing to see here, this is the main GitHub branch. For auton routines, see the respective branch
 }
 
 // define user control code here
