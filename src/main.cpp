@@ -144,7 +144,7 @@ void auton(void) {
   task::sleep(3000);
   frontMogo.spinFor(500,rotationUnits::deg);
   driveIN(17,directionType::rev);
-  InertialLeft(45);
+  InertialLeft(55);
 }
 
 // define user control code here
