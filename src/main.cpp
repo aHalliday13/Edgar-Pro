@@ -138,13 +138,22 @@ void pre_auton(void) {
 
 // define auton routine here
 void auton(void) {
+  // Dump Preloads
+  ringLift.setVelocity(100,percentUnits::pct);
+  ringLift.spinFor(5,rotationUnits::rev);
+  // Pick up Yellow Mogo
+  InertialRight(90);
   frontHook.set(false);
   driveIN(55,directionType::fwd);
   frontHook.set(true);
-  task::sleep(3000);
-  frontMogo.spinFor(500,rotationUnits::deg);
-  driveIN(17,directionType::rev);
-  InertialLeft(55);
+  // Drive away with Yellow Mogo and hide it in corner
+  frontMogo.spinFor(300,rotationUnits::deg);
+  InertialLeft(180);
+  driveIN(45,directionType::fwd);
+  frontMogo.spinFor(-300,rotationUnits::deg);
+  frontHook.set(false);
+  //Avoid hoarding penalty
+  driveIN(20,directionType::rev);
 }
 
 // define user control code here
