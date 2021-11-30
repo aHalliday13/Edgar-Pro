@@ -49,13 +49,19 @@ for if and while
 9. Do not EVER commit code to the `main` branch without testing. If you don't get a chance to test, create a new (apropriatley named) branch and commit your changes to that branch.
 10. Always leave descriptive, but short commit messages. If nesscesary, use the description box. Don't ever make long titles, just use the description box.
 
-# Chalenges
-Any development chalenges experienced will go here
-
-# Auton Routine
+# Auton Routine (Right)
 - Drive forward (50 in) to first neutral with claw open
 - Grab and lift mogo
 - Reverse (12 in) and turn (45 degrees left) so back faces aliance goal
 - Grab mogo with rear lift
 - Place preload in rear mogo while driving forward (15 in)
 - Drop both mogos
+
+# Auton Routine (Left)
+ - Start with ringle elevator output facing aliance mogo
+ - Dump preloads in mogo
+ - Spin (90 degrees right) to face neutral mogo
+ - Drive forward to neutral mogo
+ - Grab neutral mogo
+ - Reverse holding neutral mogo
+ - Drop neutral mogo
