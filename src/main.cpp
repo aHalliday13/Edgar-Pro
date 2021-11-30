@@ -32,6 +32,7 @@ int rightDrive;
 int calcVelocity;
 int prevTurn;
 float heading;
+bool autonSide;
 #define DEADBAND 15
 #define MAXVELOCITY 40
 #define MINVELOCITY 10
@@ -123,10 +124,32 @@ void driveIN(int dist, directionType dir) {
   RightDriveSmart.stop(brakeType::brake);
 }
 
+// define auton routines here
+void leftAuton(void) {
+  // left auton code goes here
+  printf("left\n");
+}
+
+void rightAuton(void) {
+  // right auton code goes here
+  printf("right\n");
+}
+
 // define pre-auton routine here
 void pre_auton(void) {
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
+  // select auton routine
+  Brain.Screen.drawRectangle(0,0,240,240);
+  Brain.Screen.drawRectangle(240,0,240,240);
+  waitUntil(Brain.Screen.pressing());
+  autonSide= Brain.Screen.xPosition()>240 ? true : false;
+  if (autonSide) {
+    Competition.autonomous(rightAuton);
+  }
+  else {
+    Competition.autonomous(leftAuton);
+  }
   // Reset important encoders and close the front claw
   frontHook.set(true);
   frontMogo.resetPosition();
@@ -134,11 +157,6 @@ void pre_auton(void) {
   // Calibrate Inertial and report status
   inertialSensor.startCalibration();
   waitUntil(!inertialSensor.isCalibrating());
-}
-
-// define auton routine here
-void auton(void) {
-  // nothing to see here, this is the main GitHub branch. For auton routines, see the respective branch
 }
 
 // define user control code here
@@ -176,10 +194,9 @@ void usercontrol(void) {
 
 // main() called on program start
 int main() {
-  // run the pre-auton routine
+  // run the pre-auton routine, this will set up auton routine
   pre_auton();
-  // Set up callbacks for autonomous and driver control periods.
-  Competition.autonomous(auton);
+  // Set up callbacks for driver control period.
   Competition.drivercontrol(usercontrol);
   // Prevent main from exiting with an infinite loop.
   while(true) {
