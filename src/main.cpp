@@ -140,7 +140,7 @@ void pre_auton(void) {
 void auton(void) {
   // Dump Preloads
   ringLift.setVelocity(100,percentUnits::pct);
-  ringLift.spinFor(5,rotationUnits::rev);
+  ringLift.spinFor(13,rotationUnits::rev);
   // Pick up Yellow Mogo
   InertialRight(90);
   frontHook.set(false);
