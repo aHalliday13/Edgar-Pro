@@ -3,7 +3,7 @@
 /*    Module:       main.cpp                                                          */
 /*    Author:       VEX                                                               */
 /*    Created:      Thu Sep 26 2019                                                   */
-/*    Description:  E.D.G.A.R. (Ergonomicaly Decent Goal-Grabbing Automated Robot)    */
+/*    Description:  E.D.G.A.R. (Ergonomically Decent Goal-Grabbing Automated Robot)    */
 /*                                                                                    */
 /*------------------------------------------------------------------------------------*/
 
