@@ -32,6 +32,7 @@ int rightDrive;
 int calcVelocity;
 int prevTurn;
 float heading;
+bool autonSide;
 #define DEADBAND 15
 #define MAXVELOCITY 40
 #define MINVELOCITY 10
@@ -131,6 +132,10 @@ void pre_auton(void) {
   frontHook.set(true);
   frontMogo.resetPosition();
   rearMogo.resetPosition();
+  Brain.Screen.drawRectangle(0,0,240,240);
+  Brain.Screen.drawRectangle(241,0,240,240);
+  waitUntil(Brain.Screen.pressing());
+  autonSide= Brain.Screen.xPosition()>240 ? true : false;
   // Calibrate Inertial and report status
   inertialSensor.startCalibration();
   waitUntil(!inertialSensor.isCalibrating());
@@ -138,7 +143,8 @@ void pre_auton(void) {
 
 // define auton routine here
 void auton(void) {
-  // nothing to see here, this is the main GitHub branch. For auton routines, see the respective branch
+  // print the side of the screen that was pressed
+  printf("%s", autonSide ? "right" : "left");
 }
 
 // define user control code here
