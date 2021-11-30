@@ -104,15 +104,15 @@ void InertialLeft(float targetTurn) {
   task::sleep(100);
 }
 
-void driveIN(int dist, directionType dir) {
+void driveIN(int dist, directionType dir,int vel) {
   dist=dist/(5.625);
   if(dir==directionType::rev) {
     dist=0-dist;
   }
   LeftDriveSmart.resetPosition();
   RightDriveSmart.resetPosition();
-  LeftDriveSmart.spin(dir,55,percentUnits::pct);
-  RightDriveSmart.spin(dir,55,percentUnits::pct);
+  LeftDriveSmart.spin(dir,vel,percentUnits::pct);
+  RightDriveSmart.spin(dir,vel,percentUnits::pct);
   if(dir==directionType::rev) {
     waitUntil(LeftDriveSmart.position(rotationUnits::rev)<dist && RightDriveSmart.position(rotationUnits::rev)<dist);
   }
@@ -144,16 +144,16 @@ void auton(void) {
   // Pick up Yellow Mogo
   InertialRight(90);
   frontHook.set(false);
-  driveIN(55,directionType::fwd);
+  driveIN(55,directionType::fwd,55);
   frontHook.set(true);
   // Drive away with Yellow Mogo and hide it in corner
   frontMogo.spinFor(300,rotationUnits::deg);
   InertialLeft(180);
-  driveIN(45,directionType::fwd);
+  driveIN(45,directionType::fwd,55);
   frontMogo.spinFor(-300,rotationUnits::deg);
   frontHook.set(false);
   //Avoid hoarding penalty
-  driveIN(20,directionType::rev);
+  driveIN(20,directionType::rev,55);
 }
 
 // define user control code here
