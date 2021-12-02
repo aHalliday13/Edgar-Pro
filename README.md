@@ -2,7 +2,7 @@
 VexCode project for 64040's E.D.G.A.R. Robot
 
 # IMPORTANT BRANCH INFO
-The `main` branch should not contain any auton code. For a specific auton routine, see `LeftAuton` or `RightAuton`.
+The `main` branch now contains auton code. Any previous statments about it not containing auton code are null.
 
 
 # Code Style Guide
