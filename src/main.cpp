@@ -144,6 +144,9 @@ void rightAutonCenter(void) {
   // right auton code goes here
   printf("right c\n");
 }
+void skillsAuton(void) {
+  printf("skills\n");
+}
 
 // define pre-auton routine here
 void pre_auton(void) {
@@ -157,7 +160,25 @@ void pre_auton(void) {
   Brain.Screen.drawRectangle(200,0,80,240);
   waitUntil(Brain.Screen.pressing());
   //Brain.Screen.xPosition();
-
+  if (Brain.Screen.xPosition()<200){
+    if (Brain.Screen.yPosition()<120){
+      Competition.autonomous(leftAutonLeft);
+    }
+    else if (Brain.Screen.yPosition()>120){
+      Competition.autonomous(leftAutonCenter);
+    }
+  }
+  else if (Brain.Screen.xPosition()>280){
+    if (Brain.Screen.yPosition()<120){
+      Competition.autonomous(rightAutonRight);
+    }
+    else if (Brain.Screen.yPosition()>120){
+      Competition.autonomous(rightAutonCenter);
+    }
+  }
+  else{
+    Competition.autonomous(skillsAuton);
+  }
   // Reset important encoders and close the front claw
   frontHook.set(true);
   frontMogo.resetPosition();
