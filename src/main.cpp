@@ -125,14 +125,24 @@ void driveIN(int dist, directionType dir) {
 }
 
 // define auton routines here
-void leftAuton(void) {
+void leftAutonLeft(void) {
   // left auton code goes here
-  printf("left\n");
+  printf("left l\n");
 }
 
-void rightAuton(void) {
+void leftAutonCenter(void) {
+  // left auton code goes here
+  printf("left c\n");
+}
+
+void rightAutonRight(void) {
   // right auton code goes here
-  printf("right\n");
+  printf("right r\n");
+}
+
+void rightAutonCenter(void) {
+  // right auton code goes here
+  printf("right c\n");
 }
 
 // define pre-auton routine here
@@ -140,16 +150,14 @@ void pre_auton(void) {
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
   // select auton routine
-  Brain.Screen.drawRectangle(0,0,240,240);
-  Brain.Screen.drawRectangle(240,0,240,240);
+  Brain.Screen.drawRectangle(0,0,200,120);
+  Brain.Screen.drawRectangle(280,0,200,120);
+  Brain.Screen.drawRectangle(0,120,200,120);
+  Brain.Screen.drawRectangle(280,120,200,120);
+  Brain.Screen.drawRectangle(200,0,80,240);
   waitUntil(Brain.Screen.pressing());
-  autonSide= Brain.Screen.xPosition()>240 ? true : false;
-  if (autonSide) {
-    Competition.autonomous(rightAuton);
-  }
-  else {
-    Competition.autonomous(leftAuton);
-  }
+  //Brain.Screen.xPosition();
+
   // Reset important encoders and close the front claw
   frontHook.set(true);
   frontMogo.resetPosition();
