@@ -138,28 +138,23 @@ void pre_auton(void) {
 
 // define auton routine here
 void auton(void) {
+  frontHook.set(false);
   //Step 1: Dump Preloads
   ringLift.setVelocity(100,percentUnits::pct);
   ringLift.spinFor(13,rotationUnits::rev);
-  //Step 2: Pick up YeMogo
+  //Step 2: "Mad Dash" for middle Yemogo
+  driveIN(6,directionType::fwd,70);
   InertialRight(90);
-  frontHook.set(false);
-  driveIN(55,directionType::fwd,100);
+  driveIN(18,directionType::fwd,70);
+  InertialRight(90);
+  driveIN(27,directionType::fwd,70);
+  InertialLeft(55);
+  driveIN(35,directionType::fwd,70);
   frontHook.set(true);
-  //Step 3: Drive away with YeMogo and hide it in corner
-  frontMogo.spinFor(300,rotationUnits::deg);
-  InertialLeft(180);
-  driveIN(40,directionType::fwd,55);
-  frontMogo.spinFor(-300,rotationUnits::deg);
-  frontHook.set(false);
-  //Step 4: Avoid hoarding penalty
-  driveIN(15,directionType::rev,55);
-  //Step 5: "Mad Dash" for middle Yemogo
-  InertialLeft(120);
-  driveIN(37,directionType::fwd,70);
-  frontHook.set(true);
-  driveIN(55,directionType::rev,100);
-  //Step 6: Profit
+  frontMogo.spinTo(300,rotationUnits::deg);
+  driveIN(40,directionType::rev,100);
+  InertialRight(30);
+  //Step 3: Profit
 }
 
 // define user control code here
