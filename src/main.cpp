@@ -208,7 +208,17 @@ void rightAutonCenter(void) {
   ringLift.spinFor(3,timeUnits::sec,100,velocityUnits::pct);
 }
 void skillsAuton(void) {
-  printf("skills\n");
+  rightAutonRight();
+  driveIN(10,directionType::fwd,55);
+  InertialLeft(90);
+  driveIN(40,directionType::fwd,55);
+  InertialLeft(90);
+  frontMogo.spinFor(200,rotationUnits::deg);
+  driveIN(10,directionType::fwd,55);
+  frontMogo.spinFor(-200,rotationUnits::deg);
+  frontHook.set(false);
+  frontMogo.spinFor(200,rotationUnits::deg);
+  driveIN(20,directionType::rev,55);
 }
 
 // define pre-auton routine here
