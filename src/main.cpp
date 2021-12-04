@@ -143,12 +143,7 @@ void leftAutonLeft(void) {
   frontHook.set(false);
   //Step 4: Avoid hoarding penalty
   driveIN(15,directionType::rev,55);
-  //Step 5: "Mad Dash" for middle Yemogo
-  InertialLeft(120);
-  driveIN(37,directionType::fwd,70);
-  frontHook.set(true);
-  driveIN(55,directionType::rev,100);
-  //Step 6: Profit
+  //Step 5: Profit
 }
 
 void leftAutonCenter(void) {
