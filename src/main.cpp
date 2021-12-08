@@ -148,6 +148,7 @@ void leftAutonLeft(void) {
 
 void leftAutonNoWP(void){
   //Step 1: Pick up YeMogo
+  InertialRight(90);
   frontHook.set(false);
   driveIN(55,directionType::fwd,100);
   frontHook.set(true);
@@ -255,7 +256,7 @@ void pre_auton(void) {
   Brain.Screen.drawRectangle(200,0,80,240);
   //waitUntil(Brain.Screen.pressing());
   //Brain.Screen.xPosition();
-  Competition.autonomous(rightAutonNoWP);
+  Competition.autonomous(leftAutonNoWP);
   /*
   if (Brain.Screen.xPosition()<200){
     if (Brain.Screen.yPosition()<120){
