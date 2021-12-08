@@ -146,6 +146,27 @@ void leftAutonLeft(void) {
   //Step 5: Profit
 }
 
+void leftAutonNoWP(void){
+  //Step 1: Pick up YeMogo
+  frontHook.set(false);
+  driveIN(55,directionType::fwd,100);
+  frontHook.set(true);
+  //Step 2: Drive away with YeMogo and hide it in corner
+  frontMogo.spinFor(300,rotationUnits::deg);
+  InertialLeft(180);
+  driveIN(40,directionType::fwd,55);
+  frontMogo.spinFor(-300,rotationUnits::deg);
+  frontHook.set(false);
+  //Step 3: Avoid hoarding penalty
+  driveIN(15,directionType::rev,55);
+  //Step 4: "Mad Dash" for middle Yemogo
+   InertialLeft(120);
+   driveIN(37,directionType::fwd,70);
+   frontHook.set(true);
+   driveIN(55,directionType::rev,100);
+   //Step 5: Profit
+}
+
 void leftAutonCenter(void) {
   // left auton code goes here
   frontHook.set(false);
@@ -185,6 +206,21 @@ void rightAutonRight(void) {
   rearMogo.spinTo(600, rotationUnits::deg);
   ringLift.spinFor(3,timeUnits::sec,100,velocityUnits::pct);
   InertialRight(35);
+}
+
+void rightAutonNoWP(void){
+  // open claw, drive forward to neutral mogo, latch on and lift
+  frontHook.set(false);
+  driveIN(60,directionType::fwd,100);
+  frontHook.set(true);
+  task::sleep(500);
+  frontMogo.spinFor(500,rotationUnits::deg);
+  InertialRight(100);
+  rearMogo.spinTo(700, rotationUnits::deg);
+  driveIN(40,directionType::rev,100);
+  rearMogo.spinTo(500, rotationUnits::deg);
+  InertialRight(25);
+  driveIN(30,directionType::fwd,100);
 }
 
 void rightAutonCenter(void) {

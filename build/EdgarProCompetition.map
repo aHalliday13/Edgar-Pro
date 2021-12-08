@@ -64,6 +64,14 @@ __vex_critical_section
 Discarded input sections
 
  .text          0x0000000000000000        0x0 build/src/main.o
+ .text._Z13leftAutonNoWPv
+                0x0000000000000000      0x100 build/src/main.o
+ .ARM.exidx.text._Z13leftAutonNoWPv
+                0x0000000000000000        0x8 build/src/main.o
+ .text._Z14rightAutonNoWPv
+                0x0000000000000000       0xf8 build/src/main.o
+ .ARM.exidx.text._Z14rightAutonNoWPv
+                0x0000000000000000        0x8 build/src/main.o
  .bss.leftDrive
                 0x0000000000000000        0x4 build/src/main.o
  .bss.rightDrive
