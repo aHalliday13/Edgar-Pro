@@ -211,16 +211,17 @@ void rightAutonRight(void) {
 void rightAutonNoWP(void){
   // open claw, drive forward to neutral mogo, latch on and lift
   frontHook.set(false);
-  driveIN(60,directionType::fwd,100);
+  driveIN(60,directionType::fwd,55);
   frontHook.set(true);
   task::sleep(500);
   frontMogo.spinFor(500,rotationUnits::deg);
-  InertialRight(100);
   rearMogo.spinTo(700, rotationUnits::deg);
-  driveIN(40,directionType::rev,100);
+  InertialRight(82.5);
+  driveIN(30,directionType::rev,30);
   rearMogo.spinTo(500, rotationUnits::deg);
   InertialRight(25);
-  driveIN(30,directionType::fwd,100);
+  driveIN(70,directionType::fwd,100);
+  ringLift.spinFor(directionType::fwd,1800, rotationUnits::deg,100,velocityUnits::pct);
 }
 
 void rightAutonCenter(void) {
@@ -252,8 +253,10 @@ void pre_auton(void) {
   Brain.Screen.drawRectangle(0,120,200,120);
   Brain.Screen.drawRectangle(280,120,200,120);
   Brain.Screen.drawRectangle(200,0,80,240);
-  waitUntil(Brain.Screen.pressing());
+  //waitUntil(Brain.Screen.pressing());
   //Brain.Screen.xPosition();
+  Competition.autonomous(rightAutonNoWP);
+  /*
   if (Brain.Screen.xPosition()<200){
     if (Brain.Screen.yPosition()<120){
       Competition.autonomous(leftAutonLeft);
@@ -272,7 +275,7 @@ void pre_auton(void) {
   }
   else{
     Competition.autonomous(skillsAuton);
-  }
+  }*/
   // Reset important encoders and close the front claw
   frontHook.set(true);
   frontMogo.resetPosition();
