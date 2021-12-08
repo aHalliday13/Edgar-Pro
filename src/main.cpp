@@ -202,6 +202,11 @@ void rightAutonCenter(void) {
   rearMogo.spinTo(600, rotationUnits::deg);
   ringLift.spinFor(3,timeUnits::sec,100,velocityUnits::pct);
 }
+
+void soloWinPoint(void){
+  printf("solo AWP\n");
+}
+
 void skillsAuton(void) {
   printf("skills\n");
 }
