@@ -138,11 +138,11 @@ void leftAutonLeft(void) {
   //Step 3: Drive away with YeMogo and hide it in corner
   frontMogo.spinFor(300,rotationUnits::deg);
   InertialLeft(180);
-  driveIN(40,directionType::fwd,55);
+  driveIN(40,directionType::fwd,100);
   frontMogo.spinFor(-300,rotationUnits::deg);
   frontHook.set(false);
   //Step 4: Avoid hoarding penalty
-  driveIN(15,directionType::rev,55);
+  driveIN(15,directionType::rev,100);
   //Step 5: Profit
 }
 
@@ -153,13 +153,13 @@ void leftAutonCenter(void) {
   ringLift.setVelocity(100,percentUnits::pct);
   ringLift.spinFor(13,rotationUnits::rev);
   //Step 2: "Mad Dash" for middle Yemogo
-  driveIN(6,directionType::fwd,70);
+  driveIN(6,directionType::fwd,100);
   InertialRight(90);
-  driveIN(18,directionType::fwd,70);
+  driveIN(18,directionType::fwd,100);
   InertialRight(90);
-  driveIN(27,directionType::fwd,70);
+  driveIN(27,directionType::fwd,100);
   InertialLeft(55);
-  driveIN(35,directionType::fwd,70);
+  driveIN(35,directionType::fwd,100);
   frontHook.set(true);
   frontMogo.spinTo(300,rotationUnits::deg);
   driveIN(40,directionType::rev,100);
@@ -171,17 +171,17 @@ void rightAutonRight(void) {
   // right auton code goes here
   // open claw, drive forward to neutral mogo, latch on and lift
   frontHook.set(false);
-  driveIN(60,directionType::fwd,55);
+  driveIN(60,directionType::fwd,100);
   frontHook.set(true);
   task::sleep(500);
   frontMogo.spinFor(500,rotationUnits::deg);
   // drop lift, back up to aliance mogo, spin to grab it with rear lift
   rearMogo.spinTo(700, rotationUnits::deg);
-  driveIN(17,directionType::rev,55);
+  driveIN(17,directionType::rev,100);
   InertialLeft(35);
   LeftDriveSmart.setVelocity(25,percentUnits::pct);
   RightDriveSmart.setVelocity(25,percentUnits::pct);
-  driveIN(20,directionType::rev,20);
+  driveIN(20,directionType::rev,100);
   rearMogo.spinTo(600, rotationUnits::deg);
   ringLift.spinFor(3,timeUnits::sec,100,velocityUnits::pct);
   InertialRight(35);
@@ -191,14 +191,14 @@ void rightAutonCenter(void) {
   // right auton code goes here
   // open claw, turn left, drive forward to center yemogo, latch on and lift
   frontHook.set(false);
-  driveIN(35,directionType::fwd,70);
+  driveIN(35,directionType::fwd,100);
   InertialLeft(45);
-  driveIN(40,directionType::fwd,70);
+  driveIN(40,directionType::fwd,100);
   frontHook.set(true);
   frontMogo.spinFor(500,rotationUnits::deg);
   // drop lift, back up to aliance mogo, load rings
   rearMogo.spinTo(700, rotationUnits::deg);
-  driveIN(70,directionType::rev,55);
+  driveIN(70,directionType::rev,100);
   rearMogo.spinTo(600, rotationUnits::deg);
   ringLift.spinFor(3,timeUnits::sec,100,velocityUnits::pct);
 }
