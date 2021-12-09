@@ -147,25 +147,23 @@ void leftAutonLeft(void) {
 }
 
 void leftAutonNoWP(void){
-  //Step 1: Pick up YeMogo
+  //align robot on walls and back up to first mogo
+  driveIN(30,directionType::rev,70);
   InertialRight(90);
-  frontHook.set(false);
-  driveIN(55,directionType::fwd,100);
+  driveIN(10,directionType::fwd,100);
+  driveIN(45,directionType::rev,70);
+  rearMogo.spinTo(700,rotationUnits::deg);
+  InertialLeft(112);
+  driveIN(30,directionType::rev,70);
+  rearMogo.spinTo(600,rotationUnits::deg);
+  //head for middle mogo
+  InertialRight(200);
+  driveIN(35,directionType::fwd,100);
   frontHook.set(true);
-  //Step 2: Drive away with YeMogo and hide it in corner
   frontMogo.spinFor(300,rotationUnits::deg);
-  InertialLeft(180);
-  driveIN(40,directionType::fwd,55);
-  frontMogo.spinFor(-300,rotationUnits::deg);
-  frontHook.set(false);
-  //Step 3: Avoid hoarding penalty
-  driveIN(15,directionType::rev,55);
-  //Step 4: "Mad Dash" for middle Yemogo
-   InertialLeft(120);
-   driveIN(37,directionType::fwd,70);
-   frontHook.set(true);
-   driveIN(55,directionType::rev,100);
-   //Step 5: Profit
+  //return to corner
+  InertialRight(135);
+  driveIN(80,directionType::fwd,100);
 }
 
 void leftAutonCenter(void) {
