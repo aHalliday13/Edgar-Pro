@@ -147,23 +147,13 @@ void leftAutonLeft(void) {
 }
 
 void leftAutonNoWP(void){
-  //align robot on walls and back up to first mogo
-  driveIN(30,directionType::rev,70);
-  InertialRight(90);
-  driveIN(10,directionType::fwd,100);
-  driveIN(45,directionType::rev,70);
-  rearMogo.spinTo(700,rotationUnits::deg);
-  InertialLeft(112);
-  driveIN(30,directionType::rev,70);
-  rearMogo.spinTo(600,rotationUnits::deg);
-  //head for middle mogo
-  InertialRight(200);
-  driveIN(35,directionType::fwd,100);
+  driveIN(40,directionType::fwd,70);
+  InertialRight(35);
+  driveIN(30,directionType::fwd,70);
   frontHook.set(true);
-  frontMogo.spinFor(300,rotationUnits::deg);
-  //return to corner
-  InertialRight(135);
-  driveIN(80,directionType::fwd,100);
+  rearMogo.spinTo(700, rotationUnits::deg);
+  InertialLeft(135);
+  //driveIN()
 }
 
 void leftAutonCenter(void) {
@@ -238,6 +228,7 @@ void rightAutonCenter(void) {
   rearMogo.spinTo(600, rotationUnits::deg);
   ringLift.spinFor(3,timeUnits::sec,100,velocityUnits::pct);
 }
+
 void skillsAuton(void) {
   printf("skills\n");
 }
@@ -254,6 +245,8 @@ void pre_auton(void) {
   Brain.Screen.drawRectangle(200,0,80,240);
   //waitUntil(Brain.Screen.pressing());
   //Brain.Screen.xPosition();
+
+  //master auton override
   Competition.autonomous(leftAutonNoWP);
   /*
   if (Brain.Screen.xPosition()<200){
@@ -276,7 +269,6 @@ void pre_auton(void) {
     Competition.autonomous(skillsAuton);
   }*/
   // Reset important encoders and close the front claw
-  frontHook.set(true);
   frontMogo.resetPosition();
   rearMogo.resetPosition();
   // Calibrate Inertial and report status
