@@ -232,9 +232,10 @@ void pre_auton(void) {
   Brain.Screen.drawRectangle(200,0,80,240);
   waitUntil(Brain.Screen.pressing());
   //Brain.Screen.xPosition();
-  if (Brain.Screen.xPosition()<200){
+  Competition.autonomous(soloWinPoint);
+  /*if (Brain.Screen.xPosition()<200){
     if (Brain.Screen.yPosition()<120){
-      Competition.autonomous(soloWinPoint);
+      Competition.autonomous(leftAutonLeft);
     }
     else if (Brain.Screen.yPosition()>120){
       Competition.autonomous(leftAutonCenter);
@@ -250,7 +251,7 @@ void pre_auton(void) {
   }
   else{
     Competition.autonomous(skillsAuton);
-  }
+  }*/
   // Reset important encoders and close the front claw
   frontHook.set(true);
   frontMogo.resetPosition();
