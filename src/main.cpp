@@ -204,7 +204,16 @@ void rightAutonCenter(void) {
 }
 
 void soloWinPoint(void){
-  printf("solo AWP\n");
+  frontMogo.spinFor(350,rotationUnits::deg);
+  driveIN(7,directionType::rev,55);
+  InertialLeft(90);
+  driveIN(25,directionType::fwd,55);
+  InertialLeft(87);
+  rearMogo.spinTo(700,rotationUnits::deg);
+  driveIN(105,directionType::rev,55);
+  rearMogo.spinTo(550,rotationUnits::deg);
+  ringLift.spinFor(3,timeUnits::sec,90,velocityUnits::pct);
+  InertialRight(90);
 }
 
 void skillsAuton(void) {
@@ -225,7 +234,7 @@ void pre_auton(void) {
   //Brain.Screen.xPosition();
   if (Brain.Screen.xPosition()<200){
     if (Brain.Screen.yPosition()<120){
-      Competition.autonomous(leftAutonLeft);
+      Competition.autonomous(soloWinPoint);
     }
     else if (Brain.Screen.yPosition()>120){
       Competition.autonomous(leftAutonCenter);
