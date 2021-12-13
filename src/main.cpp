@@ -18,6 +18,7 @@
 // LeftDriveSmart       motor_group   11, 12          
 // RightDriveSmart      motor_group   1, 2            
 // ringLift             motor         19              
+// rearMogoSwitch       limit         G               
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 #include "vex.h"
@@ -247,7 +248,7 @@ void usercontrol(void) {
       LeftDriveSmart.spin(vex::directionType::undefined, (abs(Controller1.Axis3.position()-Controller1.Axis4.position()) >= DEADBAND) ? 0-(Controller1.Axis3.position()-Controller1.Axis4.position()) : 0, velocityUnits::pct);
       RightDriveSmart.spin(vex::directionType::undefined, (abs(Controller1.Axis3.position()+Controller1.Axis4.position()) >= DEADBAND) ? 0-(Controller1.Axis3.position()+Controller1.Axis4.position()) : 0, velocityUnits::pct);
       // Rear Lift up/down
-      if(Controller1.ButtonL1.pressing()) {
+      if(Controller1.ButtonL1.pressing()&&!rearMogoSwitch.value()) {
         rearMogo.spin(directionType::rev, 50, percentUnits::pct);
       }
       else if(Controller1.ButtonL2.pressing()) {
