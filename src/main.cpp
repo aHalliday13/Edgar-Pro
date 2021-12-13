@@ -253,7 +253,7 @@ void pre_auton(void) {
     Competition.autonomous(skillsAuton);
   }*/
   // Reset important encoders and close the front claw
-  frontHook.set(true);
+  frontHook.set(false);
   frontMogo.resetPosition();
   rearMogo.resetPosition();
   // Calibrate Inertial and report status
