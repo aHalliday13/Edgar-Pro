@@ -205,12 +205,18 @@ void rightAutonCenter(void) {
 
 void soloWinPoint(void){
   frontMogo.spinFor(350,rotationUnits::deg);
-  driveIN(7,directionType::rev,55);
+  driveIN(7,directionType::rev,100);
   InertialLeft(90);
-  driveIN(25,directionType::fwd,55);
+  driveIN(25,directionType::fwd,100);
   InertialLeft(87);
+  driveIN(30,directionType::rev,100);
+  InertialLeft(90);
+  InertialRight(90);
+  driveIN(50,directionType::rev,100);
+  InertialLeft(45);
+  InertialRight(45);
   rearMogo.spinTo(700,rotationUnits::deg);
-  driveIN(105,directionType::rev,55);
+  driveIN(30,directionType::rev,55);
   rearMogo.spinTo(550,rotationUnits::deg);
   ringLift.spinFor(3,timeUnits::sec,90,velocityUnits::pct);
   InertialRight(90);
@@ -230,7 +236,7 @@ void pre_auton(void) {
   Brain.Screen.drawRectangle(0,120,200,120);
   Brain.Screen.drawRectangle(280,120,200,120);
   Brain.Screen.drawRectangle(200,0,80,240);
-  waitUntil(Brain.Screen.pressing());
+  //waitUntil(Brain.Screen.pressing());
   //Brain.Screen.xPosition();
   Competition.autonomous(soloWinPoint);
   /*if (Brain.Screen.xPosition()<200){
