@@ -195,6 +195,22 @@ void rightAutonCenter(void) {
   rearMogo.spinTo(600, rotationUnits::deg);
   ringLift.spinFor(3,timeUnits::sec,100,velocityUnits::pct);
 }
+
+void soloWinPoint(void){
+  frontMogo.spinFor(350,rotationUnits::deg);
+  driveIN(7,directionType::rev,55);
+  InertialLeft(90);
+  driveIN(21,directionType::fwd,55);
+  InertialLeft(87);
+  rearMogo.spinTo(700,rotationUnits::deg);
+  driveIN(85,directionType::rev,55);
+  InertialLeft(15);
+  driveIN(15,directionType::rev,55);
+  rearMogo.spinTo(550,rotationUnits::deg);
+  ringLift.spinFor(3,timeUnits::sec,90,velocityUnits::pct);
+  InertialRight(90);
+}
+
 void skillsAuton(void) {
   printf("skills\n");
 }
@@ -209,9 +225,10 @@ void pre_auton(void) {
   Brain.Screen.drawRectangle(0,120,200,120);
   Brain.Screen.drawRectangle(280,120,200,120);
   Brain.Screen.drawRectangle(200,0,80,240);
-  waitUntil(Brain.Screen.pressing());
+  //waitUntil(Brain.Screen.pressing());
   //Brain.Screen.xPosition();
-  if (Brain.Screen.xPosition()<200){
+  Competition.autonomous(soloWinPoint);
+  /*if (Brain.Screen.xPosition()<200){
     if (Brain.Screen.yPosition()<120){
       Competition.autonomous(leftAutonLeft);
     }
@@ -229,9 +246,9 @@ void pre_auton(void) {
   }
   else{
     Competition.autonomous(skillsAuton);
-  }
+  }*/
   // Reset important encoders and close the front claw
-  frontHook.set(true);
+  frontHook.set(false);
   frontMogo.resetPosition();
   rearMogo.resetPosition();
   // Calibrate Inertial and report status
