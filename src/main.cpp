@@ -205,18 +205,14 @@ void rightAutonCenter(void) {
 
 void soloWinPoint(void){
   frontMogo.spinFor(350,rotationUnits::deg);
-  driveIN(7,directionType::rev,100);
+  driveIN(7,directionType::rev,55);
   InertialLeft(90);
-  driveIN(25,directionType::fwd,100);
+  driveIN(21,directionType::fwd,55);
   InertialLeft(87);
-  driveIN(30,directionType::rev,100);
-  InertialLeft(90);
-  InertialRight(90);
-  driveIN(50,directionType::rev,100);
-  InertialLeft(45);
-  InertialRight(45);
   rearMogo.spinTo(700,rotationUnits::deg);
-  driveIN(30,directionType::rev,55);
+  driveIN(85,directionType::rev,55);
+  InertialLeft(15);
+  driveIN(15,directionType::rev,55);
   rearMogo.spinTo(550,rotationUnits::deg);
   ringLift.spinFor(3,timeUnits::sec,90,velocityUnits::pct);
   InertialRight(90);
