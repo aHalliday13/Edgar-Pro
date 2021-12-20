@@ -119,6 +119,7 @@ void driveIN(int dist, directionType dir,int vel,bool waitForComplete) {
 
 // define auton routines here
 void leftAutonLeft(void) {
+  
   // left auton code goes here
   //Step 1: Dump Preloads
   ringLift.setVelocity(100,percentUnits::pct);
@@ -131,7 +132,7 @@ void leftAutonLeft(void) {
   //Step 3: Drive away with YeMogo and hide it in corner
   frontMogo.spinFor(300,rotationUnits::deg);
   InertialLeft(180);
-  driveIN(40,directionType::fwd,55,false);
+  driveIN(40,directionType::fwd,55,true);
   frontMogo.spinFor(-300,rotationUnits::deg);
   frontHook.set(false);
   //Step 4: Avoid hoarding penalty
@@ -140,6 +141,7 @@ void leftAutonLeft(void) {
 }
 
 void leftAutonCenter(void) {
+  
   // left auton code goes here
   frontHook.set(false);
   //Step 1: Dump Preloads
@@ -152,7 +154,7 @@ void leftAutonCenter(void) {
   InertialRight(90);
   driveIN(27,directionType::fwd,70,true);
   InertialLeft(55);
-  driveIN(35,directionType::fwd,70,false);
+  driveIN(35,directionType::fwd,70,true);
   frontHook.set(true);
   frontMogo.spinTo(300,rotationUnits::deg);
   driveIN(40,directionType::rev,100,true);
@@ -161,10 +163,11 @@ void leftAutonCenter(void) {
 }
 
 void rightAutonRight(void) {
+  
   // right auton code goes here
   // open claw, drive forward to neutral mogo, latch on and lift
   frontHook.set(false);
-  driveIN(60,directionType::fwd,55,false);
+  driveIN(60,directionType::fwd,55,true);
   frontHook.set(true);
   task::sleep(500);
   frontMogo.spinFor(500,rotationUnits::deg);
@@ -181,6 +184,7 @@ void rightAutonRight(void) {
 }
 
 void rightAutonCenter(void) {
+  
   // right auton code goes here
   // open claw, turn left, drive forward to center yemogo, latch on and lift
   frontHook.set(false);
@@ -197,22 +201,23 @@ void rightAutonCenter(void) {
 }
 
 void soloWinPoint(void){
+  
   frontMogo.spinFor(350,rotationUnits::deg);
-  driveIN(7,directionType::rev,55);
+  driveIN(7,directionType::rev,55,true);
   InertialLeft(90);
-  driveIN(21,directionType::fwd,55);
+  driveIN(22,directionType::fwd,55,true);
   InertialLeft(87);
   rearMogo.spinTo(700,rotationUnits::deg);
-  driveIN(85,directionType::rev,55);
+  driveIN(85,directionType::rev,100,true);
   InertialLeft(15);
-  driveIN(15,directionType::rev,55);
+  driveIN(23,directionType::rev,55,true);
   rearMogo.spinTo(550,rotationUnits::deg);
   ringLift.spinFor(3,timeUnits::sec,90,velocityUnits::pct);
   InertialRight(90);
 }
 
 void skillsAuton(void) {
-  printf("skills\n");
+  Controller1.Screen.print("SKILL");
 }
 
 // define pre-auton routine here
@@ -225,28 +230,33 @@ void pre_auton(void) {
   Brain.Screen.drawRectangle(0,120,200,120);
   Brain.Screen.drawRectangle(280,120,200,120);
   Brain.Screen.drawRectangle(200,0,80,240);
-  //waitUntil(Brain.Screen.pressing());
+  waitUntil(Brain.Screen.pressing());
   //Brain.Screen.xPosition();
-  Competition.autonomous(soloWinPoint);
-  /*if (Brain.Screen.xPosition()<200){
+  if (Brain.Screen.xPosition()<200){
     if (Brain.Screen.yPosition()<120){
+      Controller1.Screen.print("LL");
       Competition.autonomous(leftAutonLeft);
     }
     else if (Brain.Screen.yPosition()>120){
+      Controller1.Screen.print("LC");
       Competition.autonomous(leftAutonCenter);
     }
   }
   else if (Brain.Screen.xPosition()>280){
     if (Brain.Screen.yPosition()<120){
+      Controller1.Screen.print("RR");
       Competition.autonomous(rightAutonRight);
     }
     else if (Brain.Screen.yPosition()>120){
+      Controller1.Screen.print("RC");
       Competition.autonomous(rightAutonCenter);
     }
   }
   else{
-    Competition.autonomous(skillsAuton);
-  }*/
+    Controller1.Screen.print("SAWP");
+    Competition.autonomous(soloWinPoint);
+  }
+  Brain.Screen.clearScreen();
   // Reset important encoders and close the front claw
   frontHook.set(false);
   frontMogo.resetPosition();
@@ -262,8 +272,8 @@ void usercontrol(void) {
   Controller1.ButtonX.pressed(pneumaticSwitchFront);
   while(true) {
       // Spin drivetrain motors
-      LeftDriveSmart.spin(vex::directionType::undefined, (abs(Controller1.Axis3.position()-Controller1.Axis4.position()) >= DEADBAND) ? 0-(Controller1.Axis3.position()-Controller1.Axis4.position()) : 0, velocityUnits::pct);
-      RightDriveSmart.spin(vex::directionType::undefined, (abs(Controller1.Axis3.position()+Controller1.Axis4.position()) >= DEADBAND) ? 0-(Controller1.Axis3.position()+Controller1.Axis4.position()) : 0, velocityUnits::pct);
+      LeftDriveSmart.spin(vex::directionType::undefined, 2*(abs(Controller1.Axis3.position()-Controller1.Axis4.position()) >= DEADBAND) ? 0-(Controller1.Axis3.position()-Controller1.Axis4.position()) : 0, velocityUnits::pct);
+      RightDriveSmart.spin(vex::directionType::undefined, 2*(abs(Controller1.Axis3.position()+Controller1.Axis4.position()) >= DEADBAND) ? 0-(Controller1.Axis3.position()+Controller1.Axis4.position()) : 0, velocityUnits::pct);
       // Rear Lift up/down
       if(Controller1.ButtonL1.pressing()&&!rearMogoSwitch.value()) {
         rearMogo.spin(directionType::rev, 50, percentUnits::pct);
