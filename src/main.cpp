@@ -19,6 +19,7 @@
 // RightDriveSmart      motor_group   1, 2            
 // ringLift             motor         19              
 // rearMogoSwitch       limit         G               
+// sideHook             motor         7               
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 #include "vex.h"
@@ -107,7 +108,7 @@ void InertialLeft(float targetTurn) {
 }
 
 void driveIN(int dist, directionType dir,int vel) {
-  dist=dist/(5.625);
+  dist=dist/(5);
   if(dir==directionType::rev) {
     dist=0-dist;
   }
@@ -127,7 +128,7 @@ void driveIN(int dist, directionType dir,int vel) {
 
 // define auton routines here
 void leftAutonLeft(void) {
-  
+  sideHook.spinFor(-1.25,rotationUnits::rev);
   // left auton code goes here
   //Step 1: Dump Preloads
   ringLift.setVelocity(100,percentUnits::pct);
@@ -149,7 +150,7 @@ void leftAutonLeft(void) {
 }
 
 void leftAutonCenter(void) {
-  
+  sideHook.spinFor(-1.25,rotationUnits::rev);
   // left auton code goes here
   frontHook.set(false);
   //Step 1: Dump Preloads
@@ -171,10 +172,11 @@ void leftAutonCenter(void) {
 }
 
 void rightAutonRight(void) {
+  sideHook.spinFor(-1.25,rotationUnits::rev);
   // right auton code goes here
   // open claw, drive forward to neutral mogo, latch on and lift
   frontHook.set(false);
-  driveIN(60,directionType::fwd,55);
+  driveIN(55,directionType::fwd,55);
   frontHook.set(true);
   task::sleep(500);
   frontMogo.spinFor(500,rotationUnits::deg);
@@ -185,13 +187,16 @@ void rightAutonRight(void) {
   LeftDriveSmart.setVelocity(25,percentUnits::pct);
   RightDriveSmart.setVelocity(25,percentUnits::pct);
   driveIN(20,directionType::rev,20);
-  rearMogo.spinTo(600, rotationUnits::deg);
+  rearMogo.spin(directionType::rev,70,velocityUnits::pct);
+  waitUntil(rearMogoSwitch.value());
+  rearMogo.stop(brakeType::hold);
   ringLift.spinFor(3,timeUnits::sec,100,velocityUnits::pct);
   InertialRight(35);
+  driveIN(5,directionType::rev,100);
 }
 
 void rightAutonCenter(void) {
-  
+  sideHook.spinFor(-1.25,rotationUnits::rev);
   // right auton code goes here
   // open claw, turn left, drive forward to center yemogo, latch on and lift
   frontHook.set(false);
@@ -208,7 +213,7 @@ void rightAutonCenter(void) {
 }
 
 void soloWinPoint(void){
-  
+  sideHook.spinFor(-1.25,rotationUnits::rev);
   frontMogo.spinFor(350,rotationUnits::deg);
   driveIN(7,directionType::rev,55);
   InertialLeft(90);
@@ -225,45 +230,57 @@ void soloWinPoint(void){
 
 void skillsAuton(void) {
   Controller1.Screen.print("SKILL");
+  sideHook.spinFor(-1.25,rotationUnits::rev);
 }
 
 // define pre-auton routine here
 void pre_auton(void) {
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
-  // select auton routine
+  // draw rectangles on the screen
   Brain.Screen.drawRectangle(0,0,200,120);
   Brain.Screen.drawRectangle(280,0,200,120);
   Brain.Screen.drawRectangle(0,120,200,120);
   Brain.Screen.drawRectangle(280,120,200,120);
   Brain.Screen.drawRectangle(200,0,80,240);
-  Competition.autonomous(rightAutonRight);
-  /*waitUntil(Brain.Screen.pressing());
-  //Brain.Screen.xPosition();
+  // draw text on the screen
+  Brain.Screen.printAt(5,15,"Left Left",false);
+  printf("LL: %ld",Brain.Screen.getStringWidth("Left Left"));
+  
+  Brain.Screen.printAt(5,125,"Left Center",false);
+  printf("LC: %ld",Brain.Screen.getStringWidth("Left Center"));
+
+  Brain.Screen.printAt(285,15,"Right Right",false);
+  printf("RR: %ld",Brain.Screen.getStringWidth("Right Right"));
+
+  Brain.Screen.printAt(285,125,"Right Center",false);
+  printf("RC: %ld",Brain.Screen.getStringWidth("Right Center"));
+  // select auton routine
+  waitUntil(Brain.Screen.pressing());
   if (Brain.Screen.xPosition()<200){
     if (Brain.Screen.yPosition()<120){
-      Controller1.Screen.print("LL");
+      Controller1.Screen.print("Left Left");
       Competition.autonomous(leftAutonLeft);
     }
     else if (Brain.Screen.yPosition()>120){
-      Controller1.Screen.print("LC");
+      Controller1.Screen.print("Left Center");
       Competition.autonomous(leftAutonCenter);
     }
   }
   else if (Brain.Screen.xPosition()>280){
     if (Brain.Screen.yPosition()<120){
-      Controller1.Screen.print("RR");
+      Controller1.Screen.print("Right Right");
       Competition.autonomous(rightAutonRight);
     }
     else if (Brain.Screen.yPosition()>120){
-      Controller1.Screen.print("RC");
+      Controller1.Screen.print("Right Center");
       Competition.autonomous(rightAutonCenter);
     }
   }
   else{
     Controller1.Screen.print("SAWP");
     Competition.autonomous(soloWinPoint);
-  }*/
+  }
   Brain.Screen.clearScreen();
   // Reset important encoders and close the front claw
   frontHook.set(false);
@@ -302,15 +319,33 @@ void usercontrol(void) {
       else {
         frontMogo.stop(brakeType::brake);
       }
+      // Side hook up/down
+      if(Controller1.ButtonY.pressing()){
+        sideHook.spin(directionType::fwd,200,velocityUnits::pct);
+      }
+      else if(Controller1.ButtonA.pressing()){
+        sideHook.spin(directionType::rev,200,velocityUnits::pct);
+      }
+      else{
+        sideHook.stop(brakeType::hold);
+      }
       // Ringle lift controls
       ringLift.spin(vex::directionType::undefined, (abs(Controller1.Axis2.position()) >= DEADBAND) ? 0-(Controller1.Axis2.position()) : 0, velocityUnits::pct);
   }
+}
+
+void calibrate(){
+  //emergency calibration code
+  LeftDriveSmart.spinFor(1,rotationUnits::rev,false);
+  RightDriveSmart.spinFor(1,rotationUnits::rev,false);
 }
 
 // main() called on program start
 int main() {
   // run the pre-auton routine, this will set up auton routine
   pre_auton();
+  //emergency calibration code, leave commented out unless you know what you're doing
+  //Competition.autonomous(calibrate);
   // Set up callbacks for driver control period.
   Competition.drivercontrol(usercontrol);
   // Prevent main from exiting with an infinite loop.
