@@ -1,0 +1,6 @@
+# These files cause problems, so this file tells GitHub to ignore changes to them
+build/
+*.bin
+*.elf
+*.map
+*.o
