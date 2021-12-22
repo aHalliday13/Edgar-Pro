@@ -20,5 +20,5 @@ Steps to reproduce the behavior:
 **Expected behavior**
 A clear and concise description of what you expected to happen.
 
-**Additional context**
+**Suggested Solution**
 Add any other context about the problem here.
