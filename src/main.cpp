@@ -22,6 +22,8 @@
 // sideHook             motor         7               
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
+// "It's always the programer's fault" - Some genius on the vex fourms
+
 #include "vex.h"
 #include "cmath"
 
@@ -134,9 +136,9 @@ void leftAutonLeft(void) {
   ringLift.setVelocity(100,percentUnits::pct);
   ringLift.spinFor(13,rotationUnits::rev);
   //Step 2: Pick up YeMogo
-  InertialRight(90);
+  InertialRight(92);
   frontHook.set(false);
-  driveIN(55,directionType::fwd,100);
+  driveIN(48,directionType::fwd,100);
   frontHook.set(true);
   //Step 3: Drive away with YeMogo and hide it in corner
   frontMogo.spinFor(300,rotationUnits::deg);
@@ -163,7 +165,7 @@ void leftAutonCenter(void) {
   InertialRight(90);
   driveIN(27,directionType::fwd,70);
   InertialLeft(55);
-  driveIN(35,directionType::fwd,70);
+  driveIN(35,directionType::fwd,20);
   frontHook.set(true);
   frontMogo.spinTo(300,rotationUnits::deg);
   driveIN(40,directionType::rev,100);
@@ -176,7 +178,7 @@ void rightAutonRight(void) {
   // right auton code goes here
   // open claw, drive forward to neutral mogo, latch on and lift
   frontHook.set(false);
-  driveIN(55,directionType::fwd,55);
+  driveIN(49,directionType::fwd,55);
   frontHook.set(true);
   task::sleep(500);
   frontMogo.spinFor(500,rotationUnits::deg);
@@ -196,15 +198,17 @@ void rightAutonRight(void) {
 }
 
 void rightAutonCenter(void) {
+  // testing code just ignore: driveIN(70,directionType::rev,100);
   sideHook.spinFor(-1.25,rotationUnits::rev);
   // right auton code goes here
   // open claw, turn left, drive forward to center yemogo, latch on and lift
   frontHook.set(false);
-  driveIN(35,directionType::fwd,70);
+  driveIN(29,directionType::fwd,70);
   InertialLeft(45);
   driveIN(40,directionType::fwd,70);
   frontHook.set(true);
   frontMogo.spinFor(500,rotationUnits::deg);
+  InertialLeft(5);
   // drop lift, back up to aliance mogo, load rings
   rearMogo.spinTo(700, rotationUnits::deg);
   driveIN(70,directionType::rev,55);
@@ -227,9 +231,9 @@ void soloWinPoint(void){
   waitUntil(LeftDriveSmart.velocity(percentUnits::pct)<5 && RightDriveSmart.velocity(percentUnits::pct)<5);
   LeftDriveSmart.stop();
   RightDriveSmart.stop();
-  driveIN(95,directionType::rev,100);
+  driveIN(91,directionType::rev,100);
   InertialLeft(15);
-  driveIN(23,directionType::rev,55);
+  driveIN(12,directionType::rev,55);
   rearMogo.spinTo(550,rotationUnits::deg);
   ringLift.spinFor(3,timeUnits::sec,90,velocityUnits::pct);
   InertialRight(90);
