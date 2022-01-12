@@ -110,6 +110,13 @@ void InertialLeft(float targetTurn) {
 }
 
 void driveIN(int dist, directionType dir,int vel) {
+  // 3:7 gear ratio motor:wheel
+  // 7 rotations of the motor is three rotations of the wheel
+  // Wheel circumfrence 12.9590697
+  // 7 rotations of the motor is 38.8772091
+  // 1 rotation of the wheel is 5.5388701
+  // need to ajust all routines to actual inches before changing value in code
+
   dist=dist/(5);
   if(dir==directionType::rev) {
     dist=0-dist;
@@ -331,10 +338,10 @@ void usercontrol(void) {
         frontMogo.stop(brakeType::brake);
       }
       // Side hook up/down
-      if(Controller1.ButtonY.pressing()){
+      if(Controller1.ButtonA.pressing()){
         sideHook.spin(directionType::fwd,200,velocityUnits::pct);
       }
-      else if(Controller1.ButtonA.pressing()){
+      else if(Controller1.ButtonY.pressing()){
         sideHook.spin(directionType::rev,200,velocityUnits::pct);
       }
       else{
