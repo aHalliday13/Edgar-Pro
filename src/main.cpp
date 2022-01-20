@@ -48,6 +48,15 @@ void pneumaticSwitchFront(void) {
   }
 }
 
+void rev2obs(){
+  LeftDriveSmart.spin(directionType::fwd,200,velocityUnits::pct);
+  RightDriveSmart.spin(directionType::fwd,200,velocityUnits::pct);
+  waitUntil(LeftDriveSmart.velocity(percentUnits::pct)>5 && RightDriveSmart.velocity(percentUnits::pct)>5);
+  waitUntil(LeftDriveSmart.velocity(percentUnits::pct)<5 && RightDriveSmart.velocity(percentUnits::pct)<5);
+  LeftDriveSmart.stop();
+  RightDriveSmart.stop();
+}
+
 void InertialRight(float targetTurn) {
   prevTurn = inertialSensor.rotation(degrees);
 
