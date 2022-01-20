@@ -52,11 +52,17 @@ void pneumaticSwitchFront(void) {
   }
 }
 
-void rev2obs(){
-  LeftDriveSmart.spin(directionType::fwd,200,velocityUnits::pct);
-  RightDriveSmart.spin(directionType::fwd,200,velocityUnits::pct);
-  waitUntil(LeftDriveSmart.velocity(percentUnits::pct)>5 && RightDriveSmart.velocity(percentUnits::pct)>5);
-  waitUntil(LeftDriveSmart.velocity(percentUnits::pct)<5 && RightDriveSmart.velocity(percentUnits::pct)<5);
+void drive2obs(directionType dir){
+  LeftDriveSmart.spin(dir,200,velocityUnits::pct);
+  RightDriveSmart.spin(dir,200,velocityUnits::pct);
+  if(dir==directionType::fwd){
+    waitUntil(LeftDriveSmart.velocity(percentUnits::pct)>5 && RightDriveSmart.velocity(percentUnits::pct)>5);
+    waitUntil(LeftDriveSmart.velocity(percentUnits::pct)<5 && RightDriveSmart.velocity(percentUnits::pct)<5);
+  }
+  else{
+    waitUntil(LeftDriveSmart.velocity(percentUnits::pct)<5 && RightDriveSmart.velocity(percentUnits::pct)<5);
+    waitUntil(LeftDriveSmart.velocity(percentUnits::pct)>5 && RightDriveSmart.velocity(percentUnits::pct)>5);
+  }
   LeftDriveSmart.stop();
   RightDriveSmart.stop();
 }
@@ -239,7 +245,7 @@ void soloWinPoint(void){
   InertialLeft(87);
   rearMogo.spinTo(700,rotationUnits::deg);
   //driveIN(12,directionType::fwd,55);
-  rev2obs();
+  drive2obs(directionType::fwd);
   driveIN(105,directionType::rev,100);
   rearMogo.spinTo(550,rotationUnits::deg,200,velocityUnits::pct);
   ringLift.spinFor(3,timeUnits::sec,200,velocityUnits::pct);
