@@ -18,6 +18,8 @@
 // LeftDriveSmart       motor_group   11, 12          
 // RightDriveSmart      motor_group   1, 2            
 // ringLift             motor         19              
+// sideHook             motor         7               
+// rearMogoSwitch       limit         G               
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 #include "vex.h"
@@ -46,6 +48,21 @@ void pneumaticSwitchFront(void) {
   else {
     frontHook.set(true);
   }
+}
+
+void drive2obs(directionType dir){
+  LeftDriveSmart.spin(dir,200,velocityUnits::pct);
+  RightDriveSmart.spin(dir,200,velocityUnits::pct);
+  if(dir==directionType::fwd){
+    waitUntil(LeftDriveSmart.velocity(percentUnits::pct)>5 && RightDriveSmart.velocity(percentUnits::pct)>5);
+    waitUntil(LeftDriveSmart.velocity(percentUnits::pct)<5 && RightDriveSmart.velocity(percentUnits::pct)<5);
+  }
+  else{
+    waitUntil(LeftDriveSmart.velocity(percentUnits::pct)<5 && RightDriveSmart.velocity(percentUnits::pct)<5);
+    waitUntil(LeftDriveSmart.velocity(percentUnits::pct)>5 && RightDriveSmart.velocity(percentUnits::pct)>5);
+  }
+  LeftDriveSmart.stop();
+  RightDriveSmart.stop();
 }
 
 void InertialRight(float targetTurn) {
@@ -203,17 +220,9 @@ void rightAutonCenter(void) {
   ringLift.spinFor(3,timeUnits::sec,100,velocityUnits::pct);
 }
 void skillsAuton(void) {
-  rightAutonRight();
-  driveIN(10,directionType::fwd,55);
-  InertialLeft(90);
-  driveIN(40,directionType::fwd,55);
-  InertialLeft(90);
-  frontMogo.spinFor(200,rotationUnits::deg);
-  driveIN(10,directionType::fwd,55);
-  frontMogo.spinFor(-200,rotationUnits::deg);
-  frontHook.set(false);
-  frontMogo.spinFor(200,rotationUnits::deg);
-  driveIN(20,directionType::rev,55);
+  drive2obs(directionType::fwd);
+  rearMogo.spinTo(700, rotationUnits::deg);
+  //driveIN()
 }
 
 // define pre-auton routine here
@@ -221,32 +230,7 @@ void pre_auton(void) {
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
   // select auton routine
-  Brain.Screen.drawRectangle(0,0,200,120);
-  Brain.Screen.drawRectangle(280,0,200,120);
-  Brain.Screen.drawRectangle(0,120,200,120);
-  Brain.Screen.drawRectangle(280,120,200,120);
-  Brain.Screen.drawRectangle(200,0,80,240);
-  waitUntil(Brain.Screen.pressing());
-  //Brain.Screen.xPosition();
-  if (Brain.Screen.xPosition()<200){
-    if (Brain.Screen.yPosition()<120){
-      Competition.autonomous(leftAutonLeft);
-    }
-    else if (Brain.Screen.yPosition()>120){
-      Competition.autonomous(leftAutonCenter);
-    }
-  }
-  else if (Brain.Screen.xPosition()>280){
-    if (Brain.Screen.yPosition()<120){
-      Competition.autonomous(rightAutonRight);
-    }
-    else if (Brain.Screen.yPosition()>120){
-      Competition.autonomous(rightAutonCenter);
-    }
-  }
-  else{
-    Competition.autonomous(skillsAuton);
-  }
+  Competition.autonomous(skillsAuton);
   // Reset important encoders and close the front claw
   frontHook.set(true);
   frontMogo.resetPosition();

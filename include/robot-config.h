@@ -11,6 +11,8 @@ extern controller Controller1;
 extern motor_group LeftDriveSmart;
 extern motor_group RightDriveSmart;
 extern motor ringLift;
+extern motor sideHook;
+extern limit rearMogoSwitch;
 
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.
