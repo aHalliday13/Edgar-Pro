@@ -259,7 +259,7 @@ void pre_auton(void) {
   //Brain.Screen.xPosition();
 
   //master auton override
-  Competition.autonomous(rightAutonNoWP);
+  Competition.autonomous(leftAutonNoWP);
   /*
   if (Brain.Screen.xPosition()<200){
     if (Brain.Screen.yPosition()<120){
