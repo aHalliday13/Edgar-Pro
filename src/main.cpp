@@ -284,55 +284,52 @@ void skillsAuton(void) {
   sideHook.spinFor(-1.25,rotationUnits::rev);
 }
 
+// now that autons are defined, we can define the auton selection code
+
+void autonSelect(){
+  if(Controller1.ButtonA.pressing()){
+    Competition.autonomous(rightAutonRight);
+    Controller1.Screen.print("RAR");
+  }
+  else if(Controller1.ButtonB.pressing()){
+    Competition.autonomous(rightAutonCenter);
+    Controller1.Screen.print("RAC");
+  }
+  else if(Controller1.ButtonX.pressing()){
+    Competition.autonomous(leftAutonCenter);
+    Controller1.Screen.print("LAC");
+  }
+  else if(Controller1.ButtonY.pressing()){
+    Competition.autonomous(leftAutonLeft);
+    Controller1.Screen.print("LAL");
+  }
+  else if(Controller1.ButtonLeft.pressing()){
+    Competition.autonomous(leftAutonNoWP);
+    Controller1.Screen.print("LANWP");
+  }
+  else if(Controller1.ButtonRight.pressing()){
+    Competition.autonomous(rightAutonNoWP);
+    Controller1.Screen.print("RANWP");
+  }
+  else if(Controller1.ButtonUp.pressing()){
+    Competition.autonomous(soloWinPoint);
+    Controller1.Screen.print("SAWP");
+  }
+  else if(Controller1.ButtonDown.pressing()){
+    Competition.autonomous(skillsAuton);
+    Controller1.Screen.print("SKILL");
+  }
+  else {
+    autonSelect();
+  }
+}
+
 // define pre-auton routine here
 void pre_auton(void) {
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
-  // draw rectangles on the screen
-  Brain.Screen.drawRectangle(0,0,200,120);
-  Brain.Screen.drawRectangle(280,0,200,120);
-  Brain.Screen.drawRectangle(0,120,200,120);
-  Brain.Screen.drawRectangle(280,120,200,120);
-  Brain.Screen.drawRectangle(200,0,80,240);
-  // draw text on the screen
-  Brain.Screen.printAt(5,15,"Left Left",false);
-  printf("LL: %ld",Brain.Screen.getStringWidth("Left Left"));
-  
-  Brain.Screen.printAt(5,125,"Left Center",false);
-  printf("LC: %ld",Brain.Screen.getStringWidth("Left Center"));
-
-  Brain.Screen.printAt(285,15,"Right Right",false);
-  printf("RR: %ld",Brain.Screen.getStringWidth("Right Right"));
-
-  Brain.Screen.printAt(285,125,"Right Center",false);
-  printf("RC: %ld",Brain.Screen.getStringWidth("Right Center"));
-  // select auton routine
-  waitUntil(Brain.Screen.pressing());
-  if (Brain.Screen.xPosition()<200){
-    if (Brain.Screen.yPosition()<120){
-      Controller1.Screen.print("Left Left");
-      Competition.autonomous(leftAutonLeft);
-    }
-    else if (Brain.Screen.yPosition()>120){
-      Controller1.Screen.print("Left Center");
-      Competition.autonomous(leftAutonCenter);
-    }
-  }
-  else if (Brain.Screen.xPosition()>280){
-    if (Brain.Screen.yPosition()<120){
-      Controller1.Screen.print("Right Right");
-      Competition.autonomous(rightAutonRight);
-    }
-    else if (Brain.Screen.yPosition()>120){
-      Controller1.Screen.print("Right Center");
-      Competition.autonomous(rightAutonCenter);
-    }
-  }
-  else{
-    Controller1.Screen.print("SAWP");
-    Competition.autonomous(soloWinPoint);
-  }
-  Brain.Screen.clearScreen();
+  // Auton Selection
+  autonSelect();
   // Reset important encoders and close the front claw
   frontHook.set(false);
   frontMogo.resetPosition();
