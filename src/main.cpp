@@ -19,6 +19,7 @@
 // RightDriveSmart      motor_group   1, 2            
 // ringLift             motor         19              
 // sideHook             motor         7               
+// rearMogoSwitch       limit         G               
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 #include "vex.h"
@@ -158,13 +159,18 @@ void leftAutonLeft(void) {
 
 void leftAutonNoWP(void){
   sideHook.spinFor(-1.25,rotationUnits::rev,200,velocityUnits::pct);
-  driveIN(40,directionType::fwd,70);
-  InertialRight(35);
-  driveIN(30,directionType::fwd,70);
+  driveIN(36,directionType::fwd,70);
+  InertialRight(15);
+  rearMogo.spinTo(700, rotationUnits::deg,false);
+  driveIN(29,directionType::fwd,70);
   frontHook.set(true);
-  rearMogo.spinTo(700, rotationUnits::deg);
-  InertialLeft(135);
-  //driveIN()
+  frontMogo.spinTo(90,rotationUnits::deg);
+  InertialLeft(95);
+  driveIN(24,directionType::rev,30);
+  rearMogo.spinTo(500, rotationUnits::deg);
+  rearMogo.stop(brakeType::hold);
+  InertialLeft(45);
+  driveIN(60,directionType::fwd,70);
 }
 
 void leftAutonCenter(void) {
