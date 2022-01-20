@@ -18,6 +18,7 @@
 // LeftDriveSmart       motor_group   11, 12          
 // RightDriveSmart      motor_group   1, 2            
 // ringLift             motor         19              
+// sideHook             motor         7               
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 #include "vex.h"
@@ -156,6 +157,7 @@ void leftAutonLeft(void) {
 }
 
 void leftAutonNoWP(void){
+  sideHook.spinFor(-1.25,rotationUnits::rev,200,velocityUnits::pct);
   driveIN(40,directionType::fwd,70);
   InertialRight(35);
   driveIN(30,directionType::fwd,70);
@@ -207,6 +209,7 @@ void rightAutonRight(void) {
 }
 
 void rightAutonNoWP(void){
+  sideHook.spinFor(-1.25,rotationUnits::rev,200,velocityUnits::pct);
   // open claw, drive forward to neutral mogo, latch on and lift
   frontHook.set(false);
   driveIN(60,directionType::fwd,55);
@@ -256,7 +259,7 @@ void pre_auton(void) {
   //Brain.Screen.xPosition();
 
   //master auton override
-  Competition.autonomous(leftAutonNoWP);
+  Competition.autonomous(rightAutonNoWP);
   /*
   if (Brain.Screen.xPosition()<200){
     if (Brain.Screen.yPosition()<120){
