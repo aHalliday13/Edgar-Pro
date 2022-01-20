@@ -52,6 +52,15 @@ void pneumaticSwitchFront(void) {
   }
 }
 
+void rev2obs(){
+  LeftDriveSmart.spin(directionType::fwd,200,velocityUnits::pct);
+  RightDriveSmart.spin(directionType::fwd,200,velocityUnits::pct);
+  waitUntil(LeftDriveSmart.velocity(percentUnits::pct)>5 && RightDriveSmart.velocity(percentUnits::pct)>5);
+  waitUntil(LeftDriveSmart.velocity(percentUnits::pct)<5 && RightDriveSmart.velocity(percentUnits::pct)<5);
+  LeftDriveSmart.stop();
+  RightDriveSmart.stop();
+}
+
 void InertialRight(float targetTurn) {
   prevTurn = inertialSensor.rotation(degrees);
 
@@ -230,12 +239,7 @@ void soloWinPoint(void){
   InertialLeft(87);
   rearMogo.spinTo(700,rotationUnits::deg);
   //driveIN(12,directionType::fwd,55);
-  LeftDriveSmart.spin(directionType::fwd,200,velocityUnits::pct);
-  RightDriveSmart.spin(directionType::fwd,200,velocityUnits::pct);
-  waitUntil(LeftDriveSmart.velocity(percentUnits::pct)>5 && RightDriveSmart.velocity(percentUnits::pct)>5);
-  waitUntil(LeftDriveSmart.velocity(percentUnits::pct)<5 && RightDriveSmart.velocity(percentUnits::pct)<5);
-  LeftDriveSmart.stop();
-  RightDriveSmart.stop();
+  rev2obs();
   driveIN(105,directionType::rev,100);
   rearMogo.spinTo(550,rotationUnits::deg,200,velocityUnits::pct);
   ringLift.spinFor(3,timeUnits::sec,200,velocityUnits::pct);
