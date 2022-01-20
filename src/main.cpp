@@ -137,11 +137,11 @@ void driveIN(int dist, directionType dir,int vel) {
 
 // define auton routines here
 void leftAutonLeft(void) {
-  sideHook.spinFor(-1.25,rotationUnits::rev);
+  sideHook.spinFor(-1.25,rotationUnits::rev,200,velocityUnits::pct);
   // left auton code goes here
   //Step 1: Dump Preloads
   ringLift.setVelocity(100,percentUnits::pct);
-  ringLift.spinFor(13,rotationUnits::rev);
+  ringLift.spinFor(1.5,timeUnits::sec);
   //Step 2: Pick up YeMogo
   InertialRight(92);
   frontHook.set(false);
@@ -159,12 +159,12 @@ void leftAutonLeft(void) {
 }
 
 void leftAutonCenter(void) {
-  sideHook.spinFor(-1.25,rotationUnits::rev);
+  sideHook.spinFor(-1.25,rotationUnits::rev,200,velocityUnits::pct);
   // left auton code goes here
   frontHook.set(false);
   //Step 1: Dump Preloads
   ringLift.setVelocity(100,percentUnits::pct);
-  ringLift.spinFor(13,rotationUnits::rev);
+  ringLift.spinFor(1.5,timeUnits::sec);
   //Step 2: "Mad Dash" for middle Yemogo
   driveIN(6,directionType::fwd,70);
   InertialRight(90);
@@ -172,7 +172,7 @@ void leftAutonCenter(void) {
   InertialRight(90);
   driveIN(27,directionType::fwd,70);
   InertialLeft(55);
-  driveIN(35,directionType::fwd,20);
+  driveIN(35,directionType::fwd,40);
   frontHook.set(true);
   frontMogo.spinTo(300,rotationUnits::deg);
   driveIN(40,directionType::rev,100);
@@ -181,7 +181,7 @@ void leftAutonCenter(void) {
 }
 
 void rightAutonRight(void) {
-  sideHook.spinFor(-1.25,rotationUnits::rev);
+  sideHook.spinFor(-1.25,rotationUnits::rev,200,velocityUnits::pct);
   // right auton code goes here
   // open claw, drive forward to neutral mogo, latch on and lift
   frontHook.set(false);
@@ -192,10 +192,8 @@ void rightAutonRight(void) {
   // drop lift, back up to aliance mogo, spin to grab it with rear lift
   rearMogo.spinTo(700, rotationUnits::deg);
   driveIN(17,directionType::rev,55);
-  InertialLeft(35);
-  LeftDriveSmart.setVelocity(25,percentUnits::pct);
-  RightDriveSmart.setVelocity(25,percentUnits::pct);
-  driveIN(20,directionType::rev,20);
+  InertialLeft(40);
+  driveIN(15,directionType::rev,20);
   rearMogo.spin(directionType::rev,70,velocityUnits::pct);
   waitUntil(rearMogoSwitch.value());
   rearMogo.stop(brakeType::hold);
@@ -206,7 +204,7 @@ void rightAutonRight(void) {
 
 void rightAutonCenter(void) {
   // testing code just ignore: driveIN(70,directionType::rev,100);
-  sideHook.spinFor(-1.25,rotationUnits::rev);
+  sideHook.spinFor(-1.25,rotationUnits::rev,200,velocityUnits::pct);
   // right auton code goes here
   // open claw, turn left, drive forward to center yemogo, latch on and lift
   frontHook.set(false);
@@ -224,25 +222,23 @@ void rightAutonCenter(void) {
 }
 
 void soloWinPoint(void){
-  sideHook.spinFor(-1.25,rotationUnits::rev);
-  frontMogo.spinFor(750,rotationUnits::deg);
-  driveIN(7,directionType::rev,55);
+  sideHook.spinFor(-1.25,rotationUnits::rev,200,velocityUnits::pct);
+  frontMogo.spinFor(directionType::fwd,750,rotationUnits::deg,200,velocityUnits::pct);
+  driveIN(7,directionType::rev,70);
   InertialLeft(90);
-  driveIN(16,directionType::fwd,55);
+  driveIN(16,directionType::fwd,70);
   InertialLeft(87);
   rearMogo.spinTo(700,rotationUnits::deg);
   //driveIN(12,directionType::fwd,55);
-  LeftDriveSmart.spin(directionType::fwd,100,velocityUnits::pct);
-  RightDriveSmart.spin(directionType::fwd,100,velocityUnits::pct);
+  LeftDriveSmart.spin(directionType::fwd,200,velocityUnits::pct);
+  RightDriveSmart.spin(directionType::fwd,200,velocityUnits::pct);
   waitUntil(LeftDriveSmart.velocity(percentUnits::pct)>5 && RightDriveSmart.velocity(percentUnits::pct)>5);
   waitUntil(LeftDriveSmart.velocity(percentUnits::pct)<5 && RightDriveSmart.velocity(percentUnits::pct)<5);
   LeftDriveSmart.stop();
   RightDriveSmart.stop();
-  driveIN(91,directionType::rev,100);
-  InertialLeft(15);
-  driveIN(12,directionType::rev,55);
-  rearMogo.spinTo(550,rotationUnits::deg);
-  ringLift.spinFor(3,timeUnits::sec,90,velocityUnits::pct);
+  driveIN(105,directionType::rev,100);
+  rearMogo.spinTo(550,rotationUnits::deg,200,velocityUnits::pct);
+  ringLift.spinFor(3,timeUnits::sec,200,velocityUnits::pct);
   InertialRight(90);
 }
 
