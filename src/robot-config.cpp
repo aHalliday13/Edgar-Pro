@@ -23,6 +23,7 @@ motor ringLift = motor(PORT19, ratio6_1, false);
 motor sideHook = motor(PORT7, ratio36_1, true);
 limit rearMogoSwitch = limit(Brain.ThreeWirePort.G);
 
+
 // VEXcode generated functions
 // define variable for remote controller enable/disable
 bool RemoteControlCodeEnabled = true;

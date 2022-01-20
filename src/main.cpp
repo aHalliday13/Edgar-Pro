@@ -18,8 +18,8 @@
 // LeftDriveSmart       motor_group   11, 12          
 // RightDriveSmart      motor_group   1, 2            
 // ringLift             motor         19              
-// sideHook             motor         7               
 // rearMogoSwitch       limit         G               
+// sideHook             motor         7               
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 // "It's always the programer's fault" - Some genius on the vex fourms
