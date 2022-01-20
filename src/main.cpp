@@ -246,6 +246,39 @@ void soloWinPoint(void){
   InertialRight(90);
 }
 
+void leftAutonNoWP(void){
+  sideHook.spinFor(-1.25,rotationUnits::rev,200,velocityUnits::pct);
+  driveIN(36,directionType::fwd,70);
+  InertialRight(15);
+  rearMogo.spinTo(700, rotationUnits::deg,false);
+  driveIN(29,directionType::fwd,70);
+  frontHook.set(true);
+  frontMogo.spinTo(90,rotationUnits::deg);
+  InertialLeft(95);
+  driveIN(24,directionType::rev,30);
+  rearMogo.spinTo(500, rotationUnits::deg);
+  rearMogo.stop(brakeType::hold);
+  InertialLeft(45);
+  driveIN(60,directionType::fwd,70);
+}
+
+void rightAutonNoWP(void){
+  sideHook.spinFor(-1.25,rotationUnits::rev,200,velocityUnits::pct);
+  // open claw, drive forward to neutral mogo, latch on and lift
+  frontHook.set(false);
+  driveIN(60,directionType::fwd,55);
+  frontHook.set(true);
+  task::sleep(500);
+  frontMogo.spinFor(500,rotationUnits::deg);
+  rearMogo.spinTo(700, rotationUnits::deg);
+  InertialRight(82.5);
+  driveIN(30,directionType::rev,30);
+  rearMogo.spinTo(500, rotationUnits::deg);
+  InertialRight(25);
+  driveIN(70,directionType::fwd,100);
+  ringLift.spinFor(directionType::fwd,1800, rotationUnits::deg,100,velocityUnits::pct);
+}
+
 void skillsAuton(void) {
   Controller1.Screen.print("SKILL");
   sideHook.spinFor(-1.25,rotationUnits::rev);
