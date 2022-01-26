@@ -231,7 +231,7 @@ void rightAutonCenter(void) {
   InertialLeft(5);
   // drop lift, back up to aliance mogo, load rings
   rearMogo.spinTo(700, rotationUnits::deg);
-  driveIN(70,directionType::rev,55);
+  driveIN(60,directionType::rev,55);
   rearMogo.spinTo(600, rotationUnits::deg);
   ringLift.spinFor(3,timeUnits::sec,100,velocityUnits::pct);
 }
