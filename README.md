@@ -1,67 +1,38 @@
 # Vex64040Edgar
-VexCode project for 64040's E.D.G.A.R. Robot
+VexCode project for 64040C E.D.G.A.R.
 
-# IMPORTANT BRANCH INFO
-The `main` branch now contains auton code. Any previous statments about it not containing auton code are null.
-
-
-# Code Style Guide
-1. Code should always be arranged from top to bottom:
-```
-#include ...
-
-using namespace vex;
-competition Competition;
-
-vars
-macros
-
-functions
-
-pre-auton
-
-auton
-
-user control
-
-main()
-```
-2. Place a comment at the top of each section `// define vars and macros here`
-3. `if`,`while`,`void`, etc. should all be written in the format:
-```
-void functionName() {
-  code();
- }
- ```
- for voids and
- ```
- if(condition) {
-  do();
- }
- ```
-for if and while
-
-4. Each section should have ONE line of space between it and the next section
-5. Each function should have ONE line of space between it and the next function
-6. One line per line. Please don't write like this: `code();otherFunction();someOtherFunction();` because it's a nightmare to read and understand
-7. Place spacing inside of long functions. Group groups of lines based on thier intended function.
-8. Only edit code inside the VexCode editor. Do not edit on GitHub, because there is no syntax checking and something WILL get messed up.
-9. Do not EVER commit code to the `main` branch without testing. If you don't get a chance to test, create a new (apropriatley named) branch and commit your changes to that branch.
-10. Always leave descriptive, but short commit messages. If nesscesary, use the description box. Don't ever make long titles, just use the description box.
-
-# Auton Routine (Right)
-- Drive forward (50 in) to first neutral with claw open
-- Grab and lift mogo
-- Reverse (12 in) and turn (45 degrees left) so back faces aliance goal
-- Grab mogo with rear lift
-- Place preload in rear mogo while driving forward (15 in)
-- Drop both mogos
-
-# Auton Routine (Left)
- - Start with ringle elevator output facing aliance mogo
- - Dump preloads in mogo
- - Spin (90 degrees right) to face neutral mogo
- - Drive forward to neutral mogo
- - Grab neutral mogo
- - Reverse holding neutral mogo
- - Drop neutral mogo
+# Autonomous Routines 
+All currently planned and/or completed autonomous routes.
+## Left Autonomous Left (LAL)
+![LAL](https://user-images.githubusercontent.com/94485192/151856098-19eaf961-00a5-43c7-90a5-3859990f53fc.png)
+<br>Dump rings into alliance mobile goal, grab left neutral mobile goal.
+## Left Autonomous Center (LAC)
+![LAC](https://user-images.githubusercontent.com/94485192/151856110-759fd924-d4b3-446d-8792-3c171ca14133.png)
+<br>Dump rings into alliance mobile goal, grab center neutral mobile goal.
+## Right Autonomous Center (RAC)
+![RAC](https://user-images.githubusercontent.com/94485192/151856139-9b67061f-dcdd-41dd-98e5-7300b3594944.png)
+<br>Grab center neutral mobile goal, dump rings into alliance mobile goal, move off of line. 
+## Right Autonomous Right (RAR)
+![RAR](https://user-images.githubusercontent.com/94485192/151856124-9f76b4fd-2e31-4a48-bb77-edbfb3b14fe6.png)
+<br>Grab right neutral mobile goal, dump rings into alliance mobile goal, move off of line. 
+## Solo Autonomous Win Point (SAWP)
+Image Coming Soon
+## Right Autonomous No Win Point (RANWP)
+Image Coming Soon
+## Left Autonomous No Win Point (LANWP)
+Image Coming Soon
+## Skills (SKILL)
+![Anthony Halliday - Field](https://github.com/aHalliday13/Vex64040Edgar/files/7959323/Anthony.Halliday.-.Field.pdf)
+1) Dump Rings
+2) Drive back to wall, lower crate lift, pick up red mogo
+3) Turn and head for bottom yellow mogo
+4) Pick up yellow mogo with front lift
+5) Head to red home zone, drop both mogos in home zone
+6) Turn, back up to blue mogo and pick up with rear crate lift
+7) Head for middle mogo, grab with front lift
+8) Head into Blue home zone, drop both mogos
+9) Back up and grab red mogo with rear lift
+10) Pick up top yellow mogo with front lift
+11) Drop mogos, spin to face rear towards blue mogo
+12) Back up to blue mogo, grab with rear lift
+13) Drop Mogos
