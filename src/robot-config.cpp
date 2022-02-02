@@ -19,10 +19,8 @@ motor_group LeftDriveSmart = motor_group(LeftDriveSmartMotorA, LeftDriveSmartMot
 motor RightDriveSmartMotorA = motor(PORT1, ratio6_1, false);
 motor RightDriveSmartMotorB = motor(PORT2, ratio6_1, true);
 motor_group RightDriveSmart = motor_group(RightDriveSmartMotorA, RightDriveSmartMotorB);
-motor ringLift = motor(PORT19, ratio6_1, false);
-motor sideHook = motor(PORT7, ratio36_1, true);
+motor ringLift = motor(PORT19, ratio18_1, false);
 limit rearMogoSwitch = limit(Brain.ThreeWirePort.G);
-
 
 // VEXcode generated functions
 // define variable for remote controller enable/disable

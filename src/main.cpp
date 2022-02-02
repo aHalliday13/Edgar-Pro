@@ -19,7 +19,6 @@
 // RightDriveSmart      motor_group   1, 2            
 // ringLift             motor         19              
 // rearMogoSwitch       limit         G               
-// sideHook             motor         7               
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 // "It's always the programer's fault" - Some genius on the vex fourms
@@ -152,7 +151,7 @@ void driveIN(int dist, directionType dir,int vel) {
 
 // define auton routines here
 void leftAutonLeft(void) {
-  sideHook.spinFor(-1.25,rotationUnits::rev,200,velocityUnits::pct);
+
   // left auton code goes here
   //Step 1: Dump Preloads
   ringLift.setVelocity(100,percentUnits::pct);
@@ -174,7 +173,7 @@ void leftAutonLeft(void) {
 }
 
 void leftAutonCenter(void) {
-  sideHook.spinFor(-1.25,rotationUnits::rev,200,velocityUnits::pct);
+
   // left auton code goes here
   frontHook.set(false);
   //Step 1: Dump Preloads
@@ -196,7 +195,7 @@ void leftAutonCenter(void) {
 }
 
 void rightAutonRight(void) {
-  sideHook.spinFor(-1.25,rotationUnits::rev,200,velocityUnits::pct);
+
   // right auton code goes here
   // open claw, drive forward to neutral mogo, latch on and lift
   frontHook.set(false);
@@ -219,7 +218,7 @@ void rightAutonRight(void) {
 
 void rightAutonCenter(void) {
   // testing code just ignore: driveIN(70,directionType::rev,100);
-  sideHook.spinFor(-1.25,rotationUnits::rev,200,velocityUnits::pct);
+
   // right auton code goes here
   // open claw, turn left, drive forward to center yemogo, latch on and lift
   frontHook.set(false);
@@ -237,7 +236,7 @@ void rightAutonCenter(void) {
 }
 
 void soloWinPoint(void){
-  sideHook.spinFor(-1.25,rotationUnits::rev,200,velocityUnits::pct);
+
   frontMogo.spinFor(directionType::fwd,750,rotationUnits::deg,200,velocityUnits::pct);
   driveIN(7,directionType::rev,70);
   InertialLeft(90);
@@ -253,8 +252,8 @@ void soloWinPoint(void){
 }
 
 void leftAutonNoWP(void){
-  sideHook.spinFor(-1.25,rotationUnits::rev,200,velocityUnits::pct);
-  driveIN(36,directionType::fwd,70);
+
+  driveIN(27,directionType::fwd,70);
   InertialRight(15);
   rearMogo.spinTo(700, rotationUnits::deg,false);
   driveIN(29,directionType::fwd,70);
@@ -269,10 +268,10 @@ void leftAutonNoWP(void){
 }
 
 void rightAutonNoWP(void){
-  sideHook.spinFor(-1.25,rotationUnits::rev,200,velocityUnits::pct);
+
   // open claw, drive forward to neutral mogo, latch on and lift
   frontHook.set(false);
-  driveIN(60,directionType::fwd,55);
+  driveIN(51,directionType::fwd,55);
   frontHook.set(true);
   task::sleep(500);
   frontMogo.spinFor(500,rotationUnits::deg);
@@ -280,14 +279,13 @@ void rightAutonNoWP(void){
   InertialRight(82.5);
   driveIN(30,directionType::rev,30);
   rearMogo.spinTo(500, rotationUnits::deg);
-  InertialRight(25);
+  InertialRight(40);
   driveIN(70,directionType::fwd,100);
-  ringLift.spinFor(directionType::fwd,1800, rotationUnits::deg,100,velocityUnits::pct);
 }
 
 void skillsAuton(void) {
   Controller1.Screen.print("SKILL");
-  sideHook.spinFor(-1.25,rotationUnits::rev);
+
 }
 
 // now that autons are defined, we can define the auton selection code
@@ -373,16 +371,7 @@ void usercontrol(void) {
       else {
         frontMogo.stop(brakeType::brake);
       }
-      // Side hook up/down
-      if(Controller1.ButtonA.pressing()){
-        sideHook.spin(directionType::fwd,200,velocityUnits::pct);
-      }
-      else if(Controller1.ButtonY.pressing()){
-        sideHook.spin(directionType::rev,200,velocityUnits::pct);
-      }
-      else{
-        sideHook.stop(brakeType::hold);
-      }
+
       // Ringle lift controls
       ringLift.spin(vex::directionType::undefined, (abs(Controller1.Axis2.position()) >= DEADBAND) ? 0-(Controller1.Axis2.position()) : 0, velocityUnits::pct);
   }
