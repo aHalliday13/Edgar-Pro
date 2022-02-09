@@ -159,7 +159,7 @@ void leftAutonLeft(void) {
   //Step 2: Pick up YeMogo
   InertialRight(92);
   frontHook.set(false);
-  driveIN(48,directionType::fwd,100);
+  driveIN(48,directionType::fwd,70);
   frontHook.set(true);
   //Step 3: Drive away with YeMogo and hide it in corner
   frontMogo.spinFor(300,rotationUnits::deg);
@@ -199,15 +199,15 @@ void rightAutonRight(void) {
   // right auton code goes here
   // open claw, drive forward to neutral mogo, latch on and lift
   frontHook.set(false);
-  driveIN(49,directionType::fwd,55);
+  driveIN(47,directionType::fwd,200);
   frontHook.set(true);
   task::sleep(500);
   frontMogo.spinFor(500,rotationUnits::deg);
   // drop lift, back up to aliance mogo, spin to grab it with rear lift
   rearMogo.spinTo(700, rotationUnits::deg);
-  driveIN(17,directionType::rev,55);
+  driveIN(20,directionType::rev,55);
   InertialLeft(40);
-  driveIN(15,directionType::rev,20);
+  driveIN(13,directionType::rev,57);
   rearMogo.spin(directionType::rev,70,velocityUnits::pct);
   waitUntil(rearMogoSwitch.value());
   rearMogo.stop(brakeType::hold);
@@ -230,7 +230,7 @@ void rightAutonCenter(void) {
   InertialLeft(5);
   // drop lift, back up to aliance mogo, load rings
   rearMogo.spinTo(700, rotationUnits::deg);
-  driveIN(60,directionType::rev,55);
+  driveIN(60,directionType::rev,50);
   rearMogo.spinTo(600, rotationUnits::deg);
   ringLift.spinFor(3,timeUnits::sec,100,velocityUnits::pct);
 }
@@ -252,19 +252,23 @@ void soloWinPoint(void){
 }
 
 void leftAutonNoWP(void){
-
-  driveIN(27,directionType::fwd,70);
-  InertialRight(15);
+  driveIN(3,directionType::fwd,70);
+  InertialRight(5);
+  driveIN(83,directionType::fwd,70);
+/*
+  driveIN(16,directionType::fwd,70);
+  InertialRight(10);
   rearMogo.spinTo(700, rotationUnits::deg,false);
   driveIN(29,directionType::fwd,70);
   frontHook.set(true);
+  task::sleep(1000);
   frontMogo.spinTo(90,rotationUnits::deg);
   InertialLeft(95);
-  driveIN(24,directionType::rev,30);
+  driveIN(27,directionType::rev,30);
   rearMogo.spinTo(500, rotationUnits::deg);
   rearMogo.stop(brakeType::hold);
   InertialLeft(45);
-  driveIN(60,directionType::fwd,70);
+  driveIN(60,directionType::fwd,70);*/
 }
 
 void rightAutonNoWP(void){
@@ -280,12 +284,14 @@ void rightAutonNoWP(void){
   driveIN(30,directionType::rev,30);
   rearMogo.spinTo(500, rotationUnits::deg);
   InertialRight(40);
-  driveIN(70,directionType::fwd,100);
+  driveIN(70,directionType::fwd,200);
 }
 
 void skillsAuton(void) {
   Controller1.Screen.print("SKILL");
-
+  driveIN(51,directionType::fwd,70);
+  frontHook.set(true);
+  driveIN(51,directionType::rev,100);
 }
 
 // now that autons are defined, we can define the auton selection code
