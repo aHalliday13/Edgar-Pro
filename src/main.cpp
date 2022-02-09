@@ -253,22 +253,18 @@ void soloWinPoint(void){
 
 void leftAutonNoWP(void){
   driveIN(3,directionType::fwd,70);
-  InertialRight(5);
-  driveIN(83,directionType::fwd,70);
-/*
-  driveIN(16,directionType::fwd,70);
-  InertialRight(10);
-  rearMogo.spinTo(700, rotationUnits::deg,false);
-  driveIN(29,directionType::fwd,70);
+  InertialRight(3);
+  driveIN(42,directionType::fwd,70);
   frontHook.set(true);
-  task::sleep(1000);
-  frontMogo.spinTo(90,rotationUnits::deg);
+  frontMogo.spinTo(110,rotationUnits::deg);
   InertialLeft(95);
+  rearMogo.spinTo(700,rotationUnits::deg,200, velocityUnits::pct);
   driveIN(27,directionType::rev,30);
-  rearMogo.spinTo(500, rotationUnits::deg);
-  rearMogo.stop(brakeType::hold);
+  rearMogo.spinTo(600,rotationUnits::deg);
   InertialLeft(45);
-  driveIN(60,directionType::fwd,70);*/
+  driveIN(30,directionType::fwd,70);
+  InertialRight(180);
+  driveIN(30,directionType::rev,70);
 }
 
 void rightAutonNoWP(void){
