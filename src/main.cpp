@@ -21,7 +21,7 @@
 // rearMogoSwitch       limit         G               
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
-// "It's always the programer's fault" - Some genius on the vex fourms
+// "It's always the programmer's fault" - Some genius on the vex fourms
 
 #include "vex.h"
 #include "cmath"
@@ -286,27 +286,30 @@ void rightAutonNoWP(void){
 void skillsAuton(void) {
   frontHook.set(false);
   driveIN(10,directionType::fwd,55);
-  rearMogo.spinTo(650,rotationUnits::deg);
+  rearMogo.spinTo(700,rotationUnits::deg);
   driveIN(11,directionType::rev,55);
   rearMogo.spinTo(500,rotationUnits::deg);
   ringLift.spinFor(2,timeUnits::sec,100,velocityUnits::pct);
   driveIN(10,directionType::fwd,55);
-  InertialRight(87);
+  InertialRight(95);
   driveIN(50,directionType::fwd,55);
   frontHook.set(true);
   frontMogo.spinFor(300,rotationUnits::deg);
   InertialRight(10);
-  driveIN(50,directionType::fwd,55);
+  driveIN(30,directionType::fwd,55);
   frontMogo.spinFor(-300,rotationUnits::deg);
   frontHook.set(false);
-  InertialLeft(100);
+  InertialLeft(90);
   rearMogo.spinTo(700,rotationUnits::deg);
   driveIN(10,directionType::fwd,55);
   InertialRight(180);
-  driveIN(30,directionType::rev,55);
+  driveIN(13,directionType::rev,55);
   rearMogo.spinTo(600,rotationUnits::deg);
-  InertialRight(37);
-  driveIN(50,directionType::fwd,55);
+  // ^ Good ^ -- v Maybe Good v
+  InertialRight(15);
+  driveIN(45,directionType::fwd,55);
+  frontHook.set(true);
+
 
 }
 
