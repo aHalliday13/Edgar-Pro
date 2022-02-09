@@ -284,10 +284,11 @@ void rightAutonNoWP(void){
 }
 
 void skillsAuton(void) {
-  Controller1.Screen.print("SKILL");
-  driveIN(51,directionType::fwd,70);
+  Controller1.Screen.print(" PRANKD LOL");
+  driveIN(47,directionType::fwd,200);
   frontHook.set(true);
-  driveIN(51,directionType::rev,100);
+  frontMogo.spinFor(90,rotationUnits::deg,false);
+  driveIN(47,directionType::rev,200);
 }
 
 // now that autons are defined, we can define the auton selection code
