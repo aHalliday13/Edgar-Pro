@@ -21,7 +21,9 @@
 // rearMogoSwitch       limit         G               
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
-// "It's always the programer's fault" - Some genius on the vex fourms
+
+// "It's always the programmer's fault" - Some genius on the vex fourms
+
 
 #include "vex.h"
 #include "cmath"
@@ -249,6 +251,36 @@ void soloWinPoint(void){
   rearMogo.spinTo(550,rotationUnits::deg,200,velocityUnits::pct);
   ringLift.spinFor(3,timeUnits::sec,200,velocityUnits::pct);
   InertialRight(90);
+
+
+void skillsAuton(void) {
+  frontHook.set(false);
+  driveIN(10,directionType::fwd,55);
+  rearMogo.spinTo(700,rotationUnits::deg);
+  driveIN(11,directionType::rev,55);
+  rearMogo.spinTo(500,rotationUnits::deg);
+  ringLift.spinFor(2,timeUnits::sec,100,velocityUnits::pct);
+  driveIN(10,directionType::fwd,55);
+  InertialRight(95);
+  driveIN(50,directionType::fwd,55);
+  frontHook.set(true);
+  frontMogo.spinFor(300,rotationUnits::deg);
+  InertialRight(10);
+  driveIN(30,directionType::fwd,55);
+  frontMogo.spinFor(-300,rotationUnits::deg);
+  frontHook.set(false);
+  InertialLeft(90);
+  rearMogo.spinTo(700,rotationUnits::deg);
+  driveIN(10,directionType::fwd,55);
+  InertialRight(180);
+  driveIN(13,directionType::rev,55);
+  rearMogo.spinTo(600,rotationUnits::deg);
+  // ^ Good ^ -- v Maybe Good v
+  InertialRight(15);
+  driveIN(45,directionType::fwd,55);
+  frontHook.set(true);
+
+
 }
 
 void leftAutonNoWP(void){
@@ -292,6 +324,7 @@ void speedyAuton(void) {
   frontMogo.spinFor(90,rotationUnits::deg,false);
   driveIN(47,directionType::rev,200);
 }
+
 
 // now that autons are defined, we can define the auton selection code
 
@@ -401,3 +434,4 @@ int main() {
     task::sleep(100);
   }
 }
+
