@@ -251,7 +251,7 @@ void soloWinPoint(void){
   rearMogo.spinTo(550,rotationUnits::deg,200,velocityUnits::pct);
   ringLift.spinFor(3,timeUnits::sec,200,velocityUnits::pct);
   InertialRight(90);
-
+}
 
 void skillsAuton(void) {
   frontHook.set(false);
@@ -360,6 +360,10 @@ void autonSelect(){
   else if(Controller1.ButtonDown.pressing()){
     Competition.autonomous(skillsAuton);
     Controller1.Screen.print("SKILL");
+  }
+  else if(Controller1.ButtonL1.pressing()){
+    Competition.autonomous(speedyAuton);
+    Controller1.Screen.print("SPEED");
   }
   else {
     autonSelect();
