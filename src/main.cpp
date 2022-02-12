@@ -21,7 +21,9 @@
 // rearMogoSwitch       limit         G               
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
+
 // "It's always the programmer's fault" - Some genius on the vex fourms
+
 
 #include "vex.h"
 #include "cmath"
@@ -249,39 +251,7 @@ void soloWinPoint(void){
   rearMogo.spinTo(550,rotationUnits::deg,200,velocityUnits::pct);
   ringLift.spinFor(3,timeUnits::sec,200,velocityUnits::pct);
   InertialRight(90);
-}
 
-void leftAutonNoWP(void){
-  driveIN(3,directionType::fwd,70);
-  InertialRight(3);
-  driveIN(42,directionType::fwd,70);
-  frontHook.set(true);
-  frontMogo.spinTo(110,rotationUnits::deg);
-  InertialLeft(95);
-  rearMogo.spinTo(700,rotationUnits::deg,200, velocityUnits::pct);
-  driveIN(27,directionType::rev,30);
-  rearMogo.spinTo(600,rotationUnits::deg);
-  InertialLeft(45);
-  driveIN(30,directionType::fwd,70);
-  InertialRight(180);
-  driveIN(30,directionType::rev,70);
-}
-
-void rightAutonNoWP(void){
-
-  // open claw, drive forward to neutral mogo, latch on and lift
-  frontHook.set(false);
-  driveIN(51,directionType::fwd,55);
-  frontHook.set(true);
-  task::sleep(500);
-  frontMogo.spinFor(500,rotationUnits::deg);
-  rearMogo.spinTo(700, rotationUnits::deg);
-  InertialRight(82.5);
-  driveIN(30,directionType::rev,30);
-  rearMogo.spinTo(500, rotationUnits::deg);
-  InertialRight(40);
-  driveIN(70,directionType::fwd,200);
-}
 
 void skillsAuton(void) {
   frontHook.set(false);
@@ -312,6 +282,49 @@ void skillsAuton(void) {
 
 
 }
+
+void leftAutonNoWP(void){
+  driveIN(3,directionType::fwd,70);
+  InertialRight(3);
+  rearMogo.spinTo(675,rotationUnits::deg,200, velocityUnits::pct,false);
+  driveIN(42,directionType::fwd,70);
+  frontHook.set(true);
+  frontMogo.spinTo(110,rotationUnits::deg);
+  InertialLeft(95);
+  driveIN(27,directionType::rev,30);
+  rearMogo.spinTo(550,rotationUnits::deg);
+  InertialLeft(45);
+  driveIN(30,directionType::fwd,70);
+  InertialRight(180);
+  driveIN(30,directionType::rev,70);
+}
+
+void rightAutonNoWP(void){
+
+  // open claw, drive forward to neutral mogo, latch on and lift
+  frontHook.set(false);
+  driveIN(51,directionType::fwd,55);
+  frontHook.set(true);
+  task::sleep(500);
+  frontMogo.spinFor(500,rotationUnits::deg);
+  rearMogo.spinTo(700, rotationUnits::deg);
+  InertialRight(82.5);
+  driveIN(30,directionType::rev,30);
+  rearMogo.spinTo(510, rotationUnits::deg);
+  InertialRight(55);
+  driveIN(35,directionType::fwd,200);
+  InertialLeft(180);
+  driveIN(35,directionType::rev,200);
+}
+
+void speedyAuton(void) {
+  Controller1.Screen.print(" PRANKD LOL");
+  driveIN(47,directionType::fwd,200);
+  frontHook.set(true);
+  frontMogo.spinFor(90,rotationUnits::deg,false);
+  driveIN(47,directionType::rev,200);
+}
+
 
 // now that autons are defined, we can define the auton selection code
 
