@@ -254,13 +254,13 @@ void soloWinPoint(void){
 void leftAutonNoWP(void){
   driveIN(3,directionType::fwd,70);
   InertialRight(3);
+  rearMogo.spinTo(675,rotationUnits::deg,200, velocityUnits::pct,false);
   driveIN(42,directionType::fwd,70);
   frontHook.set(true);
   frontMogo.spinTo(110,rotationUnits::deg);
   InertialLeft(95);
-  rearMogo.spinTo(700,rotationUnits::deg,200, velocityUnits::pct);
   driveIN(27,directionType::rev,30);
-  rearMogo.spinTo(600,rotationUnits::deg);
+  rearMogo.spinTo(550,rotationUnits::deg);
   InertialLeft(45);
   driveIN(30,directionType::fwd,70);
   InertialRight(180);
@@ -278,12 +278,14 @@ void rightAutonNoWP(void){
   rearMogo.spinTo(700, rotationUnits::deg);
   InertialRight(82.5);
   driveIN(30,directionType::rev,30);
-  rearMogo.spinTo(500, rotationUnits::deg);
-  InertialRight(40);
-  driveIN(70,directionType::fwd,200);
+  rearMogo.spinTo(510, rotationUnits::deg);
+  InertialRight(55);
+  driveIN(35,directionType::fwd,200);
+  InertialLeft(180);
+  driveIN(35,directionType::rev,200);
 }
 
-void skillsAuton(void) {
+void speedyAuton(void) {
   Controller1.Screen.print(" PRANKD LOL");
   driveIN(47,directionType::fwd,200);
   frontHook.set(true);
