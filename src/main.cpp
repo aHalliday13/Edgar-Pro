@@ -283,7 +283,7 @@ void leftAutonNoWP(void){
   frontHook.set(true);
   frontMogo.spinTo(110,rotationUnits::deg);
   InertialLeft(95);
-  driveIN(27,directionType::rev,30);
+  driveIN(25,directionType::rev,45);
   rearMogo.spinTo(-520,rotationUnits::deg);
   InertialLeft(45);
   driveIN(30,directionType::fwd,70);
