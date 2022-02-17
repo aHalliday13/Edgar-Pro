@@ -75,7 +75,6 @@ void InertialRight(float targetTurn) {
   heading = targetTurn + prevTurn;
 
   while(inertialSensor.rotation(degrees) < heading) {
-    printf("%lf\n",inertialSensor.rotation());
     calcVelocity = std::abs(heading - inertialSensor.rotation(degrees));
 
     if(calcVelocity > MAXVELOCITY) {
@@ -104,7 +103,6 @@ void InertialLeft(float targetTurn) {
   heading = targetTurn * -1 + prevTurn;
 
   while(inertialSensor.rotation(degrees) > heading) {
-    printf("%lf\n",inertialSensor.rotation());
     calcVelocity = std::abs(heading - inertialSensor.rotation(degrees));
     if(calcVelocity > MAXVELOCITY) {
       RightDriveSmart.spin(directionType::rev, MAXVELOCITY, velocityUnits::pct);
@@ -282,9 +280,11 @@ void leftAutonNoWP(void){
   driveIN(42,directionType::fwd,70);
   frontHook.set(true);
   frontMogo.spinTo(110,rotationUnits::deg);
-  InertialLeft(95);
+  InertialLeft(105);
   driveIN(25,directionType::rev,45);
-  rearMogo.spinTo(-520,rotationUnits::deg);
+  rearMogo.spin(directionType::rev,200,velocityUnits::pct);
+  waitUntil(rearMogo.velocity(percentUnits::pct)<-5);
+  waitUntil(rearMogo.velocity(percentUnits::pct)>-5);
   InertialLeft(45);
   driveIN(30,directionType::fwd,70);
   InertialRight(180);
@@ -302,9 +302,10 @@ void rightAutonNoWP(void){
   driveIN(20,directionType::rev,70);
   InertialRight(85);
   driveIN(17,directionType::rev,30);
-  rearMogo.spinTo(-520, rotationUnits::deg);
-  InertialRight(20);
-  driveIN(35,directionType::fwd,200);
+  rearMogo.spin(directionType::rev,200,velocityUnits::pct);
+  waitUntil(rearMogo.velocity(percentUnits::pct)<-5);
+  waitUntil(rearMogo.velocity(percentUnits::pct)>-5);
+  driveIN(50,directionType::fwd,200);
   
 }
 
@@ -427,6 +428,7 @@ int main() {
   // Prevent main from exiting with an infinite loop.
   while(true) {
     task::sleep(100);
+    printf("RLIFT: %lf \n",rearMogo.velocity(percentUnits::pct));
   }
 }
 
