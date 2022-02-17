@@ -9,7 +9,7 @@ brain  Brain;
 
 // VEXcode device constructors
 motor frontMogo = motor(PORT8, ratio36_1, false);
-motor rearMogo = motor(PORT6, ratio36_1, true);
+motor rearMogo = motor(PORT6, ratio18_1, false);
 digital_out frontHook = digital_out(Brain.ThreeWirePort.H);
 inertial inertialSensor = inertial(PORT13);
 controller Controller1 = controller(primary);
@@ -20,7 +20,6 @@ motor RightDriveSmartMotorA = motor(PORT1, ratio6_1, false);
 motor RightDriveSmartMotorB = motor(PORT2, ratio6_1, true);
 motor_group RightDriveSmart = motor_group(RightDriveSmartMotorA, RightDriveSmartMotorB);
 motor ringLift = motor(PORT19, ratio18_1, false);
-limit rearMogoSwitch = limit(Brain.ThreeWirePort.G);
 
 // VEXcode generated functions
 // define variable for remote controller enable/disable
