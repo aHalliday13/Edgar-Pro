@@ -280,7 +280,7 @@ void leftAutonNoWP(void){
   frontHook.set(true);
   frontMogo.spinTo(110,rotationUnits::deg);
   InertialLeft(105);
-  driveIN(25,directionType::rev,45);
+  driveIN(30,directionType::rev,45);
   rearMogo.spin(directionType::rev,200,velocityUnits::pct);
   waitUntil(rearMogo.velocity(percentUnits::pct)<-5);
   waitUntil(rearMogo.velocity(percentUnits::pct)>-5);
