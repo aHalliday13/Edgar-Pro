@@ -218,12 +218,11 @@ void rightAutonCenter(void) {
   InertialLeft(45);
   driveIN(40,directionType::fwd,70);
   frontHook.set(true);
-  frontMogo.spinFor(500,rotationUnits::deg);
-  InertialLeft(5);
+  frontMogo.spinFor(150,rotationUnits::deg);
   // drop lift, back up to aliance mogo, load rings
-  rearMogo.spinTo(0, rotationUnits::deg);
   driveIN(60,directionType::rev,50);
-  rearMogo.spinTo(-520, rotationUnits::deg);
+  InertialRight(10);
+  driveIN(15,directionType::rev,50);
   ringLift.spinFor(3,timeUnits::sec,100,velocityUnits::pct);
 }
 
@@ -428,7 +427,6 @@ int main() {
   // Prevent main from exiting with an infinite loop.
   while(true) {
     task::sleep(100);
-    printf("RLIFT: %lf \n",rearMogo.velocity(percentUnits::pct));
   }
 }
 
