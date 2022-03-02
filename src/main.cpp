@@ -293,7 +293,7 @@ void leftAutonNoWP(void){
 void rightAutonNoWP(void){
   // open claw, drive forward to neutral mogo, latch on and lift
   frontHook.set(false);
-  driveIN(51,directionType::fwd,100);
+  driveIN(48,directionType::fwd,100);
   frontHook.set(true);
   task::sleep(10);
   frontMogo.spinFor(150,rotationUnits::deg);
