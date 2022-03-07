@@ -262,7 +262,7 @@ void skillsAuton(void) {
   rearMogo.spinTo(0,rotationUnits::deg);
   driveIN(5,directionType::fwd,55);
   InertialRight(170);
-  driveIN(19,directionType::rev,30);
+  driveIN(18,directionType::rev,30);
   rearMogo.spin(directionType::rev,200,velocityUnits::pct);
   waitUntil(rearMogo.velocity(percentUnits::pct)<-5);
   waitUntil(rearMogo.velocity(percentUnits::pct)>-5);
