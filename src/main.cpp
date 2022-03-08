@@ -18,6 +18,7 @@
 // LeftDriveSmart       motor_group   11, 12          
 // RightDriveSmart      motor_group   1, 2            
 // ringLift             motor         19              
+// RearSwitch           limit         G               
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 
@@ -36,7 +37,6 @@ int rightDrive;
 int calcVelocity;
 int prevTurn;
 float heading;
-bool autonSide;
 #define DEADBAND 15
 #define MAXVELOCITY 40
 #define MINVELOCITY 10
@@ -204,7 +204,7 @@ void rightAutonRight(void) {
   frontMogo.spinFor(150,rotationUnits::deg);
   driveIN(20,directionType::rev,55);
   InertialLeft(40);
-  driveIN(25,directionType::rev,57);
+  driveIN(20,directionType::rev,57);
   ringLift.spinFor(3,timeUnits::sec,100,velocityUnits::pct);
 }
 
@@ -245,10 +245,7 @@ void soloWinPoint(void){
 void skillsAuton(void) {
   frontHook.set(false);
   driveIN(5,directionType::rev,30);
-  rearMogo.spin(directionType::rev,200,velocityUnits::pct);
-  waitUntil(rearMogo.velocity(percentUnits::pct)<-5);
-  waitUntil(rearMogo.velocity(percentUnits::pct)>-5);
-  rearMogo.stop();
+  rearMogo.spinTo(-520,rotationUnits::deg);
   InertialRight(86);
   driveIN(42,directionType::fwd,55);
   frontHook.set(true);
@@ -257,19 +254,10 @@ void skillsAuton(void) {
   frontMogo.spinTo(0,rotationUnits::deg);
   frontHook.set(false);
   driveIN(5,directionType::rev,55);
-  InertialLeft(90);
-  driveIN(5,directionType::rev,55);
   rearMogo.spinTo(0,rotationUnits::deg);
-  driveIN(5,directionType::fwd,55);
-  InertialRight(170);
-  driveIN(18,directionType::rev,30);
-  rearMogo.spin(directionType::rev,200,velocityUnits::pct);
-  waitUntil(rearMogo.velocity(percentUnits::pct)<-5);
-  waitUntil(rearMogo.velocity(percentUnits::pct)>-5);
-  rearMogo.stop();
-  InertialRight(33);
-  driveIN(56,directionType::fwd,55);
-  frontHook.set(true);
+  InertialRight(70);
+  driveIN(15,directionType::rev,30);
+  rearMogo.spinTo(-520,rotationUnits::deg);
 }
 
 void leftAutonNoWP(void){
@@ -284,7 +272,6 @@ void leftAutonNoWP(void){
   rearMogo.spin(directionType::rev,200,velocityUnits::pct);
   waitUntil(rearMogo.velocity(percentUnits::pct)<-5);
   waitUntil(rearMogo.velocity(percentUnits::pct)>-5);
-  rearMogo.stop();
   InertialLeft(45);
   driveIN(30,directionType::fwd,70);
   InertialRight(180);
@@ -294,17 +281,21 @@ void leftAutonNoWP(void){
 void rightAutonNoWP(void){
   // open claw, drive forward to neutral mogo, latch on and lift
   frontHook.set(false);
-  driveIN(48,directionType::fwd,100);
+  driveIN(46,directionType::fwd,100);
   frontHook.set(true);
   task::sleep(10);
   frontMogo.spinFor(150,rotationUnits::deg);
   InertialRight(40);
   driveIN(20,directionType::rev,70);
+  
   InertialRight(85);
-  driveIN(17,directionType::rev,30);
-  rearMogo.spin(directionType::rev,200,velocityUnits::pct);
-  waitUntil(rearMogo.velocity(percentUnits::pct)<-5);
-  waitUntil(rearMogo.velocity(percentUnits::pct)>-5);
+  driveIN(5,directionType::fwd,30);
+  rearMogo.spinTo(-700,rotationUnits::deg);
+
+  driveIN(22,directionType::rev,30);
+  rearMogo.spin(directionType::fwd,100,velocityUnits::pct);
+  waitUntil(RearSwitch.value());
+  rearMogo.stop(brakeType::brake);
   driveIN(50,directionType::fwd,200);
   
 }
@@ -387,10 +378,10 @@ void usercontrol(void) {
       RightDriveSmart.spin(vex::directionType::undefined, (2*abs(Controller1.Axis3.position()+Controller1.Axis4.position()) >= DEADBAND) ? 0-(Controller1.Axis3.position()+Controller1.Axis4.position()) : 0, velocityUnits::pct);
       // Rear Lift up/down
       if(Controller1.ButtonL1.pressing()) {
-        rearMogo.spin(directionType::rev, 50, percentUnits::pct);
+        rearMogo.spin(directionType::fwd, 50, percentUnits::pct);
       }
       else if(Controller1.ButtonL2.pressing()) {
-        rearMogo.spin(directionType::fwd, 50, percentUnits::pct);
+        rearMogo.spin(directionType::rev, 50, percentUnits::pct);
       }
       else {
         rearMogo.stop(brakeType::hold);
