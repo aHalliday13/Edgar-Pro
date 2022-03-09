@@ -237,20 +237,35 @@ void soloWinPoint(void){
 
 void skillsAuton(void) {
   frontHook.set(false);
-  driveIN(5,directionType::rev,30);
-  rearMogo.spinTo(-520,rotationUnits::deg);
-  InertialRight(86);
-  driveIN(42,directionType::fwd,55);
-  frontHook.set(true);
-  frontMogo.spinTo(110,rotationUnits::deg);
+  driveIN(10,directionType::fwd,55);
+  rearMogo.spinTo(-700,rotationUnits::deg);
+  driveIN(11,directionType::rev,55);
+  rearMogo.spinTo(-500,rotationUnits::deg);
+  ringLift.spinFor(2,timeUnits::sec,100,velocityUnits::pct);
+  driveIN(10,directionType::fwd,55);
+  InertialRight(95);
   driveIN(50,directionType::fwd,55);
-  frontMogo.spinTo(0,rotationUnits::deg);
+  frontHook.set(true);
+  frontMogo.spinFor(300,rotationUnits::deg);
+  InertialRight(10);
+  driveIN(30,directionType::fwd,55);
+  frontMogo.spinFor(-300,rotationUnits::deg);
   frontHook.set(false);
-  driveIN(5,directionType::rev,55);
-  rearMogo.spinTo(0,rotationUnits::deg);
-  InertialRight(70);
-  driveIN(15,directionType::rev,30);
-  rearMogo.spinTo(-520,rotationUnits::deg);
+  InertialLeft(90);
+  rearMogo.spinTo(-700,rotationUnits::deg);
+  driveIN(10,directionType::fwd,55);
+  InertialRight(180);
+  driveIN(13,directionType::rev,55);
+  rearMogo.spin(directionType::fwd,200,velocityUnits::pct);
+  waitUntil(RearSwitch.value());
+  rearMogo.stop();
+  InertialRight(11);
+  driveIN(45,directionType::fwd,55);
+  frontHook.set(true);
+  driveIN(35,directionType::fwd,55);
+  InertialRight(45);
+  drive2obs(directionType::fwd);
+
 }
 
 void leftAutonNoWP(void){
