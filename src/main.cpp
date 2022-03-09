@@ -32,8 +32,6 @@ using namespace vex;
 competition Competition;
 
 // define vars and macros here
-int leftDrive;
-int rightDrive;
 int calcVelocity;
 int prevTurn;
 float heading;
@@ -150,7 +148,6 @@ void driveIN(int dist, directionType dir,int vel) {
 
 // define auton routines here
 void leftAutonLeft(void) {
-
   // left auton code goes here
   //Step 1: Dump Preloads
   ringLift.setVelocity(100,percentUnits::pct);
@@ -158,21 +155,19 @@ void leftAutonLeft(void) {
   //Step 2: Pick up YeMogo
   InertialRight(92);
   frontHook.set(false);
-  driveIN(48,directionType::fwd,70);
+  driveIN(48,directionType::fwd,200);
   frontHook.set(true);
   //Step 3: Drive away with YeMogo and hide it in corner
   frontMogo.spinFor(300,rotationUnits::deg);
   InertialLeft(180);
-  driveIN(40,directionType::fwd,55);
+  driveIN(40,directionType::fwd,200);
   frontMogo.spinFor(-300,rotationUnits::deg);
-  frontHook.set(false);
-  //Step 4: Avoid hoarding penalty
-  driveIN(15,directionType::rev,55);
-  //Step 5: Profit
+  InertialRight(90);
+  rearMogo.spinTo(-700,rotationUnits::deg);
+  //Step 4: Profit
 }
 
 void leftAutonCenter(void) {
-
   // left auton code goes here
   frontHook.set(false);
   //Step 1: Dump Preloads
@@ -194,7 +189,6 @@ void leftAutonCenter(void) {
 }
 
 void rightAutonRight(void) {
-
   // right auton code goes here
   // open claw, drive forward to neutral mogo, latch on and lift
   frontHook.set(false);
@@ -227,17 +221,16 @@ void rightAutonCenter(void) {
 }
 
 void soloWinPoint(void){
-
   frontMogo.spinFor(directionType::fwd,750,rotationUnits::deg,200,velocityUnits::pct);
   driveIN(7,directionType::rev,70);
   InertialLeft(90);
   driveIN(16,directionType::fwd,70);
   InertialLeft(87);
-  rearMogo.spinTo(0,rotationUnits::deg);
+  rearMogo.spinTo(700,rotationUnits::deg);
   //driveIN(12,directionType::fwd,55);
   drive2obs(directionType::fwd);
   driveIN(105,directionType::rev,100);
-  rearMogo.spinTo(-520,rotationUnits::deg,200,velocityUnits::pct);
+  rearMogo.spinTo(550,rotationUnits::deg,200,velocityUnits::pct);
   ringLift.spinFor(3,timeUnits::sec,200,velocityUnits::pct);
   InertialRight(90);
 }
@@ -261,17 +254,15 @@ void skillsAuton(void) {
 }
 
 void leftAutonNoWP(void){
-  driveIN(3,directionType::fwd,70);
-  InertialRight(3);
-  rearMogo.spinTo(0,rotationUnits::deg,200, velocityUnits::pct,false);
-  driveIN(42,directionType::fwd,70);
+  rearMogo.spinTo(-700,rotationUnits::deg,200, velocityUnits::pct,false);
+  driveIN(47,directionType::fwd,200);
   frontHook.set(true);
   frontMogo.spinTo(110,rotationUnits::deg);
-  InertialLeft(105);
-  driveIN(30,directionType::rev,45);
-  rearMogo.spin(directionType::rev,200,velocityUnits::pct);
-  waitUntil(rearMogo.velocity(percentUnits::pct)<-5);
-  waitUntil(rearMogo.velocity(percentUnits::pct)>-5);
+  InertialLeft(95);
+  driveIN(27,directionType::rev,30);
+  rearMogo.spin(directionType::fwd,200,percentUnits::pct);
+  waitUntil(RearSwitch.value());
+  rearMogo.stop();
   InertialLeft(45);
   driveIN(30,directionType::fwd,70);
   InertialRight(180);
