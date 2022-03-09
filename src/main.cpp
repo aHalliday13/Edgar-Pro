@@ -198,13 +198,13 @@ void rightAutonRight(void) {
   // right auton code goes here
   // open claw, drive forward to neutral mogo, latch on and lift
   frontHook.set(false);
-  driveIN(44,directionType::fwd,150);
+  driveIN(44,directionType::fwd,170);
   frontHook.set(true);
   task::sleep(500);
   frontMogo.spinFor(150,rotationUnits::deg);
-  driveIN(20,directionType::rev,55);
+  driveIN(20,directionType::rev,200);
   InertialLeft(40);
-  driveIN(20,directionType::rev,57);
+  driveIN(20,directionType::rev,100);
   ringLift.spinFor(3,timeUnits::sec,100,velocityUnits::pct);
 }
 
@@ -214,15 +214,15 @@ void rightAutonCenter(void) {
   // right auton code goes here
   // open claw, turn left, drive forward to center yemogo, latch on and lift
   frontHook.set(false);
-  driveIN(29,directionType::fwd,70);
+  driveIN(29,directionType::fwd,150);
   InertialLeft(45);
-  driveIN(40,directionType::fwd,70);
+  driveIN(40,directionType::fwd,150);
   frontHook.set(true);
   frontMogo.spinFor(150,rotationUnits::deg);
   // drop lift, back up to aliance mogo, load rings
-  driveIN(60,directionType::rev,50);
+  driveIN(60,directionType::rev,200);
   InertialRight(10);
-  driveIN(15,directionType::rev,50);
+  driveIN(15,directionType::rev,200);
   ringLift.spinFor(3,timeUnits::sec,100,velocityUnits::pct);
 }
 
@@ -281,18 +281,18 @@ void leftAutonNoWP(void){
 void rightAutonNoWP(void){
   // open claw, drive forward to neutral mogo, latch on and lift
   frontHook.set(false);
-  driveIN(46,directionType::fwd,100);
+  driveIN(46,directionType::fwd,150);
   frontHook.set(true);
   task::sleep(10);
   frontMogo.spinFor(150,rotationUnits::deg);
   InertialRight(40);
-  driveIN(20,directionType::rev,70);
+  driveIN(20,directionType::rev,150);
   
   InertialRight(85);
-  driveIN(5,directionType::fwd,30);
+  driveIN(5,directionType::fwd,200);
   rearMogo.spinTo(-700,rotationUnits::deg);
 
-  driveIN(22,directionType::rev,30);
+  driveIN(22,directionType::rev,50);
   rearMogo.spin(directionType::fwd,100,velocityUnits::pct);
   waitUntil(RearSwitch.value());
   rearMogo.stop(brakeType::brake);
@@ -303,9 +303,11 @@ void rightAutonNoWP(void){
 void speedyAuton(void) {
   Controller1.Screen.print(" PRANKD LOL");
   driveIN(47,directionType::fwd,200);
+  LeftDriveSmart.spin(directionType::rev,200,velocityUnits::pct);
+  RightDriveSmart.spin(directionType::rev,200,velocityUnits::pct);
   frontHook.set(true);
   frontMogo.spinFor(90,rotationUnits::deg,false);
-  driveIN(47,directionType::rev,200);
+
 }
 
 
