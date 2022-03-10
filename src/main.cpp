@@ -19,6 +19,7 @@
 // ringLift             motor         19              
 // RearSwitch           limit         G               
 // frontMogo            motor_group   8, 7            
+// RearEStop            limit         F               
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 
@@ -256,7 +257,8 @@ void skillsAuton(void) {
   InertialRight(180);
   driveIN(13,directionType::rev,55);
   rearMogo.spin(directionType::fwd,200,velocityUnits::pct);
-  waitUntil(RearSwitch.value());
+  waitUntil(RearSwitch.value()||RearEStop.value());
+  
   rearMogo.stop();
   InertialRight(11);
   driveIN(45,directionType::fwd,55);
@@ -275,7 +277,7 @@ void leftAutonNoWP(void){
   InertialLeft(95);
   driveIN(27,directionType::rev,30);
   rearMogo.spin(directionType::fwd,200,percentUnits::pct);
-  waitUntil(RearSwitch.value());
+  waitUntil(RearSwitch.value()||RearEStop.value());
   rearMogo.stop();
   InertialLeft(45);
   driveIN(30,directionType::fwd,70);
@@ -299,7 +301,7 @@ void rightAutonNoWP(void){
 
   driveIN(22,directionType::rev,50);
   rearMogo.spin(directionType::fwd,100,velocityUnits::pct);
-  waitUntil(RearSwitch.value());
+  waitUntil(RearSwitch.value()||RearEStop.value());
   rearMogo.stop(brakeType::brake);
   driveIN(50,directionType::fwd,200);
   

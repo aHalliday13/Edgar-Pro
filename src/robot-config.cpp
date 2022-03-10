@@ -23,6 +23,7 @@ limit RearSwitch = limit(Brain.ThreeWirePort.G);
 motor frontMogoMotorA = motor(PORT8, ratio36_1, false);
 motor frontMogoMotorB = motor(PORT7, ratio36_1, true);
 motor_group frontMogo = motor_group(frontMogoMotorA, frontMogoMotorB);
+limit RearEStop = limit(Brain.ThreeWirePort.F);
 
 // VEXcode generated functions
 // define variable for remote controller enable/disable

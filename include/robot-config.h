@@ -12,6 +12,7 @@ extern motor_group RightDriveSmart;
 extern motor ringLift;
 extern limit RearSwitch;
 extern motor_group frontMogo;
+extern limit RearEStop;
 
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.
