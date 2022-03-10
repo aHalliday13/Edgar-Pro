@@ -10,7 +10,6 @@
 // ---- START VEXCODE CONFIGURED DEVICES ----
 // Robot Configuration:
 // [Name]               [Type]        [Port(s)]
-// frontMogo            motor         8               
 // rearMogo             motor         6               
 // frontHook            digital_out   H               
 // inertialSensor       inertial      13              
@@ -19,6 +18,7 @@
 // RightDriveSmart      motor_group   1, 2            
 // ringLift             motor         19              
 // RearSwitch           limit         G               
+// frontMogo            motor_group   8, 7            
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 
@@ -192,13 +192,12 @@ void rightAutonRight(void) {
   // right auton code goes here
   // open claw, drive forward to neutral mogo, latch on and lift
   frontHook.set(false);
-  driveIN(44,directionType::fwd,170);
+  driveIN(44,directionType::fwd,200);
+  frontMogo.spinFor(150,rotationUnits::deg,false);
   frontHook.set(true);
-  task::sleep(500);
-  frontMogo.spinFor(150,rotationUnits::deg);
-  driveIN(20,directionType::rev,200);
+  driveIN(15,directionType::rev,200);
   InertialLeft(40);
-  driveIN(20,directionType::rev,100);
+  driveIN(15,directionType::rev,200);
   ringLift.spinFor(3,timeUnits::sec,100,velocityUnits::pct);
 }
 
