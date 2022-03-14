@@ -270,7 +270,7 @@ void skillsAuton(void) {
 }
 
 void leftAutonNoWP(void){
-  rearMogo.spinTo(-700,rotationUnits::deg,200, velocityUnits::pct,false);
+  rearMogo.spinTo(-650,rotationUnits::deg,200, velocityUnits::pct,false);
   driveIN(47,directionType::fwd,200);
   frontHook.set(true);
   frontMogo.spinTo(110,rotationUnits::deg);
