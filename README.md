@@ -1,4 +1,5 @@
-![edgarprobannerinverted](https://user-images.githubusercontent.com/94485192/159014582-ba201766-1143-41b5-8c6b-497554c1a698.png)
+![edgarprobannerinverted copy](https://user-images.githubusercontent.com/94485192/159015510-6621565b-d5a0-4450-a51a-c8e083b5e456.png)
+
 # Autonomous Routines 
 All currently planned and/or completed autonomous routes.
 ## Left Autonomous Left (LAL)
