@@ -1,6 +1,4 @@
-# Vex64040Edgar
-VexCode project for 64040C E.D.G.A.R.
-
+![edgarprobannerinverted](https://user-images.githubusercontent.com/94485192/159014582-ba201766-1143-41b5-8c6b-497554c1a698.png)
 # Autonomous Routines 
 All currently planned and/or completed autonomous routes.
 ## Left Autonomous Left (LAL)
