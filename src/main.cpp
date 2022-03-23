@@ -1,30 +1,26 @@
 /*------------------------------------------------------------------------------------*/
 /*                                                                                    */
 /*    Module:       main.cpp                                                          */
-/*    Author:       VEX                                                               */
+/*    Author:       Anthony Halliday, Camden Wolfield                                 */
 /*    Created:      Thu Sep 26 2019                                                   */
-/*    Description:  E.D.G.A.R. (Ergonomicaly Decent Goal-Grabbing Automated Robot)    */
+/*    Description:  Edgar Pro                                                         */
 /*                                                                                    */
 /*------------------------------------------------------------------------------------*/
+
+// "It's always the programmer's fault" - Some genius on the vex fourms
 
 // ---- START VEXCODE CONFIGURED DEVICES ----
 // Robot Configuration:
 // [Name]               [Type]        [Port(s)]
-// rearMogo             motor         6               
-// frontHook            digital_out   H               
-// inertialSensor       inertial      13              
+// frontHook            digital_out   H  
+// rearHook             digital_out   G             
+// inertialSensor       inertial      10               
+// frontMogo            motor         7               
+// ringLift             motor         8               
+// LeftDriveSmart       motor_group   1, 3, 5           
+// RightDriveSmart      motor_group   2, 4, 6                        
 // Controller1          controller                    
-// LeftDriveSmart       motor_group   11, 12          
-// RightDriveSmart      motor_group   1, 2            
-// ringLift             motor         19              
-// RearSwitch           limit         G               
-// frontMogo            motor_group   8, 7            
-// RearEStop            limit         F               
 // ---- END VEXCODE CONFIGURED DEVICES ----
-
-
-// "It's always the programmer's fault" - Some genius on the vex fourms
-
 
 #include "vex.h"
 #include "cmath"
@@ -121,7 +117,7 @@ void InertialLeft(float targetTurn) {
   task::sleep(100);
 }
 
-void driveIN(int dist, directionType dir,int vel) {
+void driveIN(int dist, directionType dir,int volt) {
   // 3:7 gear ratio motor:wheel
   // 7 rotations of the motor is three rotations of the wheel
   // Wheel circumfrence 12.9590697
@@ -135,8 +131,8 @@ void driveIN(int dist, directionType dir,int vel) {
   }
   LeftDriveSmart.resetPosition();
   RightDriveSmart.resetPosition();
-  LeftDriveSmart.spin(dir,vel,percentUnits::pct);
-  RightDriveSmart.spin(dir,vel,percentUnits::pct);
+  LeftDriveSmart.spin(dir,volt,voltageUnits::volt);
+  RightDriveSmart.spin(dir,volt,voltageUnits::volt);
   if(dir==directionType::rev) {
     waitUntil(LeftDriveSmart.position(rotationUnits::rev)<dist && RightDriveSmart.position(rotationUnits::rev)<dist);
   }
@@ -156,15 +152,15 @@ void leftAutonLeft(void) {
   //Step 2: Pick up YeMogo
   InertialRight(92);
   frontHook.set(false);
-  driveIN(48,directionType::fwd,200);
+  driveIN(48,directionType::fwd,12.0);
   frontHook.set(true);
   //Step 3: Drive away with YeMogo and hide it in corner
   frontMogo.spinFor(300,rotationUnits::deg);
   InertialLeft(180);
-  driveIN(40,directionType::fwd,200);
+  driveIN(40,directionType::fwd,12.0);
   frontMogo.spinFor(-300,rotationUnits::deg);
   InertialRight(90);
-  rearMogo.spinTo(-700,rotationUnits::deg);
+  //rearMogo.spinTo(-700,rotationUnits::deg); // I think this is useless with the new hook [DELETE]
   //Step 4: Profit
 }
 
@@ -193,12 +189,12 @@ void rightAutonRight(void) {
   // right auton code goes here
   // open claw, drive forward to neutral mogo, latch on and lift
   frontHook.set(false);
-  driveIN(44,directionType::fwd,200);
+  driveIN(44,directionType::fwd,12.0);
   frontMogo.spinFor(150,rotationUnits::deg,false);
   frontHook.set(true);
-  driveIN(15,directionType::rev,200);
+  driveIN(15,directionType::rev,12.0);
   InertialLeft(40);
-  driveIN(15,directionType::rev,200);
+  driveIN(15,directionType::rev,12.0);
   ringLift.spinFor(3,timeUnits::sec,100,velocityUnits::pct);
 }
 
@@ -214,13 +210,14 @@ void rightAutonCenter(void) {
   frontHook.set(true);
   frontMogo.spinFor(150,rotationUnits::deg);
   // drop lift, back up to aliance mogo, load rings
-  driveIN(60,directionType::rev,200);
+  driveIN(60,directionType::rev,12.0);
   InertialRight(10);
-  driveIN(15,directionType::rev,200);
+  driveIN(15,directionType::rev,12.0);
   ringLift.spinFor(3,timeUnits::sec,100,velocityUnits::pct);
 }
 
 void soloWinPoint(void){
+  /* All code depreciated, fix later [FIX]
   frontMogo.spinFor(directionType::fwd,750,rotationUnits::deg,200,velocityUnits::pct);
   driveIN(7,directionType::rev,70);
   InertialLeft(90);
@@ -233,14 +230,15 @@ void soloWinPoint(void){
   rearMogo.spinTo(550,rotationUnits::deg,200,velocityUnits::pct);
   ringLift.spinFor(3,timeUnits::sec,200,velocityUnits::pct);
   InertialRight(90);
+  */
 }
 
 void skillsAuton(void) {
   frontHook.set(false);
   driveIN(10,directionType::fwd,55);
-  rearMogo.spinTo(-700,rotationUnits::deg);
+ //rearMogo.spinTo(-700,rotationUnits::deg); // Depreciated [DELETE]
   driveIN(11,directionType::rev,55);
-  rearMogo.spinTo(-500,rotationUnits::deg);
+  rearHook.set(true);
   ringLift.spinFor(2,timeUnits::sec,100,velocityUnits::pct);
   driveIN(10,directionType::fwd,55);
   InertialRight(95);
@@ -252,14 +250,11 @@ void skillsAuton(void) {
   frontMogo.spinFor(-300,rotationUnits::deg);
   frontHook.set(false);
   InertialLeft(90);
-  rearMogo.spinTo(-700,rotationUnits::deg);
+  rearHook.set(false);
   driveIN(10,directionType::fwd,55);
   InertialRight(180);
   driveIN(13,directionType::rev,55);
-  rearMogo.spin(directionType::fwd,200,velocityUnits::pct);
-  waitUntil(RearSwitch.value()||RearEStop.value());
-  
-  rearMogo.stop();
+  rearHook.set(true);
   InertialRight(11);
   driveIN(45,directionType::fwd,55);
   frontHook.set(true);
@@ -270,15 +265,13 @@ void skillsAuton(void) {
 }
 
 void leftAutonNoWP(void){
-  rearMogo.spinTo(-650,rotationUnits::deg,200, velocityUnits::pct,false);
-  driveIN(47,directionType::fwd,200);
+  //rearMogo.spinTo(-650,rotationUnits::deg,200, velocityUnits::pct,false); //Depreciated [DELETE]
+  driveIN(47,directionType::fwd,12.0);
   frontHook.set(true);
   frontMogo.spinTo(110,rotationUnits::deg);
   InertialLeft(95);
   driveIN(27,directionType::rev,30);
-  rearMogo.spin(directionType::fwd,200,percentUnits::pct);
-  waitUntil(RearSwitch.value()||RearEStop.value());
-  rearMogo.stop();
+  rearHook.set(true);
   InertialLeft(45);
   driveIN(30,directionType::fwd,70);
   InertialRight(180);
@@ -296,20 +289,18 @@ void rightAutonNoWP(void){
   driveIN(20,directionType::rev,150);
   
   InertialRight(85);
-  driveIN(5,directionType::fwd,200);
-  rearMogo.spinTo(-700,rotationUnits::deg);
+  driveIN(5,directionType::fwd,12.0);
+  //rearMogo.spinTo(-700,rotationUnits::deg); //Depreciated [DELETE]
 
   driveIN(22,directionType::rev,50);
-  rearMogo.spin(directionType::fwd,100,velocityUnits::pct);
-  waitUntil(RearSwitch.value()||RearEStop.value());
-  rearMogo.stop(brakeType::brake);
-  driveIN(50,directionType::fwd,200);
+  rearHook.set(true);
+  driveIN(50,directionType::fwd,12.0);
   
 }
 
 void speedyAuton(void) {
   Controller1.Screen.print(" PRANKD LOL");
-  driveIN(47,directionType::fwd,200);
+  driveIN(47,directionType::fwd,12.0);
   LeftDriveSmart.spin(directionType::rev,200,velocityUnits::pct);
   RightDriveSmart.spin(directionType::rev,200,velocityUnits::pct);
   frontHook.set(true);
@@ -368,11 +359,11 @@ void pre_auton(void) {
   vexcodeInit();
   // Auton Selection
   autonSelect();
-  // Reset important encoders and close the front claw
+  // Reset important encoders, close the front claw, and open the back
   frontHook.set(false);
+  rearHook.set(false);
   frontMogo.resetPosition();
-  rearMogo.resetPosition();
-  // Calibrate Inertial and report status
+  // Calibrate Inertial and wait until complete
   inertialSensor.startCalibration();
   waitUntil(!inertialSensor.isCalibrating());
 }
@@ -383,20 +374,17 @@ void usercontrol(void) {
   Controller1.ButtonX.pressed(pneumaticSwitchFront);
   while(true) {
       // Spin drivetrain motors
-      LeftDriveSmart.spin(vex::directionType::undefined, (2*abs(Controller1.Axis3.position()-Controller1.Axis4.position()) >= DEADBAND) ? 0-(Controller1.Axis3.position()-Controller1.Axis4.position()) : 0, velocityUnits::pct);
-      RightDriveSmart.spin(vex::directionType::undefined, (2*abs(Controller1.Axis3.position()+Controller1.Axis4.position()) >= DEADBAND) ? 0-(Controller1.Axis3.position()+Controller1.Axis4.position()) : 0, velocityUnits::pct);
+      LeftDriveSmart.spin(vex::directionType::undefined, (2*abs(Controller1.Axis3.position()+Controller1.Axis4.position()) >= DEADBAND) ? 0-(Controller1.Axis3.position()+Controller1.Axis4.position()) : 0, velocityUnits::pct);
+      RightDriveSmart.spin(vex::directionType::undefined, (2*abs(Controller1.Axis3.position()-Controller1.Axis4.position()) >= DEADBAND) ? 0-(Controller1.Axis3.position()-Controller1.Axis4.position()) : 0, velocityUnits::pct);
       // Rear Lift up/down
       if(Controller1.ButtonL1.pressing()) {
-        rearMogo.spin(directionType::fwd, 50, percentUnits::pct);
+        rearHook.set(true);
       }
       else if(Controller1.ButtonL2.pressing()) {
-        rearMogo.spin(directionType::rev, 50, percentUnits::pct);
-      }
-      else {
-        rearMogo.stop(brakeType::hold);
+        rearHook.set(false);
       }
       // Front Lift up/down
-      if(Controller1.ButtonR1.pressing()&&frontMogo.position(rotationUnits::deg)<=910) {
+      if(Controller1.ButtonR1.pressing()) {
         frontMogo.spin(directionType::fwd, 100, percentUnits::pct);
       }
       else if(Controller1.ButtonR2.pressing()&&frontMogo.position(rotationUnits::deg)>=0) {
