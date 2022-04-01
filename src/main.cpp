@@ -22,6 +22,23 @@
 // Controller1          controller                    
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
+// ---- START SUPPORTED AUTON ROUTES ----
+// [Name]               [Support Level]
+// LANWP                Incomplete
+// SPEED                Complete
+// RANWP                Complete
+// RAR                  Complete
+// SKILL                In Progress
+// ZACH1                In Progress
+// ZACH2                Not Started
+// ZACH3                Not Started
+// ZACH4                Not Started
+// ZACH5                Not Started
+// ZACH6                Not Started
+// ZACH7                Not Started
+// ZACH8                Not Started
+// ---- END SUPPORTED AUTON ROUTES ----
+
 #include "vex.h"
 #include "cmath"
 
@@ -73,33 +90,6 @@ void InertialRight(float targetTurn) {
     calcVelocity = std::abs(heading - inertialSensor.rotation(degrees));
 
     if(calcVelocity > MAXVELOCITY) {
-      RightDriveSmart.spin(directionType::fwd, MAXVELOCITY, velocityUnits::pct);
-      LeftDriveSmart.spin(directionType::rev, MAXVELOCITY, velocityUnits::pct);
-    } 
-    else if(calcVelocity < MINVELOCITY) {
-      RightDriveSmart.spin(directionType::fwd, MINVELOCITY, velocityUnits::pct);
-      LeftDriveSmart.spin(directionType::rev, MINVELOCITY, velocityUnits::pct);
-    } 
-    else {
-      RightDriveSmart.spin(directionType::fwd, calcVelocity, velocityUnits::pct);
-      LeftDriveSmart.spin(directionType::rev, calcVelocity, velocityUnits::pct);
-    }
-  }
-  RightDriveSmart.stop(brakeType::brake);
-  LeftDriveSmart.stop(brakeType::brake);
-  task::sleep(100);
-}
-
-void InertialLeft(float targetTurn) {
-  prevTurn = inertialSensor.rotation(degrees);
-
-  task::sleep(100);
-
-  heading = targetTurn * -1 + prevTurn;
-
-  while(inertialSensor.rotation(degrees) > heading) {
-    calcVelocity = std::abs(heading - inertialSensor.rotation(degrees));
-    if(calcVelocity > MAXVELOCITY) {
       RightDriveSmart.spin(directionType::rev, MAXVELOCITY, velocityUnits::pct);
       LeftDriveSmart.spin(directionType::fwd, MAXVELOCITY, velocityUnits::pct);
     } 
@@ -117,15 +107,43 @@ void InertialLeft(float targetTurn) {
   task::sleep(100);
 }
 
-void driveIN(int dist, directionType dir,int volt) {
+void InertialLeft(float targetTurn) {
+  prevTurn = inertialSensor.rotation(degrees);
+
+  task::sleep(100);
+
+  heading = targetTurn * -1 + prevTurn;
+
+  while(inertialSensor.rotation(degrees) > heading) {
+    calcVelocity = std::abs(heading - inertialSensor.rotation(degrees));
+    if(calcVelocity > MAXVELOCITY) {
+      RightDriveSmart.spin(directionType::fwd, MAXVELOCITY, velocityUnits::pct);
+      LeftDriveSmart.spin(directionType::rev, MAXVELOCITY, velocityUnits::pct);
+    } 
+    else if(calcVelocity < MINVELOCITY) {
+      RightDriveSmart.spin(directionType::fwd, MINVELOCITY, velocityUnits::pct);
+      LeftDriveSmart.spin(directionType::rev, MINVELOCITY, velocityUnits::pct);
+    } 
+    else {
+      RightDriveSmart.spin(directionType::fwd, calcVelocity, velocityUnits::pct);
+      LeftDriveSmart.spin(directionType::rev, calcVelocity, velocityUnits::pct);
+    }
+  }
+  RightDriveSmart.stop(brakeType::brake);
+  LeftDriveSmart.stop(brakeType::brake);
+  task::sleep(100);
+}
+
+void driveIN(float dist, directionType dir,float volt) {
   // 3:7 gear ratio motor:wheel
   // 7 rotations of the motor is three rotations of the wheel
   // Wheel circumfrence 12.9590697
   // 7 rotations of the motor is 38.8772091
   // 1 rotation of the wheel is 5.5388701
   // need to ajust all routines to actual inches before changing value in code
+  // current value is 5+3/4 in
 
-  dist=dist/(5);
+  dist=dist/(5.75);
   if(dir==directionType::rev) {
     dist=0-dist;
   }
@@ -189,12 +207,13 @@ void rightAutonRight(void) {
   // right auton code goes here
   // open claw, drive forward to neutral mogo, latch on and lift
   frontHook.set(false);
-  driveIN(44,directionType::fwd,12.0);
+  driveIN(47,directionType::fwd,12.0);
   frontMogo.spinFor(150,rotationUnits::deg,false);
   frontHook.set(true);
   driveIN(15,directionType::rev,12.0);
   InertialLeft(40);
-  driveIN(15,directionType::rev,12.0);
+  driveIN(20,directionType::rev,12.0);
+  rearHook.set(true);
   ringLift.spinFor(3,timeUnits::sec,100,velocityUnits::pct);
 }
 
@@ -280,22 +299,16 @@ void leftAutonNoWP(void){
 
 void rightAutonNoWP(void){
   // open claw, drive forward to neutral mogo, latch on and lift
-  frontHook.set(false);
-  driveIN(46,directionType::fwd,150);
+  driveIN(55,directionType::fwd,150);
   frontHook.set(true);
-  task::sleep(10);
-  frontMogo.spinFor(150,rotationUnits::deg);
-  InertialRight(40);
-  driveIN(20,directionType::rev,150);
-  
-  InertialRight(85);
-  driveIN(5,directionType::fwd,12.0);
-  //rearMogo.spinTo(-700,rotationUnits::deg); //Depreciated [DELETE]
-
-  driveIN(22,directionType::rev,50);
+  frontMogo.spinFor(150,rotationUnits::deg,false);
+  InertialRight(45);
+  driveIN(15,directionType::rev,12.0);
+  InertialRight(50);
+  driveIN(20,directionType::rev,12.0);
   rearHook.set(true);
+  InertialRight(45);
   driveIN(50,directionType::fwd,12.0);
-  
 }
 
 void speedyAuton(void) {
@@ -305,51 +318,56 @@ void speedyAuton(void) {
   RightDriveSmart.spin(directionType::rev,200,velocityUnits::pct);
   frontHook.set(true);
   frontMogo.spinFor(90,rotationUnits::deg,false);
-
 }
 
+void zach1(){
+  frontHook.set(false);
+  driveIN(47,directionType::fwd,12.0);
+  frontMogo.spinFor(700,rotationUnits::deg,200,velocityUnits::pct,false);
+  frontHook.set(true);
+  frontMogo.stop(brakeType::hold);
+  driveIN(50,directionType::rev,12.0);
+  InertialLeft(125);
+  driveIN(15,directionType::rev,7.0);
+  rearHook.set(true);
+  task::sleep(500);
+  ringLift.spin(directionType::fwd,100,velocityUnits::pct);
+  driveIN(4.5,directionType::fwd,12.0);
+  InertialRight(125);
+  driveIN(55,directionType::fwd,6.75);
+  driveIN(70,directionType::rev,12.0);
+  ringLift.stop();
+}
+
+void zach2(){
+  
+}
+
+void zach3(){
+  
+}
+
+void zach4(){
+  
+}
 
 // now that autons are defined, we can define the auton selection code
 
+std::string autonRoutes [13] = {"RAR","RAC","RANWP","SPEED","LANWP","LAC","LAL","SKILL","SAWP","ZACH1","ZACH2","ZACH3","ZACH4"};
+bool waitForComplete = true;
+int autonIndex = 0;
+
 void autonSelect(){
-  if(Controller1.ButtonA.pressing()){
-    Competition.autonomous(rightAutonRight);
-    Controller1.Screen.print("RAR");
-  }
-  else if(Controller1.ButtonB.pressing()){
-    Competition.autonomous(rightAutonCenter);
-    Controller1.Screen.print("RAC");
-  }
-  else if(Controller1.ButtonX.pressing()){
-    Competition.autonomous(leftAutonCenter);
-    Controller1.Screen.print("LAC");
-  }
-  else if(Controller1.ButtonY.pressing()){
-    Competition.autonomous(leftAutonLeft);
-    Controller1.Screen.print("LAL");
-  }
-  else if(Controller1.ButtonLeft.pressing()){
-    Competition.autonomous(leftAutonNoWP);
-    Controller1.Screen.print("LANWP");
-  }
-  else if(Controller1.ButtonRight.pressing()){
-    Competition.autonomous(rightAutonNoWP);
-    Controller1.Screen.print("RANWP");
-  }
-  else if(Controller1.ButtonUp.pressing()){
-    Competition.autonomous(soloWinPoint);
-    Controller1.Screen.print("SAWP");
-  }
-  else if(Controller1.ButtonDown.pressing()){
-    Competition.autonomous(skillsAuton);
-    Controller1.Screen.print("SKILL");
-  }
-  else if(Controller1.ButtonL1.pressing()){
-    Competition.autonomous(speedyAuton);
-    Controller1.Screen.print("SPEED");
-  }
-  else {
-    autonSelect();
+  while(true){
+    if (Controller1.ButtonUp.pressing()){
+      autonIndex++;
+      waitUntil(!Controller1.ButtonUp.pressing());
+    }
+    else if (Controller1.ButtonDown.pressing()){
+      autonIndex--;
+      waitUntil(!Controller1.ButtonDown.pressing());
+    }
+    printf("%i",autonIndex);
   }
 }
 
@@ -357,8 +375,6 @@ void autonSelect(){
 void pre_auton(void) {
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
-  // Auton Selection
-  autonSelect();
   // Reset important encoders, close the front claw, and open the back
   frontHook.set(false);
   rearHook.set(false);
@@ -407,10 +423,12 @@ void calibrate(){
 
 // main() called on program start
 int main() {
-  // run the pre-auton routine, this will set up auton routine
+  // run the pre-auton routine
   pre_auton();
-  //emergency calibration code, leave commented out unless you know what you're doing
-  //Competition.autonomous(calibrate);
+  // Manualy select an auton
+  Competition.autonomous(zach1);
+  // Autonomous Selection
+  //autonSelect();
   // Set up callbacks for driver control period.
   Competition.drivercontrol(usercontrol);
   // Prevent main from exiting with an infinite loop.

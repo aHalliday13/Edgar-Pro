@@ -12,9 +12,6 @@ extern motor_group RightDriveSmart;
 extern controller Controller1;
 extern digital_out rearHook;
 
-// Remove these once their refrences are gone from the code
-extern motor rearMogo;
-
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.
  * 
