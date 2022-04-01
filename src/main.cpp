@@ -162,47 +162,6 @@ void driveIN(float dist, directionType dir,float volt) {
 }
 
 // define auton routines here
-void leftAutonLeft(void) {
-  // left auton code goes here
-  //Step 1: Dump Preloads
-  ringLift.setVelocity(100,percentUnits::pct);
-  ringLift.spinFor(1.5,timeUnits::sec);
-  //Step 2: Pick up YeMogo
-  InertialRight(92);
-  frontHook.set(false);
-  driveIN(48,directionType::fwd,12.0);
-  frontHook.set(true);
-  //Step 3: Drive away with YeMogo and hide it in corner
-  frontMogo.spinFor(300,rotationUnits::deg);
-  InertialLeft(180);
-  driveIN(40,directionType::fwd,12.0);
-  frontMogo.spinFor(-300,rotationUnits::deg);
-  InertialRight(90);
-  //rearMogo.spinTo(-700,rotationUnits::deg); // I think this is useless with the new hook [DELETE]
-  //Step 4: Profit
-}
-
-void leftAutonCenter(void) {
-  // left auton code goes here
-  frontHook.set(false);
-  //Step 1: Dump Preloads
-  ringLift.setVelocity(100,percentUnits::pct);
-  ringLift.spinFor(1.5,timeUnits::sec);
-  //Step 2: "Mad Dash" for middle Yemogo
-  driveIN(6,directionType::fwd,70);
-  InertialRight(90);
-  driveIN(18,directionType::fwd,70);
-  InertialRight(90);
-  driveIN(27,directionType::fwd,70);
-  InertialLeft(55);
-  driveIN(35,directionType::fwd,40);
-  frontHook.set(true);
-  frontMogo.spinTo(300,rotationUnits::deg);
-  driveIN(40,directionType::rev,100);
-  InertialRight(30);
-  //Step 3: Profit
-}
-
 void rightAutonRight(void) {
   // right auton code goes here
   // open claw, drive forward to neutral mogo, latch on and lift
@@ -215,41 +174,6 @@ void rightAutonRight(void) {
   driveIN(20,directionType::rev,12.0);
   rearHook.set(true);
   ringLift.spinFor(3,timeUnits::sec,100,velocityUnits::pct);
-}
-
-void rightAutonCenter(void) {
-  // testing code just ignore: driveIN(70,directionType::rev,100);
-
-  // right auton code goes here
-  // open claw, turn left, drive forward to center yemogo, latch on and lift
-  frontHook.set(false);
-  driveIN(29,directionType::fwd,150);
-  InertialLeft(45);
-  driveIN(40,directionType::fwd,150);
-  frontHook.set(true);
-  frontMogo.spinFor(150,rotationUnits::deg);
-  // drop lift, back up to aliance mogo, load rings
-  driveIN(60,directionType::rev,12.0);
-  InertialRight(10);
-  driveIN(15,directionType::rev,12.0);
-  ringLift.spinFor(3,timeUnits::sec,100,velocityUnits::pct);
-}
-
-void soloWinPoint(void){
-  /* All code depreciated, fix later [FIX]
-  frontMogo.spinFor(directionType::fwd,750,rotationUnits::deg,200,velocityUnits::pct);
-  driveIN(7,directionType::rev,70);
-  InertialLeft(90);
-  driveIN(16,directionType::fwd,70);
-  InertialLeft(87);
-  rearMogo.spinTo(700,rotationUnits::deg);
-  //driveIN(12,directionType::fwd,55);
-  drive2obs(directionType::fwd);
-  driveIN(105,directionType::rev,100);
-  rearMogo.spinTo(550,rotationUnits::deg,200,velocityUnits::pct);
-  ringLift.spinFor(3,timeUnits::sec,200,velocityUnits::pct);
-  InertialRight(90);
-  */
 }
 
 void skillsAuton(void) {
