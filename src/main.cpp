@@ -177,34 +177,7 @@ void rightAutonRight(void) {
 }
 
 void skillsAuton(void) {
-  frontHook.set(false);
-  driveIN(10,directionType::fwd,55);
- //rearMogo.spinTo(-700,rotationUnits::deg); // Depreciated [DELETE]
-  driveIN(11,directionType::rev,55);
-  rearHook.set(true);
-  ringLift.spinFor(2,timeUnits::sec,100,velocityUnits::pct);
-  driveIN(10,directionType::fwd,55);
-  InertialRight(95);
-  driveIN(50,directionType::fwd,55);
-  frontHook.set(true);
-  frontMogo.spinFor(300,rotationUnits::deg);
-  InertialRight(10);
-  driveIN(30,directionType::fwd,55);
-  frontMogo.spinFor(-300,rotationUnits::deg);
-  frontHook.set(false);
-  InertialLeft(90);
-  rearHook.set(false);
-  driveIN(10,directionType::fwd,55);
-  InertialRight(180);
-  driveIN(13,directionType::rev,55);
-  rearHook.set(true);
-  InertialRight(11);
-  driveIN(45,directionType::fwd,55);
-  frontHook.set(true);
-  driveIN(35,directionType::fwd,55);
-  InertialRight(45);
-  drive2obs(directionType::fwd);
-
+  // Insert skills routine here
 }
 
 void leftAutonNoWP(void){
