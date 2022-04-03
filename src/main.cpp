@@ -235,6 +235,7 @@ void speedyAuton(void) {
 }
 
 void zach1(){
+  // Start on right, grab right neutral with front, grab alliance goal with back, load with rings from field
   frontHook.set(false);
   driveIN(47,directionType::fwd,12.0);
   frontMogo.spinFor(700,rotationUnits::deg,200,velocityUnits::pct,false);
@@ -254,31 +255,31 @@ void zach1(){
 }
 
 void zach2(){
-  
+  // start on right, grab yellow center with front, grab alliance goal with rear, load with rings from field
 }
 
 void zach3(){
-  
+  // start on left, speed for left yellow, back up to alliance on platform, grab, load with match load rings
 }
 
 void zach4(){
-  
+  // start on right, speed for right yellow with front, grab center yellow with back, place center yellow in corner, grab alliance with back, get field rings
 }
 
 void zach5(){
-  
+  // start on right, speed for center, back up to alliance, load with field rings, grab right yellow with front
 }
 
 void zach6(){
-  
+  // same as 5, but fake dash for right goal instead of center
 }
 
 void zach7(){
-  
+  // start on left, fake for left yellow, go for center, bring it back, grab alliance with rear lift, load with match loads
 }
 
 void zach8(){
-  
+  // open slot for future expansion
 }
 
 // now that autons are defined, we can define the auton selection code
