@@ -45,7 +45,7 @@
 using namespace vex;
 competition Competition;
 
-// define vars and macros here
+// define variables and macros here
 int calcVelocity;
 int prevTurn;
 float heading;
@@ -54,16 +54,6 @@ float heading;
 #define MINVELOCITY 10
 
 // define functions here
-void pneumaticSwitchFront(void) {
-  // on button press, if front hook is pressurized, depresurize, otherwise, pressurize
-  if(frontHook.value()) {
-    frontHook.set(false);
-  }
-  else {
-    frontHook.set(true);
-  }
-}
-
 void drive2obs(directionType dir){
   LeftDriveSmart.spin(dir,200,velocityUnits::pct);
   RightDriveSmart.spin(dir,200,velocityUnits::pct);
@@ -275,23 +265,48 @@ void zach4(){
   
 }
 
-// now that autons are defined, we can define the auton selection code
+void zach5(){
+  
+}
 
-std::string autonRoutes [13] = {"RAR","RAC","RANWP","SPEED","LANWP","LAC","LAL","SKILL","SAWP","ZACH1","ZACH2","ZACH3","ZACH4"};
+void zach6(){
+  
+}
+
+void zach7(){
+  
+}
+
+void zach8(){
+  
+}
+
+// now that autons are defined, we can define the auton selection code
+std::string autonRoutes [13] = {"LANWP","SPEED","RANWP","RAR","SKILL","ZACH1","ZACH2","ZACH3","ZACH4","ZACH5","ZACH6","ZACH7","ZACH8"};
 bool waitForComplete = true;
 int autonIndex = 0;
 
 void autonSelect(){
-  while(true){
+  printf("%i",autonIndex);
+  while(waitForComplete){
     if (Controller1.ButtonUp.pressing()){
       autonIndex++;
+      printf("%i",autonIndex);
       waitUntil(!Controller1.ButtonUp.pressing());
     }
     else if (Controller1.ButtonDown.pressing()){
       autonIndex--;
+      printf("%i",autonIndex);
       waitUntil(!Controller1.ButtonDown.pressing());
     }
-    printf("%i",autonIndex);
+    else if (Controller1.ButtonX.pressing()) {
+      waitForComplete = false;
+    }
+
+    // prevent overflow
+    autonIndex = autonIndex < 0 ? autonIndex+13 : autonIndex;
+    autonIndex = autonIndex > 12 ? 0 : autonIndex;
+
   }
 }
 
@@ -309,6 +324,18 @@ void pre_auton(void) {
 }
 
 // define user control code here
+void pneumaticSwitchFront(void) {
+  // on button press, check if driver control is active, then if front hook is pressurized, depresurize, otherwise, pressurize
+  if(competition().isDriverControl()){
+    if(frontHook.value()) {
+      frontHook.set(false);
+    }
+    else {
+      frontHook.set(true);
+    }
+  }
+}
+
 void usercontrol(void) {
   // Bind button x to front hook
   Controller1.ButtonX.pressed(pneumaticSwitchFront);
@@ -337,12 +364,6 @@ void usercontrol(void) {
       // Ringle lift controls
       ringLift.spin(vex::directionType::undefined, (abs(Controller1.Axis2.position()) >= DEADBAND) ? 0-(Controller1.Axis2.position()) : 0, velocityUnits::pct);
   }
-}
-
-void calibrate(){
-  //emergency calibration code
-  LeftDriveSmart.spinFor(1,rotationUnits::rev,false);
-  RightDriveSmart.spinFor(1,rotationUnits::rev,false);
 }
 
 // main() called on program start
