@@ -11,6 +11,7 @@ extern motor_group LeftDriveSmart;
 extern motor_group RightDriveSmart;
 extern controller Controller1;
 extern digital_out rearHook;
+extern digital_out autonHook;
 
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.
