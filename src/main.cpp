@@ -393,6 +393,13 @@ void usercontrol(void) {
       else if(Controller1.ButtonL2.pressing()) {
         rearHook.set(false);
       }
+      // Rear auton hook
+      if(Controller1.ButtonUp.pressing()) {
+        autonHook.set(true);
+      }
+      else if(Controller1.ButtonDown.pressing()) {
+        autonHook.set(false);
+      }
       // Front Lift up/down
       if(Controller1.ButtonR1.pressing()) {
         frontMogo.spin(directionType::fwd, 100, percentUnits::pct);

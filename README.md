@@ -1,1 +1,1 @@
-EDGAR is curently transitioning to EDGAR Pro. Major hardware and software changes are being made, and the README has been temporarily cleared untill these changes are complete. Please stay tuned for future updates. Full public release of software and hardware will occur on or before May 1.
+EDGAR is curently transitioning to EDGAR Pro. Major hardware and software changes are being made, and the README has been temporarily cleared untill these changes are complete. Please stay tuned for future updates. Full public release of software and hardware will occur on or before May 8.

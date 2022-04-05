@@ -28,6 +28,7 @@ motor RightDriveSmartMotorC = motor(PORT6, ratio6_1, true);
 motor_group RightDriveSmart = motor_group(RightDriveSmartMotorA, RightDriveSmartMotorB, RightDriveSmartMotorC);
 
 digital_out rearHook = digital_out(Brain.ThreeWirePort.G);
+digital_out autonHook = digital_out(Brain.ThreeWirePort.A);
 
 // VEXcode generated functions
 // define variable for remote controller enable/disable
