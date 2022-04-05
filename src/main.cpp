@@ -29,8 +29,8 @@
 // RANWP                Complete
 // RAR                  Complete
 // SKILL                In Progress
-// ZACH1                In Progress
-// ZACH2                Not Started
+// ZACH1                Complete
+// ZACH2                In Progress
 // ZACH3                Not Started
 // ZACH4                Not Started
 // ZACH5                Not Started
@@ -238,24 +238,35 @@ void zach1(){
   // Start on right, grab right neutral with front, grab alliance goal with back, load with rings from field
   frontHook.set(false);
   driveIN(47,directionType::fwd,12.0);
-  frontMogo.spinFor(700,rotationUnits::deg,200,velocityUnits::pct,false);
   frontHook.set(true);
-  frontMogo.stop(brakeType::hold);
+  frontMogo.startSpinTo(800,rotationUnits::deg);
   driveIN(50,directionType::rev,12.0);
   InertialLeft(125);
-  driveIN(15,directionType::rev,7.0);
+  driveIN(17,directionType::rev,7.0);
   rearHook.set(true);
   task::sleep(500);
-  ringLift.spin(directionType::fwd,100,velocityUnits::pct);
-  driveIN(4.5,directionType::fwd,12.0);
+  frontMogo.stop(brakeType::hold);
+  ringLift.spin(directionType::fwd,50,velocityUnits::pct);
+  driveIN(4.75,directionType::fwd,12.0);
   InertialRight(125);
-  driveIN(55,directionType::fwd,6.75);
-  driveIN(70,directionType::rev,12.0);
+  ringLift.setVelocity(200, percentUnits::pct);
+  driveIN(55,directionType::fwd,5.5);
+  driveIN(55,directionType::rev,5.5);
+  InertialLeft(180);
   ringLift.stop();
 }
 
 void zach2(){
   // start on right, grab yellow center with front, grab alliance goal with rear, load with rings from field
+  driveIN(60,directionType::fwd,12.0);
+  frontHook.set(true);
+  //frontMogo.spinFor(700,rotationUnits::deg,200,velocityUnits::pct,false);
+  driveIN(43,directionType::rev,12.0);
+  InertialLeft(40);
+  driveIN(20,directionType::rev,12.0);
+  rearHook.set(true);
+  driveIN(1,directionType::rev,12.0);
+  InertialRight(90);
 }
 
 void zach3(){
@@ -283,31 +294,62 @@ void zach8(){
 }
 
 // now that autons are defined, we can define the auton selection code
-std::string autonRoutes [13] = {"LANWP","SPEED","RANWP","RAR","SKILL","ZACH1","ZACH2","ZACH3","ZACH4","ZACH5","ZACH6","ZACH7","ZACH8"};
+std::string autonRoutes [13] = {"LANWP","SPEED","RANWP","RARNR","SKILL","ZACH1","ZACH2","ZACH3","ZACH4","ZACH5","ZACH6","ZACH7","ZACH8"};
 bool waitForComplete = true;
 int autonIndex = 0;
 
 void autonSelect(){
-  printf("%i",autonIndex);
   while(waitForComplete){
     if (Controller1.ButtonUp.pressing()){
       autonIndex++;
-      printf("%i",autonIndex);
       waitUntil(!Controller1.ButtonUp.pressing());
     }
     else if (Controller1.ButtonDown.pressing()){
       autonIndex--;
-      printf("%i",autonIndex);
       waitUntil(!Controller1.ButtonDown.pressing());
     }
     else if (Controller1.ButtonX.pressing()) {
+      Controller1.Screen.setCursor(4, 1);
+      Controller1.Screen.print("= %s",autonRoutes[autonIndex].c_str());
       waitForComplete = false;
+    }
+    else{
+      Controller1.Screen.print("> %s",autonRoutes[autonIndex].c_str());
+      Controller1.Screen.setCursor(4, 1);
     }
 
     // prevent overflow
     autonIndex = autonIndex < 0 ? autonIndex+13 : autonIndex;
     autonIndex = autonIndex > 12 ? 0 : autonIndex;
 
+  }
+  switch(autonIndex){
+    case(0):
+      Competition.autonomous(leftAutonNoWP);
+    case(1):
+      Competition.autonomous(speedyAuton);     
+    case(2):
+      Competition.autonomous(rightAutonNoWP);
+    case(3):
+      Competition.autonomous(rightAutonRight);
+    case(4):
+      Competition.autonomous(skillsAuton);
+    case(5):
+      Competition.autonomous(zach1);
+    case(6):
+      Competition.autonomous(zach2);
+    case(7):
+      Competition.autonomous(zach3);
+    case(8):
+      Competition.autonomous(zach4);
+    case(9):
+      Competition.autonomous(zach5);
+    case(10):
+      Competition.autonomous(zach6);
+    case(11):
+      Competition.autonomous(zach7);
+    case(12):
+      Competition.autonomous(zach8);
   }
 }
 
@@ -372,7 +414,7 @@ int main() {
   // run the pre-auton routine
   pre_auton();
   // Manualy select an auton
-  Competition.autonomous(zach1);
+  Competition.autonomous(zach2);
   // Autonomous Selection
   //autonSelect();
   // Set up callbacks for driver control period.
