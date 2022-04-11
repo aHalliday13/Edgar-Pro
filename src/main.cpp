@@ -9,19 +9,6 @@
 
 // "It's always the programmer's fault" - Some genius on the vex fourms
 
-// ---- START VEXCODE CONFIGURED DEVICES ----
-// Robot Configuration:
-// [Name]               [Type]        [Port(s)]
-// frontHook            digital_out   H  
-// rearHook             digital_out   G             
-// inertialSensor       inertial      10               
-// frontMogo            motor         7               
-// ringLift             motor         8               
-// LeftDriveSmart       motor_group   1, 3, 5           
-// RightDriveSmart      motor_group   2, 4, 6                        
-// Controller1          controller                    
-// ---- END VEXCODE CONFIGURED DEVICES ----
-
 // ---- START SUPPORTED AUTON ROUTES ----
 // [Name]               [Support Level]
 // LANWP                Incomplete
@@ -40,10 +27,33 @@
 // ---- END SUPPORTED AUTON ROUTES ----
 
 #include "vex.h"
+
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// Controller1          controller                    
+// inertialSensor       inertial      10              
+// frontHook            digital_out   H               
+// frontMogo            motor         7               
+// ringLift             motor         11              
+// LeftDriveSmartA      motor         1               
+// LeftDriveSmartB      motor         3               
+// LeftDriveSmartC      motor         9               
+// RightDriveSmartA     motor         2               
+// RightDriveSmartB     motor         4               
+// RightDriveSmartC     motor         6               
+// rearHook             digital_out   G               
+// autonHook            digital_out   A               
+// frontVision          vision        17              
+// rearVision           vision        15              
+// ---- END VEXCODE CONFIGURED DEVICES ----
 #include "cmath"
 
 using namespace vex;
 competition Competition;
+
+motor_group LeftDriveSmart = motor_group(LeftDriveSmartA, LeftDriveSmartB, LeftDriveSmartC);
+motor_group RightDriveSmart = motor_group(RightDriveSmartA, RightDriveSmartB, RightDriveSmartC);
 
 // define variables and macros here
 int calcVelocity;
@@ -256,21 +266,32 @@ void zach1(){
   ringLift.stop();
 }
 
+#define MANUAL zach2
+
 void zach2(){
   // start on right, grab yellow center with front, grab alliance goal with rear, load with rings from field
   driveIN(60,directionType::fwd,12.0);
   frontHook.set(true);
-  //frontMogo.spinFor(700,rotationUnits::deg,200,velocityUnits::pct,false);
+  frontMogo.startSpinTo(400,rotationUnits::deg,200,velocityUnits::pct);
   driveIN(43,directionType::rev,12.0);
-  InertialLeft(40);
-  driveIN(20,directionType::rev,12.0);
+  task::sleep(500);
+  InertialLeft(42.5);
+  driveIN(15,directionType::rev,7.0);
   rearHook.set(true);
-  driveIN(1,directionType::rev,12.0);
-  InertialRight(90);
+  driveIN(5,directionType::fwd,12.0);
+  InertialRight(92.5);
+  //ringLift.spin(fwd,12.0,voltageUnits::volt);
+  //driveIN(60,directionType::fwd,7.0);
+  //driveIN(70,directionType::rev,12.0);
 }
 
 void zach3(){
   // start on left, speed for left yellow, back up to alliance on platform, grab, load with match load rings
+  driveIN(47,directionType::fwd,12.0);
+  LeftDriveSmart.spin(directionType::rev,200,velocityUnits::pct);
+  RightDriveSmart.spin(directionType::rev,200,velocityUnits::pct);
+  frontHook.set(true);
+  frontMogo.spinFor(90,rotationUnits::deg,false);
 }
 
 void zach4(){
@@ -294,7 +315,8 @@ void zach8(){
 }
 
 // now that autons are defined, we can define the auton selection code
-std::string autonRoutes [13] = {"LANWP","SPEED","RANWP","RARNR","SKILL","ZACH1","ZACH2","ZACH3","ZACH4","ZACH5","ZACH6","ZACH7","ZACH8"};
+//autonRoutes [13] = {"LANWP","SPEED","RANWP","RARNR","SKILL","ZACH1","ZACH2","ZACH3","ZACH4","ZACH5","ZACH6","ZACH7","ZACH8"};
+
 bool waitForComplete = true;
 int autonIndex = 0;
 
@@ -310,11 +332,11 @@ void autonSelect(){
     }
     else if (Controller1.ButtonX.pressing()) {
       Controller1.Screen.setCursor(4, 1);
-      Controller1.Screen.print("= %s",autonRoutes[autonIndex].c_str());
+      //Controller1.Screen.print("= %s",autonRoutes[autonIndex].c_str());
       waitForComplete = false;
     }
     else{
-      Controller1.Screen.print("> %s",autonRoutes[autonIndex].c_str());
+      //Controller1.Screen.print("> %s",autonRoutes[autonIndex].c_str());
       Controller1.Screen.setCursor(4, 1);
     }
 
@@ -421,7 +443,7 @@ int main() {
   // run the pre-auton routine
   pre_auton();
   // Manualy select an auton
-  Competition.autonomous(zach2);
+  Competition.autonomous(MANUAL);
   // Autonomous Selection
   //autonSelect();
   // Set up callbacks for driver control period.
