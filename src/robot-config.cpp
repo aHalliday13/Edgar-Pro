@@ -21,12 +21,6 @@ motor RightDriveSmartB = motor(PORT4, ratio6_1, true);
 motor RightDriveSmartC = motor(PORT6, ratio6_1, true);
 digital_out rearHook = digital_out(Brain.ThreeWirePort.G);
 digital_out autonHook = digital_out(Brain.ThreeWirePort.A);
-/*vex-vision-config:begin*/
-vision frontVision = vision (PORT17, 50);
-/*vex-vision-config:end*/
-/*vex-vision-config:begin*/
-vision rearVision = vision (PORT15, 50);
-/*vex-vision-config:end*/
 
 // VEXcode generated functions
 // define variable for remote controller enable/disable

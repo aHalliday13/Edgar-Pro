@@ -43,9 +43,7 @@
 // RightDriveSmartB     motor         4               
 // RightDriveSmartC     motor         6               
 // rearHook             digital_out   G               
-// autonHook            digital_out   A               
-// frontVision          vision        17              
-// rearVision           vision        15              
+// autonHook            digital_out   A                           
 // ---- END VEXCODE CONFIGURED DEVICES ----
 #include "cmath"
 
@@ -266,8 +264,6 @@ void zach1(){
   ringLift.stop();
 }
 
-#define MANUAL zach2
-
 void zach2(){
   // start on right, grab yellow center with front, grab alliance goal with rear, load with rings from field
   driveIN(60,directionType::fwd,12.0);
@@ -280,18 +276,22 @@ void zach2(){
   rearHook.set(true);
   driveIN(5,directionType::fwd,12.0);
   InertialRight(92.5);
-  //ringLift.spin(fwd,12.0,voltageUnits::volt);
-  //driveIN(60,directionType::fwd,7.0);
-  //driveIN(70,directionType::rev,12.0);
+  ringLift.spin(fwd,12.0,voltageUnits::volt);
+  driveIN(60,directionType::fwd,7.0);
+  driveIN(70,directionType::rev,12.0);
 }
+
+#define MANUAL zach3
 
 void zach3(){
   // start on left, speed for left yellow, back up to alliance on platform, grab, load with match load rings
-  driveIN(47,directionType::fwd,12.0);
-  LeftDriveSmart.spin(directionType::rev,200,velocityUnits::pct);
-  RightDriveSmart.spin(directionType::rev,200,velocityUnits::pct);
+  driveIN(47,directionType::fwd,6.0);
   frontHook.set(true);
-  frontMogo.spinFor(90,rotationUnits::deg,false);
+  frontMogo.startSpinTo(800,rotationUnits::deg);
+  driveIN(50,directionType::rev,6.0);
+  InertialLeft(130);
+  drive2obs(directionType::fwd);
+  driveIN(48,directionType::rev,12.0);
 }
 
 void zach4(){
