@@ -9,23 +9,6 @@
 
 // "It's always the programmer's fault" - Some genius on the vex fourms
 
-// ---- START SUPPORTED AUTON ROUTES ----
-// [Name]               [Support Level]
-// LANWP                Incomplete
-// SPEED                Complete
-// RANWP                Complete
-// RAR                  Complete
-// SKILL                In Progress
-// ZACH1                Complete
-// ZACH2                In Progress
-// ZACH3                Not Started
-// ZACH4                Not Started
-// ZACH5                Not Started
-// ZACH6                Not Started
-// ZACH7                Not Started
-// ZACH8                Not Started
-// ---- END SUPPORTED AUTON ROUTES ----
-
 #include "vex.h"
 
 // ---- START VEXCODE CONFIGURED DEVICES ----
@@ -46,7 +29,6 @@
 // autonHook            digital_out   A                           
 // ---- END VEXCODE CONFIGURED DEVICES ----
 #include "cmath"
-
 using namespace vex;
 competition Competition;
 
@@ -70,8 +52,8 @@ void drive2obs(directionType dir){
     waitUntil(LeftDriveSmart.velocity(percentUnits::pct)<5 && RightDriveSmart.velocity(percentUnits::pct)<5);
   }
   else{
-    waitUntil(LeftDriveSmart.velocity(percentUnits::pct)<5 && RightDriveSmart.velocity(percentUnits::pct)<5);
-    waitUntil(LeftDriveSmart.velocity(percentUnits::pct)>5 && RightDriveSmart.velocity(percentUnits::pct)>5);
+    waitUntil(LeftDriveSmart.velocity(percentUnits::pct)<-5 || RightDriveSmart.velocity(percentUnits::pct)<-5);
+    waitUntil(LeftDriveSmart.velocity(percentUnits::pct)>-5 || RightDriveSmart.velocity(percentUnits::pct)>-5);
   }
   LeftDriveSmart.stop();
   RightDriveSmart.stop();
@@ -284,14 +266,23 @@ void zach2(){
 #define MANUAL zach3
 
 void zach3(){
+  // this routine is still very much a work in progress, so don't be supprised if it doesn't perform as expected
   // start on left, speed for left yellow, back up to alliance on platform, grab, load with match load rings
-  driveIN(47,directionType::fwd,6.0);
+  driveIN(48,directionType::fwd,12.0);
   frontHook.set(true);
   frontMogo.startSpinTo(800,rotationUnits::deg);
-  driveIN(50,directionType::rev,6.0);
-  InertialLeft(130);
-  drive2obs(directionType::fwd);
-  driveIN(48,directionType::rev,12.0);
+  driveIN(24,directionType::rev,12.0);
+  InertialRight(10);
+  driveIN(25,directionType::rev,7.0);
+  InertialLeft(115);
+  //drive2obs(directionType::fwd);
+  driveIN(1,directionType::rev,6.0);
+  drive2obs(directionType::rev);
+  rearHook.set(true);
+  driveIN(20,directionType::fwd,7.0);
+  InertialLeft(90);
+  driveIN(24,directionType::rev,12.0);
+  driveIN(24,directionType::fwd,7.0);
 }
 
 void zach4(){
@@ -315,12 +306,15 @@ void zach8(){
 }
 
 // now that autons are defined, we can define the auton selection code
-//autonRoutes [13] = {"LANWP","SPEED","RANWP","RARNR","SKILL","ZACH1","ZACH2","ZACH3","ZACH4","ZACH5","ZACH6","ZACH7","ZACH8"};
+/*  This code is REALLY messed up, don't uncomment it unless you are some sort of wizzard who magicaly fixes code
+std::function<void(void)> autonSelect(){
 
-bool waitForComplete = true;
-int autonIndex = 0;
+  bool waitForComplete = true;
+  int autonIndex = 0;
 
-void autonSelect(){
+  std::string autonRoutes [13] = {"LANWP","SPEED","RANWP","RARNR","SKILL","ZACH1","ZACH2","ZACH3","ZACH4","ZACH5","ZACH6","ZACH7","ZACH8"};
+  void (*functptr[])() = {&leftAutonNoWP,&speedyAuton,&rightAutonNoWP,&rightAutonRight,&skillsAuton,&zach1,&zach2,&zach3,&zach4,&zach5,&zach6,&zach7,&zach8};
+  
   while(waitForComplete){
     if (Controller1.ButtonUp.pressing()){
       autonIndex++;
@@ -332,11 +326,11 @@ void autonSelect(){
     }
     else if (Controller1.ButtonX.pressing()) {
       Controller1.Screen.setCursor(4, 1);
-      //Controller1.Screen.print("= %s",autonRoutes[autonIndex].c_str());
+      Controller1.Screen.print("= %s",autonRoutes[autonIndex].c_str());
       waitForComplete = false;
     }
     else{
-      //Controller1.Screen.print("> %s",autonRoutes[autonIndex].c_str());
+      Controller1.Screen.print("> %s",autonRoutes[autonIndex].c_str());
       Controller1.Screen.setCursor(4, 1);
     }
 
@@ -345,35 +339,10 @@ void autonSelect(){
     autonIndex = autonIndex > 12 ? 0 : autonIndex;
 
   }
-  switch(autonIndex){
-    case(0):
-      Competition.autonomous(leftAutonNoWP);
-    case(1):
-      Competition.autonomous(speedyAuton);     
-    case(2):
-      Competition.autonomous(rightAutonNoWP);
-    case(3):
-      Competition.autonomous(rightAutonRight);
-    case(4):
-      Competition.autonomous(skillsAuton);
-    case(5):
-      Competition.autonomous(zach1);
-    case(6):
-      Competition.autonomous(zach2);
-    case(7):
-      Competition.autonomous(zach3);
-    case(8):
-      Competition.autonomous(zach4);
-    case(9):
-      Competition.autonomous(zach5);
-    case(10):
-      Competition.autonomous(zach6);
-    case(11):
-      Competition.autonomous(zach7);
-    case(12):
-      Competition.autonomous(zach8);
-  }
+  Controller1.Screen.setCursor(4, 1);
+  return zach3;
 }
+*/
 
 // define pre-auton routine here
 void pre_auton(void) {
@@ -408,6 +377,10 @@ void usercontrol(void) {
       // Spin drivetrain motors
       LeftDriveSmart.spin(vex::directionType::undefined, (2*abs(Controller1.Axis3.position()+Controller1.Axis4.position()) >= DEADBAND) ? 0-(Controller1.Axis3.position()+Controller1.Axis4.position()) : 0, velocityUnits::pct);
       RightDriveSmart.spin(vex::directionType::undefined, (2*abs(Controller1.Axis3.position()-Controller1.Axis4.position()) >= DEADBAND) ? 0-(Controller1.Axis3.position()-Controller1.Axis4.position()) : 0, velocityUnits::pct);
+      // Test code, don't uncomment unless you know what you're doing
+      //RightDriveSmart.spin(directionType::undefined,Controller1.Axis3.position(),velocityUnits::pct);
+      //LeftDriveSmart.spin(directionType::undefined,Controller1.Axis3.position(),velocityUnits::pct);
+      
       // Rear Lift up/down
       if(Controller1.ButtonL1.pressing()) {
         rearHook.set(true);
@@ -445,12 +418,13 @@ int main() {
   // Manualy select an auton
   Competition.autonomous(MANUAL);
   // Autonomous Selection
-  //autonSelect();
+  //Competition.autonomous(pls help!);
   // Set up callbacks for driver control period.
   Competition.drivercontrol(usercontrol);
   // Prevent main from exiting with an infinite loop.
   while(true) {
     task::sleep(100);
+    printf("LEFT: %f  RIGHT: %f\n",LeftDriveSmart.velocity(percentUnits::pct),RightDriveSmart.velocity(percentUnits::pct));
   }
 }
 
