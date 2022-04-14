@@ -11,7 +11,7 @@ brain  Brain;
 controller Controller1 = controller(primary);
 inertial inertialSensor = inertial(PORT10);
 digital_out frontHook = digital_out(Brain.ThreeWirePort.H);
-motor frontMogo = motor(PORT7, ratio36_1, true);
+motor frontMogo = motor(PORT20, ratio36_1, true);
 motor ringLift = motor(PORT11, ratio6_1, false);
 motor LeftDriveSmartA = motor(PORT1, ratio6_1, true);
 motor LeftDriveSmartB = motor(PORT3, ratio6_1, false);
