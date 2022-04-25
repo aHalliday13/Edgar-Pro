@@ -139,33 +139,7 @@ void RARNR(void) {
 }
 
 void SKILL(void) {
-  frontHook.set(false);
-  driveIN(10,directionType::fwd,55);
-  driveIN(11,directionType::rev,55);
-  rearHook.set(true);
-  ringLift.spinFor(2,timeUnits::sec,100,velocityUnits::pct);
-  driveIN(10,directionType::fwd,55);
-  InertialRight(95);
-  driveIN(50,directionType::fwd,55);
-  frontHook.set(true);
-  frontMogo.spinFor(300,rotationUnits::deg);
-  InertialRight(10);
-  driveIN(30,directionType::fwd,55);
-  frontMogo.spinFor(-300,rotationUnits::deg);
-  frontHook.set(false);
-  InertialLeft(90);
-  rearHook.set(false);
-  driveIN(10,directionType::fwd,55);
-  InertialRight(180);
-  driveIN(13,directionType::rev,55);
-  rearHook.set(true);
-  InertialRight(11);
-  driveIN(45,directionType::fwd,55);
-  frontHook.set(true);
-  driveIN(35,directionType::fwd,55);
-  InertialRight(45);
-  drive2obs(directionType::fwd);
-
+  // insert camden code here
 }
 
 void LANWP(void){
@@ -320,7 +294,7 @@ void RACRF(){
 
   rearHook.set(true);
   driveIN(5,directionType::fwd,12.0);
-  InertialRight(100);
+  InertialRight(115);
   ringLift.spin(fwd,12.0,voltageUnits::volt);
   driveIN(50,directionType::fwd,7.0);
   driveIN(60,directionType::rev,12.0);
@@ -328,6 +302,22 @@ void RACRF(){
 
 void LACFR(){
   // start on left, fake for left yellow, go for center, bring it back, grab alliance with rear lift, load with match loads
+  InertialRight(25);
+
+  ringLift.spin(directionType::fwd,12.0,voltageUnits::volt);
+  frontMogo.startSpinTo(200, rotationUnits::deg, 200, velocityUnits::pct);
+  driveIN(30,directionType::fwd,12.0);
+  driveIN(30,directionType::fwd,3.0);
+  frontMogo.startSpinTo(0, rotationUnits::deg, 200, velocityUnits::pct);
+  driveIN(15,directionType::fwd,6.0);
+  frontHook.set(true);
+  frontMogo.startSpinTo(300, rotationUnits::deg, 200, velocityUnits::pct);
+
+  driveIN(70,directionType::rev,12.0);
+  InertialLeft(100);
+
+  drive2obs(directionType::rev);
+  rearHook.set(true);
 }
 
 int autonSelect(){
@@ -363,8 +353,6 @@ int autonSelect(){
   }
   return autonIndex;
 }
-
-#define MANUAL RACRF
 
 // define pre-auton routine here
 void pre_auton(void) {
@@ -433,12 +421,19 @@ void usercontrol(void) {
   }
 }
 
+#define ROUTE RARNR
+
+#ifndef ROUTE
+#define ROUTE autonSelect
+#endif
+
 // main() called on program start
 int main() {
   // run the pre-auton routine
   pre_auton();
   // Select an auton
-  //Competition.autonomous(MANUAL);
+  Competition.autonomous(ROUTE);
+  /*
   int testfoo =autonSelect();
   printf("%i",testfoo);
   switch(testfoo){
@@ -478,7 +473,7 @@ int main() {
     default:
       Competition.autonomous(RARWR);
   }
-
+  */
   // Set up callbacks for driver control period.
   Competition.drivercontrol(usercontrol);
   // Prevent main from exiting with an infinite loop.
