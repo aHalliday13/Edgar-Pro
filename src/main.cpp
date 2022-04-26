@@ -320,40 +320,6 @@ void LACFR(){
   rearHook.set(true);
 }
 
-int autonSelect(){
-
-  bool waitForComplete = true;
-  int autonIndex = 0;
-
-  std::string autonRoutes [11] = {"LANWP","SPEED","RANWP","RARNR","SKILL","RARWR","RACWR","LALWR","RADWA","RACRF","LACFR"};
-  
-  while(waitForComplete){
-    if (Controller1.ButtonUp.pressing()){
-      autonIndex++;
-      waitUntil(!Controller1.ButtonUp.pressing());
-    }
-    else if (Controller1.ButtonDown.pressing()){
-      autonIndex--;
-      waitUntil(!Controller1.ButtonDown.pressing());
-    }
-    else if (Controller1.ButtonX.pressing()) {
-      Controller1.Screen.setCursor(4, 1);
-      Controller1.Screen.print("= %s",autonRoutes[autonIndex].c_str());
-      waitForComplete = false;
-    }
-    else{
-      Controller1.Screen.print("> %s",autonRoutes[autonIndex].c_str());
-      Controller1.Screen.setCursor(4, 1);
-    }
-
-    // prevent overflow
-    autonIndex = autonIndex < 0 ? autonIndex+11 : autonIndex;
-    autonIndex = autonIndex > 10 ? 0 : autonIndex;
-
-  }
-  return autonIndex;
-}
-
 // define pre-auton routine here
 void pre_auton(void) {
   // Initializing Robot Configuration. DO NOT REMOVE!
@@ -366,6 +332,46 @@ void pre_auton(void) {
   inertialSensor.startCalibration();
   waitUntil(!inertialSensor.isCalibrating());
 }
+
+/* Super Fancy Auton Selector (C) Anthony Halliday, 2022, Under the license "pls dont steal my code, thx" */
+
+std::string autonRoutes [11] = {"LANWP","SPEED","RANWP","RARNR","SKILL","RARWR","RACWR","LALWR","RADWA","RACRF","LACFR"};
+int autonIndex = 0;
+
+typedef void (*autonPointer)();
+autonPointer autonPointers [11] = {LANWP,SPEED,RANWP,RARNR,SKILL,RARWR,RACWR,LALWR,RADWA,RACRF,LACFR};
+
+autonPointer autonSelect(){
+  while(true){
+    if (Controller1.ButtonUp.pressing()){
+      autonIndex++;
+      waitUntil(!Controller1.ButtonUp.pressing());
+    }
+    else if (Controller1.ButtonDown.pressing()){
+      autonIndex--;
+      waitUntil(!Controller1.ButtonDown.pressing());
+    }
+    else if (Controller1.ButtonX.pressing()) {
+      Controller1.Screen.setCursor(4, 1);
+      Controller1.Screen.print("= %s",autonRoutes[autonIndex].c_str());
+      goto escape;
+    }
+    else{
+      Controller1.Screen.print("> %s",autonRoutes[autonIndex].c_str());
+      Controller1.Screen.setCursor(4, 1);
+    }
+
+    // prevent overflow
+    autonIndex = autonIndex < 0 ? autonIndex+11 : autonIndex;
+    autonIndex = autonIndex > 10 ? 0 : autonIndex;
+
+  }
+  escape:
+  Brain.Screen.print("%x",autonIndex);
+  return autonPointers[autonIndex];
+}
+
+/* End Super Fancy auton selector */
 
 // define user control code here
 void pneumaticSwitchFront(void) {
@@ -423,57 +429,16 @@ void usercontrol(void) {
 
 #define ROUTE RARNR
 
-#ifndef ROUTE
-#define ROUTE autonSelect
-#endif
-
 // main() called on program start
 int main() {
   // run the pre-auton routine
   pre_auton();
   // Select an auton
-  Competition.autonomous(ROUTE);
-  /*
-  int testfoo =autonSelect();
-  printf("%i",testfoo);
-  switch(testfoo){
-    case 0:
-      Competition.autonomous(LANWP);
-      break;
-    case 1:
-      Competition.autonomous(SPEED);
-      break;
-    case 2:
-      Competition.autonomous(RANWP);
-      break;
-    case 3:
-      Competition.autonomous(RARNR);
-      break;
-    case 4:
-      Competition.autonomous(SKILL);
-      break;
-    case 5:
-      Competition.autonomous(RARWR);
-      break;
-    case 6:
-      Competition.autonomous(RACWR);
-      break;
-    case 7:
-      Competition.autonomous(LALWR);
-      break;
-    case 8:
-      Competition.autonomous(RADWA);
-      break;
-    case 9:
-      Competition.autonomous(RACRF);
-      break;
-    case 10:
-      Competition.autonomous(LACFR);
-      break;
-    default:
-      Competition.autonomous(RARWR);
-  }
-  */
+  autonPointer route = autonSelect(); 
+  Competition.autonomous(route);
+  Brain.Screen.print("Done! (hopefully)");
+  // The auton selector is being held together by chewing gum and a shoestring, so if it breaks, not my fault
+  
   // Set up callbacks for driver control period.
   Competition.drivercontrol(usercontrol);
   // Prevent main from exiting with an infinite loop.
