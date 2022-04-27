@@ -15,6 +15,7 @@
 using namespace vex;
 competition Competition;
 
+// Manualy create a motor group because the vex config wizzard can't have more than two motors for some reason
 motor_group LeftDriveSmart = motor_group(LeftDriveSmartA, LeftDriveSmartB, LeftDriveSmartC);
 motor_group RightDriveSmart = motor_group(RightDriveSmartA, RightDriveSmartB, RightDriveSmartC);
 
@@ -26,7 +27,7 @@ float heading;
 #define MAXVELOCITY 40
 #define MINVELOCITY 10
 
-// define functions here
+// Essential driving functions
 void drive2obs(directionType dir){
   LeftDriveSmart.spin(dir,12.0,voltageUnits::volt);
   RightDriveSmart.spin(dir,12.0,voltageUnits::volt);
@@ -125,37 +126,21 @@ void driveIN(float dist, directionType dir,float volt) {
 }
 
 // define auton routines here
-void RARNR(void) {
-  // open claw, drive forward to neutral mogo, latch on and lift
-  frontHook.set(false);
-  driveIN(47,directionType::fwd,12.0);
-  frontMogo.spinFor(150,rotationUnits::deg,false);
-  frontHook.set(true);
-  driveIN(15,directionType::rev,12.0);
-  InertialLeft(40);
-  driveIN(20,directionType::rev,12.0);
-  rearHook.set(true);
-  ringLift.spinFor(3,timeUnits::sec,100,velocityUnits::pct);
-}
-
-void SKILL(void) {
+void SKILL() {
   // insert camden code here
 }
 
-void LANWP(void){
+void SPEED() {
+  Controller1.Screen.print(" PRANKD LOL");
   driveIN(47,directionType::fwd,12.0);
+  LeftDriveSmart.spin(directionType::rev,200,velocityUnits::pct);
+  RightDriveSmart.spin(directionType::rev,200,velocityUnits::pct);
   frontHook.set(true);
-  frontMogo.spinTo(110,rotationUnits::deg);
-  InertialLeft(95);
-  driveIN(27,directionType::rev,30);
-  rearHook.set(true);
-  InertialLeft(45);
-  driveIN(30,directionType::fwd,70);
-  InertialRight(180);
-  driveIN(30,directionType::rev,70);
+  frontMogo.spinFor(90,rotationUnits::deg,false);
 }
 
-void RANWP(void){
+// Right Side
+void RANWP(){
   // open claw, drive forward to neutral mogo, latch on and lift
   driveIN(55,directionType::fwd,150);
   frontHook.set(true);
@@ -169,13 +154,49 @@ void RANWP(void){
   driveIN(50,directionType::fwd,12.0);
 }
 
-void SPEED(void) {
-  Controller1.Screen.print(" PRANKD LOL");
-  driveIN(47,directionType::fwd,12.0);
-  LeftDriveSmart.spin(directionType::rev,200,velocityUnits::pct);
-  RightDriveSmart.spin(directionType::rev,200,velocityUnits::pct);
+void RADWA(){
+  // start on right, speed for right yellow with front, grab center yellow with back, place center yellow in corner, grab alliance with back, get field rings
+  driveIN(55,directionType::fwd,150);
   frontHook.set(true);
-  frontMogo.spinFor(90,rotationUnits::deg,false);
+  frontMogo.setBrake(brakeType::hold);
+  frontMogo.startSpinTo(800,rotationUnits::deg);
+  InertialRight(35);
+  driveIN(25,directionType::rev,12.0);
+  InertialRight(65);
+  driveIN(18,directionType::rev,7.0);
+
+  LeftDriveSmart.spin(directionType::rev,6.0,voltageUnits::volt);
+  RightDriveSmart.spin(directionType::rev,6.0,voltageUnits::volt);
+  LeftDriveSmart.resetPosition();
+  RightDriveSmart.resetPosition();
+  // 5.75 in/rot
+  
+  waitUntil(LeftDriveSmart.position(rotationUnits::rev)<2.875 && RightDriveSmart.position(rotationUnits::rev)<2.875);
+  rearHook.set(true);
+  waitUntil(LeftDriveSmart.position(rotationUnits::rev)<3.5 && RightDriveSmart.position(rotationUnits::rev)<3.5);
+  
+  driveIN(32,directionType::fwd,12.0);
+  InertialLeft(110);
+  driveIN(12,directionType::rev,7.0);
+  rearHook.set(false);
+  task::sleep(1000);
+  InertialLeft(85);
+  drive2obs(directionType::rev);
+  rearHook.set(true);
+  ringLift.spin(directionType::fwd,12.0,voltageUnits::volt);
+}
+
+void RARNR() {
+  // open claw, drive forward to neutral mogo, latch on and lift
+  frontHook.set(false);
+  driveIN(47,directionType::fwd,12.0);
+  frontMogo.spinFor(150,rotationUnits::deg,false);
+  frontHook.set(true);
+  driveIN(15,directionType::rev,12.0);
+  InertialLeft(40);
+  driveIN(20,directionType::rev,12.0);
+  rearHook.set(true);
+  ringLift.spinFor(3,timeUnits::sec,100,velocityUnits::pct);
 }
 
 void RARWR(){
@@ -218,60 +239,8 @@ void RACWR(){
   driveIN(70,directionType::rev,12.0);
 }
 
-void LALWR(){
-  // this routine is still very much a work in progress, so don't be supprised if it doesn't perform as expected
-  // start on left, speed for left yellow, back up to alliance on platform, grab, load with match load rings
-  driveIN(48,directionType::fwd,12.0);
-  frontHook.set(true);
-  frontMogo.startSpinTo(800,rotationUnits::deg);
-  driveIN(34,directionType::rev,12.0);
-  InertialRight(10);
-  driveIN(15,directionType::rev,6.0);
-  InertialLeft(120);
-  drive2obs(directionType::fwd);
-  driveIN(26,directionType::rev,6.0);
-  task::sleep(500);
-  rearHook.set(true);
-  driveIN(20,directionType::fwd,7.0);
-  InertialLeft(90);
-  driveIN(24,directionType::rev,12.0);
-  driveIN(24,directionType::fwd,7.0);
-}
-
-void RADWA(){
-  // start on right, speed for right yellow with front, grab center yellow with back, place center yellow in corner, grab alliance with back, get field rings
-  driveIN(55,directionType::fwd,150);
-  frontHook.set(true);
-  frontMogo.setBrake(brakeType::hold);
-  frontMogo.startSpinTo(800,rotationUnits::deg);
-  InertialRight(35);
-  driveIN(25,directionType::rev,12.0);
-  InertialRight(65);
-  driveIN(18,directionType::rev,7.0);
-
-  LeftDriveSmart.spin(directionType::rev,6.0,voltageUnits::volt);
-  RightDriveSmart.spin(directionType::rev,6.0,voltageUnits::volt);
-  LeftDriveSmart.resetPosition();
-  RightDriveSmart.resetPosition();
-  // 5.75 in/rot
-  
-  waitUntil(LeftDriveSmart.position(rotationUnits::rev)<2.875 && RightDriveSmart.position(rotationUnits::rev)<2.875);
-  rearHook.set(true);
-  waitUntil(LeftDriveSmart.position(rotationUnits::rev)<3.5 && RightDriveSmart.position(rotationUnits::rev)<3.5);
-  
-  driveIN(32,directionType::fwd,12.0);
-  InertialLeft(110);
-  driveIN(12,directionType::rev,7.0);
-  rearHook.set(false);
-  task::sleep(1000);
-  InertialLeft(85);
-  drive2obs(directionType::rev);
-  rearHook.set(true);
-  ringLift.spin(directionType::fwd,12.0,voltageUnits::volt);
-}
-
 void RACRF(){
-  // same as 2, but fake for right goal instead of center
+  // same as RACWR, but fake for right goal instead of center
   InertialLeft(30);
   driveIN(60,directionType::fwd,12.0);
   frontHook.set(true);
@@ -300,7 +269,41 @@ void RACRF(){
   driveIN(60,directionType::rev,12.0);
 }
 
-void LACFR(){
+// Left side
+void LANWP(){
+  driveIN(47,directionType::fwd,12.0);
+  frontHook.set(true);
+  frontMogo.spinTo(110,rotationUnits::deg);
+  InertialLeft(95);
+  driveIN(27,directionType::rev,30);
+  rearHook.set(true);
+  InertialLeft(45);
+  driveIN(30,directionType::fwd,70);
+  InertialRight(180);
+  driveIN(30,directionType::rev,70);
+}
+
+void LALWR(){
+  // this routine is still very much a work in progress, so don't be supprised if it doesn't perform as expected
+  // start on left, speed for left yellow, back up to alliance on platform, grab, load with match load rings
+  driveIN(48,directionType::fwd,12.0);
+  frontHook.set(true);
+  frontMogo.startSpinTo(800,rotationUnits::deg);
+  driveIN(34,directionType::rev,12.0);
+  InertialRight(10);
+  driveIN(15,directionType::rev,6.0);
+  InertialLeft(120);
+  drive2obs(directionType::fwd);
+  driveIN(26,directionType::rev,6.0);
+  task::sleep(500);
+  rearHook.set(true);
+  driveIN(20,directionType::fwd,7.0);
+  InertialLeft(90);
+  driveIN(24,directionType::rev,12.0);
+  driveIN(24,directionType::fwd,7.0);
+}
+
+void LACRF(){
   // start on left, fake for left yellow, go for center, bring it back, grab alliance with rear lift, load with match loads
   InertialRight(25);
 
@@ -320,61 +323,8 @@ void LACFR(){
   rearHook.set(true);
 }
 
-// define pre-auton routine here
-void pre_auton(void) {
-  // Initializing Robot Configuration. DO NOT REMOVE!
-  vexcodeInit();
-  // Reset important encoders, close the front claw, and open the back
-  frontHook.set(false);
-  rearHook.set(false);
-  frontMogo.resetPosition();
-  // Calibrate Inertial and wait until complete
-  inertialSensor.startCalibration();
-  waitUntil(!inertialSensor.isCalibrating());
-}
-
-/* Super Fancy Auton Selector (C) Anthony Halliday, 2022, Under the license "pls dont steal my code, thx" */
-
-std::string autonRoutes [11] = {"LANWP","SPEED","RANWP","RARNR","SKILL","RARWR","RACWR","LALWR","RADWA","RACRF","LACFR"};
-int autonIndex = 0;
-
-typedef void (*autonPointer)();
-autonPointer autonPointers [11] = {LANWP,SPEED,RANWP,RARNR,SKILL,RARWR,RACWR,LALWR,RADWA,RACRF,LACFR};
-
-autonPointer autonSelect(){
-  while(true){
-    if (Controller1.ButtonUp.pressing()){
-      autonIndex++;
-      waitUntil(!Controller1.ButtonUp.pressing());
-    }
-    else if (Controller1.ButtonDown.pressing()){
-      autonIndex--;
-      waitUntil(!Controller1.ButtonDown.pressing());
-    }
-    else if (Controller1.ButtonX.pressing()) {
-      Controller1.Screen.setCursor(4, 1);
-      Controller1.Screen.print("= %s",autonRoutes[autonIndex].c_str());
-      goto escape;
-    }
-    else{
-      Controller1.Screen.print("> %s",autonRoutes[autonIndex].c_str());
-      Controller1.Screen.setCursor(4, 1);
-    }
-
-    // prevent overflow
-    autonIndex = autonIndex < 0 ? autonIndex+11 : autonIndex;
-    autonIndex = autonIndex > 10 ? 0 : autonIndex;
-
-  }
-  escape:
-  Brain.Screen.print("%x",autonIndex);
-  return autonPointers[autonIndex];
-}
-
-/* End Super Fancy auton selector */
-
 // define user control code here
-void pneumaticSwitchFront(void) {
+void pneumaticSwitchFront() {
   // on button press, check if driver control is active, then if front hook is pressurized, depresurize, otherwise, pressurize
   if(competition().isDriverControl()){
     if(frontHook.value()) {
@@ -386,7 +336,7 @@ void pneumaticSwitchFront(void) {
   }
 }
 
-void usercontrol(void) {
+void usercontrol() {
   // Bind button x to front hook
   Controller1.ButtonX.pressed(pneumaticSwitchFront);
   while(true) {
@@ -427,23 +377,34 @@ void usercontrol(void) {
   }
 }
 
-#define ROUTE RARNR
-
 // main() called on program start
 int main() {
-  // run the pre-auton routine
-  pre_auton();
-  // Select an auton
-  autonPointer route = autonSelect(); 
-  Competition.autonomous(route);
-  Brain.Screen.print("Done! (hopefully)");
-  // The auton selector is being held together by chewing gum and a shoestring, so if it breaks, not my fault
+  // Initializing Robot Configuration. DO NOT REMOVE!
+  vexcodeInit();
+
+  // BIG FONT so everyone can read my debug status
+  Brain.Screen.setFont(fontType::mono60);
+
+  // Reset important encoders, open the front claw, and close the back claw
+  frontHook.set(false);
+  rearHook.set(true);
+  frontMogo.resetPosition();
+
+  // Calibrate Inertial and wait until complete
+  inertialSensor.startCalibration();
+  waitUntil(!inertialSensor.isCalibrating());
+
+  // Super Fancy Auton Selector (C) Anthony Halliday, 2022, Under the license "pls dont steal my code, thx"
+  // jk lol, its just completley broken, welcome to vex!
   
-  // Set up callbacks for driver control period.
+  // Set up driver control period.
   Competition.drivercontrol(usercontrol);
+
   // Prevent main from exiting with an infinite loop.
   while(true) {
-    task::sleep(100);
+    if (LeftDriveSmart.temperature(temperatureUnits::celsius)>50 || RightDriveSmart.temperature(temperatureUnits::celsius)>50){
+      Controller1.rumble(".. .. .. ");
+    }
   }
 }
 
