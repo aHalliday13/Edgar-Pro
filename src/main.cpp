@@ -127,10 +127,12 @@ void driveIN(float dist, directionType dir,float volt) {
 
 // define auton routines here
 void SKILL() {
+  rearHook.set(false);
   // insert camden code here
 }
 
 void SPEED() {
+  rearHook.set(false);
   Controller1.Screen.print(" PRANKD LOL");
   driveIN(47,directionType::fwd,12.0);
   LeftDriveSmart.spin(directionType::rev,200,velocityUnits::pct);
@@ -141,6 +143,7 @@ void SPEED() {
 
 // Right Side
 void RANWP(){
+  rearHook.set(false);
   // open claw, drive forward to neutral mogo, latch on and lift
   driveIN(55,directionType::fwd,150);
   frontHook.set(true);
@@ -155,6 +158,7 @@ void RANWP(){
 }
 
 void RADWA(){
+  rearHook.set(false);
   // start on right, speed for right yellow with front, grab center yellow with back, place center yellow in corner, grab alliance with back, get field rings
   driveIN(55,directionType::fwd,150);
   frontHook.set(true);
@@ -187,6 +191,7 @@ void RADWA(){
 }
 
 void RARNR() {
+  rearHook.set(false);
   // open claw, drive forward to neutral mogo, latch on and lift
   frontHook.set(false);
   driveIN(47,directionType::fwd,12.0);
@@ -196,10 +201,12 @@ void RARNR() {
   InertialLeft(40);
   driveIN(20,directionType::rev,12.0);
   rearHook.set(true);
+  InertialRight(10);
   ringLift.spinFor(3,timeUnits::sec,100,velocityUnits::pct);
 }
 
 void RARWR(){
+  rearHook.set(false);
   // Start on right, grab right neutral with front, grab alliance goal with back, load with rings from field
   frontHook.set(false);
   driveIN(47,directionType::fwd,12.0);
@@ -218,10 +225,11 @@ void RARWR(){
   ringLift.setVelocity(200, percentUnits::pct);
   driveIN(55,directionType::fwd,5.5);
   driveIN(55,directionType::rev,5.5);
-  InertialLeft(180);
+  InertialLeft(200);
 }
 
 void RACWR(){
+  rearHook.set(false);
   // start on right, grab yellow center with front, grab alliance goal with rear, load with rings from field
   driveIN(60,directionType::fwd,12.0);
   frontHook.set(true);
@@ -240,15 +248,16 @@ void RACWR(){
 }
 
 void RACRF(){
+  rearHook.set(false);
   // same as RACWR, but fake for right goal instead of center
   InertialLeft(30);
-  driveIN(60,directionType::fwd,12.0);
+  driveIN(65,directionType::fwd,7.0);
   frontHook.set(true);
   frontMogo.setBrake(brakeType::hold);
   frontMogo.startSpinTo(800,rotationUnits::deg,200,velocityUnits::pct);
-  driveIN(43,directionType::rev,12.0);
+  driveIN(42,directionType::rev,12.0);
   task::sleep(500);
-  InertialLeft(42.5);
+  InertialLeft(40);
 
   LeftDriveSmart.spin(directionType::rev,6.0,voltageUnits::volt);
   RightDriveSmart.spin(directionType::rev,6.0,voltageUnits::volt);
@@ -261,9 +270,10 @@ void RACRF(){
   task::sleep(100);
   drive2obs(directionType::rev);
 
+  task::sleep(500);
   rearHook.set(true);
   driveIN(5,directionType::fwd,12.0);
-  InertialRight(115);
+  InertialRight(95);
   ringLift.spin(fwd,12.0,voltageUnits::volt);
   driveIN(50,directionType::fwd,7.0);
   driveIN(60,directionType::rev,12.0);
@@ -271,19 +281,25 @@ void RACRF(){
 
 // Left side
 void LANWP(){
+  rearHook.set(false);
   driveIN(47,directionType::fwd,12.0);
   frontHook.set(true);
-  frontMogo.spinTo(110,rotationUnits::deg);
-  InertialLeft(95);
-  driveIN(27,directionType::rev,30);
+  frontMogo.startSpinTo(110,rotationUnits::deg);
+
+  InertialLeft(35);
+  driveIN(25,directionType::rev,12.0);
+  InertialLeft(110);
+  driveIN(30,directionType::rev,7.0);
+
   rearHook.set(true);
-  InertialLeft(45);
+  InertialRight(15);
   driveIN(30,directionType::fwd,70);
   InertialRight(180);
   driveIN(30,directionType::rev,70);
 }
 
 void LALWR(){
+  rearHook.set(false);
   // this routine is still very much a work in progress, so don't be supprised if it doesn't perform as expected
   // start on left, speed for left yellow, back up to alliance on platform, grab, load with match load rings
   driveIN(48,directionType::fwd,12.0);
@@ -304,6 +320,7 @@ void LALWR(){
 }
 
 void LACRF(){
+  rearHook.set(false);
   // start on left, fake for left yellow, go for center, bring it back, grab alliance with rear lift, load with match loads
   InertialRight(25);
 
@@ -384,6 +401,7 @@ int main() {
 
   // BIG FONT so everyone can read my debug status
   Brain.Screen.setFont(fontType::mono60);
+  Brain.Screen.setFillColor("red");
 
   // Reset important encoders, open the front claw, and close the back claw
   frontHook.set(false);
@@ -395,6 +413,7 @@ int main() {
   waitUntil(!inertialSensor.isCalibrating());
 
   // Super Fancy Auton Selector (C) Anthony Halliday, 2022, Under the license "pls dont steal my code, thx"
+  Competition.autonomous(LANWP);
   // jk lol, its just completley broken, welcome to vex!
   
   // Set up driver control period.
@@ -402,9 +421,15 @@ int main() {
 
   // Prevent main from exiting with an infinite loop.
   while(true) {
-    if (LeftDriveSmart.temperature(temperatureUnits::celsius)>50 || RightDriveSmart.temperature(temperatureUnits::celsius)>50){
-      Controller1.rumble(".. .. .. ");
+    if (LeftDriveSmart.temperature(temperatureUnits::celsius)>50 || RightDriveSmart.temperature(temperatureUnits::celsius)>50,true){
+      Controller1.rumble("---");
+      Controller1.Screen.clearLine(4);
+      Controller1.Screen.print("       OVERHEAT       ");
+      Brain.Screen.drawRectangle(0, 0, 480, 240);
+      //x=120, y=100
+      Brain.Screen.printAt(120,100,"OVERHEAT");
     }
+    task::sleep(1000);
   }
 }
 
