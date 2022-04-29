@@ -133,12 +133,15 @@ void SKILL() {
 
 void SPEED() {
   rearHook.set(false);
-  Controller1.Screen.print(" PRANKD LOL");
+  Brain.Screen.setFont(fontType::mono60);
+  Brain.Screen.printAt(75,100,"prankd, lol");
   driveIN(47,directionType::fwd,12.0);
   LeftDriveSmart.spin(directionType::rev,200,velocityUnits::pct);
   RightDriveSmart.spin(directionType::rev,200,velocityUnits::pct);
   frontHook.set(true);
   frontMogo.spinFor(90,rotationUnits::deg,false);
+  task::sleep(10000);
+  Brain.Screen.clearScreen();
 }
 
 // Right Side
@@ -399,9 +402,9 @@ int main() {
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
 
-  // BIG FONT so everyone can read my debug status
+  // Set color and font for screen
   Brain.Screen.setFont(fontType::mono60);
-  Brain.Screen.setFillColor("red");
+  Brain.Screen.setFillColor(red);
 
   // Reset important encoders, open the front claw, and close the back claw
   frontHook.set(false);
@@ -413,23 +416,72 @@ int main() {
   waitUntil(!inertialSensor.isCalibrating());
 
   // Super Fancy Auton Selector (C) Anthony Halliday, 2022, Under the license "pls dont steal my code, thx"
-  Competition.autonomous(LANWP);
+  select:
+  if (Controller1.ButtonUp.pressing()){
+    Competition.autonomous(SPEED);
+    Controller1.Screen.print("SPEED");
+  }
+  else if (Controller1.ButtonDown.pressing()){
+    Competition.autonomous(LANWP);
+    Controller1.Screen.print("LANWP");
+  }
+  else if (Controller1.ButtonLeft.pressing()){
+    Competition.autonomous(LALWR);
+    Controller1.Screen.print("LALWR");
+  }
+  else if (Controller1.ButtonRight.pressing()){
+    Competition.autonomous(LACRF);
+    Controller1.Screen.print("LACRF");
+  }
+  else if (Controller1.ButtonX.pressing()){
+    Competition.autonomous(RANWP);
+    Controller1.Screen.print("RANWP");
+  }
+  else if (Controller1.ButtonY.pressing()){
+    Competition.autonomous(RACRF);
+    Controller1.Screen.print("RACRF");
+  }
+  else if (Controller1.ButtonA.pressing()){
+    Competition.autonomous(RACWR);
+    Controller1.Screen.print("RACWR");
+  }
+  else if (Controller1.ButtonB.pressing()){
+    Competition.autonomous(RADWA);
+    Controller1.Screen.print("RADWA");
+  }
+  else if (Controller1.ButtonL1.pressing()){
+    Competition.autonomous(SKILL);
+    Controller1.Screen.print("SKILL");
+  }
+  else if (Controller1.ButtonR1.pressing()){
+    Competition.autonomous(RARNR);
+    Controller1.Screen.print("RARNR");
+  }
+  else if (Controller1.ButtonR2.pressing()){
+    Competition.autonomous(RARWR);
+    Controller1.Screen.print("RARWR");
+  }
+  else{
+    goto select;
+  }
   // jk lol, its just completley broken, welcome to vex!
-  
+  task::sleep(2000);
+  Controller1.Screen.clearLine(4);
   // Set up driver control period.
   Competition.drivercontrol(usercontrol);
 
   // Prevent main from exiting with an infinite loop.
   while(true) {
-    if (LeftDriveSmart.temperature(temperatureUnits::celsius)>50 || RightDriveSmart.temperature(temperatureUnits::celsius)>50,true){
-      Controller1.rumble("---");
-      Controller1.Screen.clearLine(4);
-      Controller1.Screen.print("       OVERHEAT       ");
-      Brain.Screen.drawRectangle(0, 0, 480, 240);
-      //x=120, y=100
+    if (LeftDriveSmart.temperature(temperatureUnits::celsius)>50 || RightDriveSmart.temperature(temperatureUnits::celsius)>50){
+      //Brain.Screen.drawRectangle(0, 0, 480, 240);
       Brain.Screen.printAt(120,100,"OVERHEAT");
+      
+      while (LeftDriveSmart.temperature(temperatureUnits::celsius)>50 || RightDriveSmart.temperature(temperatureUnits::celsius)>50){
+        Controller1.rumble("---");
+      }
     }
     task::sleep(1000);
+
   }
 }
 
