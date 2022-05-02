@@ -311,11 +311,11 @@ void LALWR(){
   driveIN(15,directionType::rev,6.0);
   InertialLeft(120);
   drive2obs(directionType::fwd);
-  driveIN(26,directionType::rev,6.0);
-  task::sleep(500);
+  driveIN(30,directionType::rev,6.0);
   rearHook.set(true);
   driveIN(20,directionType::fwd,7.0);
   InertialLeft(90);
+  ringLift.spin(directionType::fwd, 12.0, voltageUnits::volt);
   driveIN(24,directionType::rev,12.0);
   driveIN(24,directionType::fwd,7.0);
 }
