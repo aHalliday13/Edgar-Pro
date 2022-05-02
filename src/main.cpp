@@ -290,15 +290,13 @@ void LANWP(){
   frontMogo.startSpinTo(110,rotationUnits::deg);
 
   InertialLeft(35);
-  driveIN(25,directionType::rev,12.0);
-  InertialLeft(110);
-  driveIN(30,directionType::rev,7.0);
+  driveIN(20,directionType::rev,12.0);
+  InertialLeft(115);
+  driveIN(35,directionType::rev,7.0);
 
   rearHook.set(true);
-  InertialRight(15);
-  driveIN(30,directionType::fwd,70);
-  InertialRight(180);
-  driveIN(30,directionType::rev,70);
+  InertialLeft(15);
+  driveIN(60,directionType::fwd,70);
 }
 
 void LALWR(){
