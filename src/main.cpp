@@ -332,13 +332,20 @@ void LACRF(){
   frontMogo.startSpinTo(0, rotationUnits::deg, 200, velocityUnits::pct);
   driveIN(15,directionType::fwd,6.0);
   frontHook.set(true);
-  frontMogo.startSpinTo(300, rotationUnits::deg, 200, velocityUnits::pct);
+  frontMogo.startSpinTo(800, rotationUnits::deg, 200, velocityUnits::pct);
 
-  driveIN(70,directionType::rev,12.0);
-  InertialLeft(100);
+  driveIN(10,directionType::rev,12.0);
+  driveIN(60,directionType::rev,5.0);
+  frontMogo.spin(directionType::fwd);
+  InertialLeft(160);
 
-  drive2obs(directionType::rev);
+  drive2obs(directionType::fwd);
+  driveIN(40,directionType::rev,5.0);
   rearHook.set(true);
+  driveIN(25,directionType::fwd,4.0);
+  InertialLeft(90);
+  driveIN(30,directionType::rev,5.0);
+  driveIN(60,directionType::fwd,5.0);
 }
 
 // define user control code here
